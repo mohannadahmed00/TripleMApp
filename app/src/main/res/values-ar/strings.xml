@@ -14,4 +14,11 @@
     <string name="total">Total</string>
     <string name="free_domestic_shipping">Free Domestic Shipping</string>
     <string name="checkout">CHECKOUT</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="confirm_password">Confirm your password</string>
+    <string name="email_hint">Enter your e-mail</string>
+    <string name="user_hint">Enter your username</string>
+    <string name="sign_up_title">Sign Up</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="sign_in_title">Log In</string>
 </resources>
