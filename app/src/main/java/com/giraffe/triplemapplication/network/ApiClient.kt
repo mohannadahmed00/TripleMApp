@@ -15,7 +15,7 @@ object ApiClient: RemoteSource {
             val original: Request = chain.request()
             val originalHttpUrl: HttpUrl = original.url()
             val url = originalHttpUrl.newBuilder()
-                .addQueryParameter("appid", "")
+                //.addQueryParameter("appid", "")
                 .build()
             val requestBuilder: Request.Builder = original.newBuilder()
                 .url(url)

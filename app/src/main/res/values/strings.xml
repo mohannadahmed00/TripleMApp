@@ -13,4 +13,7 @@
     <string name="finished_orders">Finished Orders</string>
     <string name="shipment_addresses">Shipment Addresses</string>
     <string name="currency">Currency</string>
+    <string name="total">Total</string>
+    <string name="free_domestic_shipping">Free Domestic Shipping</string>
+    <string name="checkout">CHECKOUT</string>
 </resources>

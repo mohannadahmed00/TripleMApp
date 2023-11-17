@@ -12,10 +12,11 @@
         android:id="@+id/iv_profile"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@id/cv_profile"
         android:layout_marginTop="77dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/profile" />
+        android:src="@drawable/profile" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -29,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_profile"
         app:layout_constraintTop_toTopOf="@+id/iv_profile"
-        tools:text="Mohannad Ahmed" />
+        android:text="Mohannad Ahmed" />
 
     <TextView
         android:id="@+id/tv_email"
@@ -42,7 +43,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/tv_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
-        tools:text="mohannad199344@gmail.com" />
+        android:text="mohannad199344@gmail.com" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_edit_profile"
