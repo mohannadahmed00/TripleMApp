@@ -40,9 +40,9 @@
                     android:layout_marginHorizontal="25dp"
                     android:layout_marginTop="15dp"
                     android:hint="@string/email_hint"
-
+                    app:boxBackgroundMode="none"
                     app:endIconMode="clear_text"
-
+                    app:startIconDrawable="@drawable/mail_ic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -65,7 +65,9 @@
                     android:hint="@string/password_hint"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:startIconDrawable="@drawable/password_ic"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:boxBackgroundMode="none"
                     app:layout_constraintTop_toBottomOf="@+id/emailTextInputLayout"
                     app:passwordToggleEnabled="true">
 
