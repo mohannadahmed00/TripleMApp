@@ -7,6 +7,15 @@
     <string name="cart">Cart</string>
     <string name="me">Me</string>
 
+
+
+    <string name="recently">RECENTLY VIEWED</string>
+    <string name="recommeded">RECOMMENDED</string>
+    <string name="clear">CLEAR</string>
+    <string name="refresh">REFRESH</string>
+
+
+
     <string name="password_hint">Enter your password</string>
     <string name="confirm_password">Confirm your password</string>
     <string name="email_hint">Enter your e-mail</string>
