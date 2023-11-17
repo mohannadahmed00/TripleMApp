@@ -6,6 +6,7 @@
     <color name="background">#F5F6F8</color>
     <color name="gary">#727C8E</color>
     <color name="light_gary">#4D727C8F</color>
+    <color name="light_gray">#D8D8D8</color>
     <color name="dark_gary">#515C6F</color>
     <color name="red">#FF6969</color>
 </resources>
