@@ -4,4 +4,11 @@
     <string name="search">Search</string>
     <string name="cart">Cart</string>
     <string name="me">Me</string>
+    <string name="edit_profile">EDIT PROFILE</string>
+    <string name="all_my_orders">All My Orders</string>
+    <string name="pending_payments">Pending Payments</string>
+    <string name="pending_shipments">Pending Shipments</string>
+    <string name="finished_orders">Finished Orders</string>
+    <string name="shipment_addresses">Shipment Addresses</string>
+    <string name="currency">Currency</string>
 </resources>
