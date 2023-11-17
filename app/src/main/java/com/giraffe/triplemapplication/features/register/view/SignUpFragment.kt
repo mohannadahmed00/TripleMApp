@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentProfileBinding
+import com.giraffe.triplemapplication.databinding.FragmentSignUpBinding
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
+import com.giraffe.triplemapplication.features.register.viewmodel.RegisterVM
 
 
-class SignUpFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
-    override fun getViewModel(): Class<ProfileVM> {
+class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
+    override fun getViewModel(): Class<RegisterVM> {
         TODO("Not yet implemented")
     }
 
@@ -19,7 +21,7 @@ class SignUpFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         b: Boolean,
-    ): FragmentProfileBinding {
+    ): FragmentSignUpBinding {
         TODO("Not yet implemented")
     }
 

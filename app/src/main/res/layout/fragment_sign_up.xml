@@ -130,6 +130,7 @@
             android:layout_width="0dp"
             android:id="@+id/sign_up_btn"
             style="@style/button_primary"
+            android:background="@drawable/primary_button"
             android:layout_marginTop="40dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
@@ -140,6 +141,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_btn"
             android:layout_width="0dp"
+            android:background="@drawable/secondary_button"
             style="@style/button_secondary"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
