@@ -14,6 +14,7 @@
             android:text="@string/sign_in_title"
             android:textAlignment="center"
             android:textSize="28sp"
+            android:textColor="@color/dark_gary"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/sign_in_card"
             app:layout_constraintEnd_toEndOf="parent"
@@ -25,17 +26,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
+            style="@style/card_style"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sign_in_title">
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/emailTextInputLayout"
                     android:layout_width="match_parent"
@@ -121,6 +118,5 @@
             app:layout_constraintEnd_toEndOf="@id/sign_in_card"
             app:layout_constraintStart_toStartOf="@id/sign_in_card"
             app:layout_constraintTop_toBottomOf="@id/sign_up_btn" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>

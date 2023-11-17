@@ -12,11 +12,11 @@
         android:id="@+id/iv_profile"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:layout_constraintBottom_toTopOf="@id/cv_profile"
         android:layout_marginTop="77dp"
+        android:src="@drawable/profile"
+        app:layout_constraintBottom_toTopOf="@id/cv_profile"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/profile" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -24,33 +24,33 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:gravity="center"
+        android:text="Mohannad Ahmed"
         android:textColor="@color/dark_gary"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_profile"
-        app:layout_constraintTop_toTopOf="@+id/iv_profile"
-        android:text="Mohannad Ahmed" />
+        app:layout_constraintTop_toTopOf="@+id/iv_profile" />
 
     <TextView
         android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:text="mohannad199344@gmail.com"
         android:textColor="@color/dark_gary"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/tv_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name"
-        android:text="mohannad199344@gmail.com" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_edit_profile"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="11dp"
-        android:background="@drawable/white_button_bg"
+        android:background="@drawable/white_button_stroked"
         android:paddingHorizontal="18dp"
         android:text="@string/edit_profile"
         android:textColor="@color/dark_gary"
@@ -64,11 +64,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_profile"
+        style="@style/card_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:backgroundTint="@color/white"
-        app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@id/cv_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -257,11 +257,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_settings"
+        style="@style/card_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="25dp"
-        android:backgroundTint="@color/white"
-        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
