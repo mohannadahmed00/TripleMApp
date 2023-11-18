@@ -5,6 +5,8 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="cart">Cart</string>
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="share_this">Share This</string>
     <string name="me">Me</string>
 
 
@@ -12,6 +14,19 @@
     <string name="recommeded">RECOMMENDED</string>
     <string name="clear">CLEAR</string>
     <string name="refresh">REFRESH</string>
+
+    <string name="product">Product</string>
+    <string name="details">Details</string>
+    <string name="reviews">Reviews</string>
+    <string name="select_color">SELECT COLOR</string>
+    <string name="brand">BRAND</string>
+    <string name="condition">CONDITION</string>
+    <string name="category">CATEGORY</string>
+    <string name="sku">SKU</string>
+    <string name="material">MATERIAL</string>
+    <string name="fitting">FITTING</string>
+    <string name="select_size">SELECT SIZE (US)</string>
+
 
 
     <string name="password_hint">Enter your password</string>

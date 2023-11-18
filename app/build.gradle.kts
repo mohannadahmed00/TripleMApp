@@ -95,6 +95,10 @@ dependencies {
     //circleimageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
+    //color picker
+    implementation ("petrov.kristiyan:colorpicker-library:1.1.10")
+
+
 
     testImplementation("androidx.test:core-ktx:1.5.0")
     testImplementation("androidx.test.ext:junit-ktx:1.1.5")
@@ -105,4 +109,5 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
     testImplementation("app.cash.turbine:turbine:0.5.1")
+
 }
