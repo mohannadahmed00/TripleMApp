@@ -23,10 +23,9 @@ class ViewModelFactory(private val repo: RepoInterface) : ViewModelProvider.Fact
             ProfileVM(repo) as T
         } else if (modelClass.isAssignableFrom(SharedVM::class.java)) {
             SharedVM(repo) as T
-        }else if (modelClass.isAssignableFrom(CheckoutVM::class.java)) {
+        } else if (modelClass.isAssignableFrom(CheckoutVM::class.java)) {
             CheckoutVM(repo) as T
-        }
-        else {
+        } else {
             throw IllegalArgumentException("can't create ${modelClass.simpleName}")
         }
     }
