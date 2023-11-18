@@ -2,12 +2,22 @@ package com.giraffe.triplemapplication.features.home.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
+import kotlinx.coroutines.launch
+
 
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
     override fun getViewModel(): Class<HomeVM> = HomeVM::class.java
+
+    private lateinit var recyclerAdapter: ProductAdapter
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -15,5 +25,27 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         b: Boolean
     ): FragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
-    override fun handleView() {}
+    override fun handleView() {
+        // Recycler View
+        recyclerAdapter = ProductAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        binding.recyclerView.apply {
+            adapter = recyclerAdapter
+            layoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.HORIZONTAL
+            }
+        }
+
+        binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
+
+        lifecycleScope.launch {
+            mViewModel.products.collect {
+                recyclerAdapter.submitList(it)
+            }
+        }
+    }
+
+    private fun navigateToAllCategoriesScreen() {
+        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToAllCategoriesFragment()
+        findNavController(requireView()).navigate(action)
+    }
 }
