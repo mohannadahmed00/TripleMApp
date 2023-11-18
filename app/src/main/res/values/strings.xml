@@ -8,12 +8,10 @@
     <string name="me">Me</string>
 
 
-
     <string name="recently">RECENTLY VIEWED</string>
     <string name="recommeded">RECOMMENDED</string>
     <string name="clear">CLEAR</string>
     <string name="refresh">REFRESH</string>
-
 
 
     <string name="password_hint">Enter your password</string>
