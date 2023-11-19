@@ -22,23 +22,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <HorizontalScrollView
-            android:id="@+id/categories_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/categories_label">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
                 <ImageView
                     android:id="@+id/apparel_image"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/apparel"
+                    app:layout_constraintEnd_toStartOf="@id/beauty_image"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
 
                 <TextView
                     android:id="@+id/apparel_label"
@@ -52,11 +43,12 @@
 
                 <ImageView
                     android:id="@+id/beauty_image"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/beauty"
+                    app:layout_constraintEnd_toStartOf="@id/shoes_image"
                     app:layout_constraintStart_toEndOf="@id/apparel_image"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
 
                 <TextView
                     android:id="@+id/beauty_label"
@@ -65,16 +57,18 @@
                     android:layout_height="wrap_content"
                     android:text="Beauty"
                     app:layout_constraintEnd_toEndOf="@id/beauty_image"
+
                     app:layout_constraintStart_toStartOf="@id/beauty_image"
                     app:layout_constraintTop_toBottomOf="@id/beauty_image" />
 
                 <ImageView
                     android:id="@+id/shoes_image"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/shoes"
+                    app:layout_constraintEnd_toStartOf="@id/see_all_image"
                     app:layout_constraintStart_toEndOf="@id/beauty_image"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
 
                 <TextView
                     android:id="@+id/shoes_label"
@@ -88,11 +82,12 @@
 
                 <ImageView
                     android:id="@+id/see_all_image"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/see_all"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/shoes_image"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
 
                 <TextView
                     android:id="@+id/see_all_label"
@@ -103,9 +98,6 @@
                     app:layout_constraintEnd_toEndOf="@id/see_all_image"
                     app:layout_constraintStart_toStartOf="@id/see_all_image"
                     app:layout_constraintTop_toBottomOf="@id/see_all_image" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </HorizontalScrollView>
 
         <TextView
             android:id="@+id/latest_label"
@@ -115,7 +107,7 @@
             android:layout_margin="16dp"
             android:text="@string/latest"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/categories_scroll_view" />
+            app:layout_constraintTop_toBottomOf="@+id/apparel_label"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/slider_view_pager"
