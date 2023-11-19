@@ -26,4 +26,32 @@
     <string name="back">Back</string>
     <string name="mobile_hint">Enter you mobile number</string>
     <string name="address_hint">Enter your address (optional)</string>
+    <string name="choose_your_preferred_language">Choose your preferred language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="categories">Categories</string>
+    <string name="all_categories">All Categories</string>
+    <string name="latest">Latest</string>
+    <string name="see_all">See All</string>
+    <string name="recently">RECENTLY VIEWED</string>
+    <string name="recommeded">RECOMMENDED</string>
+    <string name="clear">CLEAR</string>
+    <string name="refresh">REFRESH</string>
+
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="share_this">Share This</string>
+
+    <string name="product">Product</string>
+    <string name="details">Details</string>
+    <string name="reviews">Reviews</string>
+    <string name="select_color">SELECT COLOR</string>
+    <string name="brand">BRAND</string>
+    <string name="condition">CONDITION</string>
+    <string name="category">CATEGORY</string>
+    <string name="sku">SKU</string>
+    <string name="material">MATERIAL</string>
+    <string name="fitting">FITTING</string>
+    <string name="select_size">SELECT SIZE (US)</string>
+
+
 </resources>

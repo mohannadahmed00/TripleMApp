@@ -1,4 +1,10 @@
 package com.giraffe.triplemapplication.database
 
+import com.giraffe.triplemapplication.utils.Constants
+import kotlinx.coroutines.flow.Flow
 
-interface LocalSource {}
+
+interface LocalSource {
+    suspend fun getLanguage(): Flow<String>
+    suspend fun setLanguage(code:Constants.Languages)
+}

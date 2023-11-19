@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.giraffe.triplemapplication.features.home.view.HomeFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_allCategoriesFragment"
+            app:destination="@id/allCategoriesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.giraffe.triplemapplication.features.search.view.SearchFragment"
@@ -24,6 +28,23 @@
         android:id="@+id/profileFragment"
         android:name="com.giraffe.triplemapplication.features.profile.view.ProfileFragment"
         android:label="@string/me"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/profileFragment"
+            android:id="@+id/action_profileFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.giraffe.triplemapplication.features.profile.view.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language" />
+    <fragment
+        android:id="@+id/allCategoriesFragment"
+        android:name="com.giraffe.triplemapplication.features.home.view.AllCategoriesFragment"
+        android:label="fragment_all_categories"
+        tools:layout="@layout/fragment_all_categories" />
+
 
 </navigation>
