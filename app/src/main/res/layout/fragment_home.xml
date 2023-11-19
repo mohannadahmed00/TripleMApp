@@ -108,8 +108,8 @@
         android:id="@+id/slider_view_pager"
         android:layout_width="wrap_content"
         android:layout_height="250dp"
-        app:layout_constraintTop_toBottomOf="@id/latest_label"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/latest_label"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -117,9 +117,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slider_view_pager"
         tools:itemCount="3"
-        app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/item_product" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

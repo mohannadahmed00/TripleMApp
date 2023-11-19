@@ -15,7 +15,9 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
 
     init {
         viewModelScope.launch {
-            _products.value = listOf()
+            repo.getProducts().collect { products ->
+                _products.value = products
+            }
         }
     }
 }

@@ -2,6 +2,9 @@ package com.giraffe.triplemapplication.model.repo
 
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.database.LocalSource
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
+import com.giraffe.triplemapplication.model.products.Product
+import kotlinx.coroutines.flow.Flow
 
 class Repo private constructor(
     private val remoteSource: RemoteSource,
@@ -17,6 +20,10 @@ class Repo private constructor(
                 instance
             }
         }
+    }
+
+    override suspend fun getProducts(): Flow<List<Product>> {
+        return remoteSource.getProducts()
     }
 
 
