@@ -37,6 +37,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
             }
         }
 
+        binding.categoriesScrollView.isHorizontalScrollBarEnabled = false
         binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
 
         images = arrayListOf()
