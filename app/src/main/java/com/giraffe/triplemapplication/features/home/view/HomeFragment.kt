@@ -8,16 +8,18 @@ import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import kotlinx.coroutines.launch
 
-
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
     override fun getViewModel(): Class<HomeVM> = HomeVM::class.java
 
     private lateinit var recyclerAdapter: ProductAdapter
+    private lateinit var images: ArrayList<Int>
+    private lateinit var sliderAdapter: SliderAdapter
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -36,6 +38,13 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         }
 
         binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
+
+        images = arrayListOf()
+        images.add(R.drawable.banner)
+        images.add(R.drawable.banner)
+        images.add(R.drawable.banner)
+        sliderAdapter = SliderAdapter(requireContext(), images)
+        binding.sliderViewPager.adapter = sliderAdapter
 
         lifecycleScope.launch {
             mViewModel.products.collect {
