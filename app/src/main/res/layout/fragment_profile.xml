@@ -335,7 +335,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="19dp"
-                android:text="@string/pending_shipments"
+                android:text="Payment Method"
                 android:textColor="@color/gary"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/line5"
