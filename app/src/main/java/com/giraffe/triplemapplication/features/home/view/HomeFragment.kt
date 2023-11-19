@@ -48,8 +48,13 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         binding.sliderViewPager.adapter = sliderAdapter
 
         lifecycleScope.launch {
-            mViewModel.products.collect {
-                recyclerAdapter.submitList(it)
+            mViewModel.uiState.collect {
+                recyclerAdapter.submitList(it.products)
+                if (it.categories != emptyList<String?>()) {
+                    binding.apparelLabel.text = it.categories[0]
+                    binding.beautyLabel.text = it.categories[1]
+                    binding.shoesLabel.text = it.categories[2]
+                }
             }
         }
     }
