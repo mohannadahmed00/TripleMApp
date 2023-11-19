@@ -8,6 +8,7 @@ import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,37 +26,26 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
 
     fun getAllProducts(){
         viewModelScope.launch(Dispatchers.IO) {
-            when(val call = safeApiCalls { repo.getAllProducts() }){
-                is Resource.Failure -> {
-                    _allProductsFlow.emit(Resource.Failure(false,0,call.errorBody))
-                }
-                Resource.Loading -> {
-                    _allProductsFlow.emit(Resource.Loading)
-                }
-                is Resource.Success -> {
-                    call.value
-                        .catch {
-                            _allProductsFlow.emit(Resource.Failure(false,0,it.message))
-                        }
-                        .collect{
-                            _allProductsFlow.emit(Resource.Success(it))
-                        }
-                }
-            }
+            _allProductsFlow.emit(safeApiCalls {repo.getAllProducts()})
         }
     }
 
 
-    private suspend fun <T> safeApiCalls(apiCall: suspend () -> T): Resource<T> {
+    private suspend fun <T> safeApiCalls(apiCall: suspend () -> Flow<T>): Resource<T> {
         return withContext(Dispatchers.IO) {
+            var resource:Resource<T> = Resource.Loading
             try {
-                Resource.Success(apiCall.invoke())
-            } catch (throwable: Throwable) {
-                Log.e("BaseRepo->","$throwable")
+                apiCall.invoke()
+                    .catch {
+                        resource = Resource.Failure(true,0,it)
+                    }.collect{
+                        resource = Resource.Success(it)
+                    }
+            }catch (throwable: Throwable){
                 when (throwable) {
                     is HttpException -> {
                         Log.e("BaseRepoHttpErrorBody->","${throwable.response()!!.errorBody()}")
-                        Resource.Failure(
+                        resource = Resource.Failure(
                             false,
                             throwable.code(),
                             throwable.response()!!.errorBody() as ResponseBody
@@ -63,17 +53,18 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
                     }
                     is JsonSyntaxException -> {
                         Log.e("BaseRepoJsonErrorBody->", throwable.localizedMessage)
-                        Resource.Failure(
+                        resource = Resource.Failure(
                             false,
                             0,
                             throwable.localizedMessage
                         )
                     }
                     else -> {
-                        Resource.Failure(true, null, null)
+                        resource = Resource.Failure(true, null, null)
                     }
                 }
             }
+            resource
         }
     }
 }
