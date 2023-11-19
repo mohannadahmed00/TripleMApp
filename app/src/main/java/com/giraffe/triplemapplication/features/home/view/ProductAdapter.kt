@@ -36,7 +36,7 @@ class ProductAdapter(
                     .error(R.drawable.ic_broken_image)
             )
             .into(holder.binding.productImage)
-        holder.binding.productName.text = current.title?.lowercase()?.substringAfterLast("| ")
+        holder.binding.productName.text = current.handle
         holder.binding.productPrice.text = current.variants?.get(0)?.price.toString()
         holder.binding.row.setOnClickListener { onItemClick(current) }
     }
