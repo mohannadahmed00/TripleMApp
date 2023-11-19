@@ -1,17 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:orientation="vertical"
     tools:context=".features.home.view.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/textView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/home" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/categories_label"
+            style="@style/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/categories"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/apparel_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/apparel"
+                    app:layout_constraintEnd_toStartOf="@id/beauty_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
+
+                <TextView
+                    android:id="@+id/apparel_label"
+                    style="@style/subtitle_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apparel"
+                    app:layout_constraintEnd_toEndOf="@id/apparel_image"
+                    app:layout_constraintStart_toStartOf="@id/apparel_image"
+                    app:layout_constraintTop_toBottomOf="@id/apparel_image" />
+
+                <ImageView
+                    android:id="@+id/beauty_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/beauty"
+                    app:layout_constraintEnd_toStartOf="@id/shoes_image"
+                    app:layout_constraintStart_toEndOf="@id/apparel_image"
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
+
+                <TextView
+                    android:id="@+id/beauty_label"
+                    style="@style/subtitle_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Beauty"
+                    app:layout_constraintEnd_toEndOf="@id/beauty_image"
+
+                    app:layout_constraintStart_toStartOf="@id/beauty_image"
+                    app:layout_constraintTop_toBottomOf="@id/beauty_image" />
+
+                <ImageView
+                    android:id="@+id/shoes_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/shoes"
+                    app:layout_constraintEnd_toStartOf="@id/see_all_image"
+                    app:layout_constraintStart_toEndOf="@id/beauty_image"
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
+
+                <TextView
+                    android:id="@+id/shoes_label"
+                    style="@style/subtitle_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shoes"
+                    app:layout_constraintEnd_toEndOf="@id/shoes_image"
+                    app:layout_constraintStart_toStartOf="@id/shoes_image"
+                    app:layout_constraintTop_toBottomOf="@id/shoes_image" />
+
+                <ImageView
+                    android:id="@+id/see_all_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/see_all"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/shoes_image"
+                    app:layout_constraintTop_toBottomOf="@id/categories_label" />
+
+                <TextView
+                    android:id="@+id/see_all_label"
+                    style="@style/subtitle_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/see_all"
+                    app:layout_constraintEnd_toEndOf="@id/see_all_image"
+                    app:layout_constraintStart_toStartOf="@id/see_all_image"
+                    app:layout_constraintTop_toBottomOf="@id/see_all_image" />
+
+        <TextView
+            android:id="@+id/latest_label"
+            style="@style/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/latest"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/apparel_label"/>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/slider_view_pager"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/latest_label"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/slider_view_pager"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_product" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
