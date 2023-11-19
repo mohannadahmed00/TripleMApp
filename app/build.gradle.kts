@@ -94,9 +94,9 @@ dependencies {
 
     //circleimageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
-
-    //color picker
-    implementation ("petrov.kristiyan:colorpicker-library:1.1.10")
+//
+//    //color picker
+//    implementation ("petrov.kristiyan:colorpicker-library:1.1.10")
 
 
 
