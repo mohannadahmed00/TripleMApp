@@ -28,7 +28,6 @@
         android:id="@+id/profileFragment"
         android:name="com.giraffe.triplemapplication.features.profile.view.ProfileFragment"
         android:label="@string/me"
-<<<<<<< HEAD
         tools:layout="@layout/fragment_profile" >
         <action
             app:popUpToInclusive="true"
@@ -41,13 +40,11 @@
         android:name="com.giraffe.triplemapplication.features.profile.view.LanguageFragment"
         android:label="fragment_language"
         tools:layout="@layout/fragment_language" />
-=======
-        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/allCategoriesFragment"
         android:name="com.giraffe.triplemapplication.features.home.view.AllCategoriesFragment"
         android:label="fragment_all_categories"
         tools:layout="@layout/fragment_all_categories" />
->>>>>>> 88a4754c9af20e507c54559d6b32060473a9de04
+
 
 </navigation>

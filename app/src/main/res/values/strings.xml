@@ -6,14 +6,6 @@
     <string name="search">Search</string>
     <string name="cart">Cart</string>
     <string name="me">Me</string>
-
-
-    <string name="recently">RECENTLY VIEWED</string>
-    <string name="recommeded">RECOMMENDED</string>
-    <string name="clear">CLEAR</string>
-    <string name="refresh">REFRESH</string>
-
-
     <string name="password_hint">Enter your password</string>
     <string name="confirm_password">Confirm your password</string>
     <string name="email_hint">Enter your e-mail</string>
@@ -45,5 +37,10 @@
     <string name="all_categories">All Categories</string>
     <string name="latest">Latest</string>
     <string name="see_all">See All</string>
+    <string name="recently">RECENTLY VIEWED</string>
+    <string name="recommeded">RECOMMENDED</string>
+    <string name="clear">CLEAR</string>
+    <string name="refresh">REFRESH</string>
+
 
 </resources>

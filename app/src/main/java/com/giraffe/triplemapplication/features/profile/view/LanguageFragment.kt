@@ -24,6 +24,10 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
     override fun handleView() {
         mViewModel.getLanguage()
         observeGetLanguage()
+        handleClicks()
+    }
+
+    private fun handleClicks() {
         binding.tvEnglish.setOnClickListener {
             binding.ivEnglishCorrect.show()
             binding.ivArabicCorrect.hide()

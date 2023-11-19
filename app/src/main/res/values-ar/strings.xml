@@ -29,4 +29,12 @@
     <string name="choose_your_preferred_language">Choose your preferred language</string>
     <string name="english">English</string>
     <string name="arabic">Arabic</string>
+    <string name="categories">Categories</string>
+    <string name="all_categories">All Categories</string>
+    <string name="latest">Latest</string>
+    <string name="see_all">See All</string>
+    <string name="recently">RECENTLY VIEWED</string>
+    <string name="recommeded">RECOMMENDED</string>
+    <string name="clear">CLEAR</string>
+    <string name="refresh">REFRESH</string>
 </resources>

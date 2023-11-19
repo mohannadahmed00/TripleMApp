@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
@@ -27,6 +26,7 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
             _allProductsFlow.emit(safeApiCalls {repo.getAllProducts()})
         }
     }
+    fun getAllCategories(){}
     private suspend fun <T> safeApiCalls(apiCall: suspend () -> Flow<T>): Resource<T> {
         return withContext(Dispatchers.IO) {
             var resource:Resource<T> = Resource.Loading

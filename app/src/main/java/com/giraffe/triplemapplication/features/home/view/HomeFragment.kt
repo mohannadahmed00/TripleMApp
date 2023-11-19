@@ -37,7 +37,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
             }
         }
 
-        binding.categoriesScrollView.isHorizontalScrollBarEnabled = false
+        //binding.categoriesScrollView.isHorizontalScrollBarEnabled = false
         binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
 
         images = arrayListOf()
@@ -47,7 +47,10 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         sliderAdapter = SliderAdapter(requireContext(), images)
         binding.sliderViewPager.adapter = sliderAdapter
 
-        lifecycleScope.launch {
+        mViewModel.getAllProducts()
+        observeGetAllProducts()
+
+        /*lifecycleScope.launch {
             mViewModel.uiState.collect {
                 recyclerAdapter.submitList(it.products)
                 if (it.categories != emptyList<String?>()) {
@@ -56,6 +59,12 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                     binding.shoesLabel.text = it.categories[2]?.lowercase()
                 }
             }
+        }*/
+    }
+
+    private fun observeGetAllProducts() {
+        lifecycleScope.launch {
+
         }
     }
 
