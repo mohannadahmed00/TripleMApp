@@ -26,7 +26,7 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
     }
 
     private fun setCategories() {
-        val map: Map<String?, List<Product>> = _uiState.value.products.groupBy { it.vendor }
+        val map: Map<String?, List<Product>> = _uiState.value.products.groupBy { it.product_type }
         val keysByProductCount = map
             .filterKeys { it != null }
             .entries
