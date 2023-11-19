@@ -21,4 +21,16 @@
         <item name="cardElevation">8dp</item>
         <item name="cardUseCompatPadding">true</item>
     </style>
+    <style name="title_text" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/dark_gary</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+    <style name="subtitle_text" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/gary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+
+    </style>
 </resources>

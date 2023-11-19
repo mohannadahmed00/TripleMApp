@@ -1,5 +1,7 @@
 package com.giraffe.triplemapplication.bases
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -63,5 +65,10 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding> : Fragment() {
 
     fun dismissLoading() {
         loading.dismiss()
+    }
+
+    private fun isConnected(): Boolean {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null
     }
 }
