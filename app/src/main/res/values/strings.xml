@@ -34,5 +34,10 @@
     <string name="total">Total</string>
     <string name="free_domestic_shipping">Free Domestic Shipping</string>
     <string name="checkout">CHECKOUT</string>
+    <string name="user_info">User Info</string>
+    <string name="confirm">Confirm</string>
+    <string name="back">Back</string>
+    <string name="mobile_hint">Enter you mobile number</string>
+    <string name="address_hint">Enter your address (optional)</string>
 
 </resources>

@@ -15,9 +15,5 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
         b: Boolean
     ): FragmentCartBinding = FragmentCartBinding.inflate(inflater, container, false)
 
-    override fun handleView() {
-
-    }
-
-
+    override fun handleView() {}
 }
