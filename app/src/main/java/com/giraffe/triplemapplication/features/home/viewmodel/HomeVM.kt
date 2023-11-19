@@ -18,8 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.HttpException
-
-
 class HomeVM(private val repo:RepoInterface):ViewModel() {
     private val _allProductsFlow:MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
     val allProductsFlow:StateFlow<Resource<AllProductsResponse>> = _allProductsFlow.asStateFlow()
@@ -29,8 +27,6 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
             _allProductsFlow.emit(safeApiCalls {repo.getAllProducts()})
         }
     }
-
-
     private suspend fun <T> safeApiCalls(apiCall: suspend () -> Flow<T>): Resource<T> {
         return withContext(Dispatchers.IO) {
             var resource:Resource<T> = Resource.Loading
