@@ -63,4 +63,5 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToAllCategoriesFragment()
         findNavController(requireView()).navigate(action)
     }
+
 }

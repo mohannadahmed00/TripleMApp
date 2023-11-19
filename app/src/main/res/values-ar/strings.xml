@@ -21,4 +21,9 @@
     <string name="sign_up_title">Sign Up</string>
     <string name="forget_password">Forget Password</string>
     <string name="sign_in_title">Log In</string>
+    <string name="user_info">User Info</string>
+    <string name="confirm">Confirm</string>
+    <string name="back">Back</string>
+    <string name="mobile_hint">Enter you mobile number</string>
+    <string name="address_hint">Enter your address (optional)</string>
 </resources>
