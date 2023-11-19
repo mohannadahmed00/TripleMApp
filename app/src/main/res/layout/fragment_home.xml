@@ -99,7 +99,7 @@
                     style="@style/subtitle_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See All"
+                    android:text="@string/see_all"
                     app:layout_constraintEnd_toEndOf="@id/see_all_image"
                     app:layout_constraintStart_toStartOf="@id/see_all_image"
                     app:layout_constraintTop_toBottomOf="@id/see_all_image" />

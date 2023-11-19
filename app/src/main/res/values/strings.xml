@@ -36,5 +36,6 @@
     <string name="categories">Categories</string>
     <string name="all_categories">All Categories</string>
     <string name="latest">Latest</string>
+    <string name="see_all">See All</string>
 
 </resources>
