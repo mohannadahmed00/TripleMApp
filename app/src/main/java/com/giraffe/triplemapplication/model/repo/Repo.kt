@@ -1,9 +1,8 @@
 package com.giraffe.triplemapplication.model.repo
 
-import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.database.LocalSource
-import com.giraffe.triplemapplication.model.products.AllProductsResponse
-import kotlinx.coroutines.flow.Flow
+import com.giraffe.triplemapplication.network.RemoteSource
+import com.giraffe.triplemapplication.utils.Constants
 
 class Repo private constructor(
     private val remoteSource: RemoteSource,
@@ -21,9 +20,12 @@ class Repo private constructor(
         }
     }
 
-    override suspend fun getAllProducts(): Flow<AllProductsResponse> {
-        return remoteSource.getAllProducts()
-    }
+    override suspend fun getAllProducts() = remoteSource.getAllProducts()
+
+
+    override suspend fun getLanguage() = localSource.getLanguage()
+
+    override suspend fun setLanguage(code: Constants.Languages) = localSource.setLanguage(code)
 
 
 }

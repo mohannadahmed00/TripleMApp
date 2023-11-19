@@ -1,14 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".features.profile.view.LanguageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/close_ic"
+        android:layout_marginTop="36dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
+        android:text="@string/choose_your_preferred_language"
+        android:textColor="@color/dark_gary"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_languages"
+        style="@style/card_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginVertical="15dp">
+
+            <TextView
+                android:id="@+id/tv_english"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:text="@string/english"
+                android:textColor="@color/gary"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@id/line1"
+                app:layout_constraintEnd_toStartOf="@id/iv_english_correct"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_english_correct"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="invisible"
+                android:src="@drawable/correct_ic"
+                app:layout_constraintBottom_toBottomOf="@id/tv_english"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_english"
+                app:layout_constraintTop_toTopOf="@id/tv_english" />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="14dp"
+                android:background="@color/light_gary"
+                app:layout_constraintBottom_toTopOf="@id/tv_arabic"
+                app:layout_constraintEnd_toEndOf="@id/iv_english_correct"
+                app:layout_constraintStart_toStartOf="@id/tv_english"
+                app:layout_constraintTop_toBottomOf="@id/tv_english" />
+
+            <TextView
+                android:id="@+id/tv_arabic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:text="@string/arabic"
+                android:textColor="@color/gary"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_arabic_correct"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line1" />
+
+            <ImageView
+                android:id="@+id/iv_arabic_correct"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/correct_ic"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/tv_arabic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_arabic"
+                app:layout_constraintTop_toTopOf="@id/tv_arabic" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

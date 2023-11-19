@@ -39,5 +39,8 @@
     <string name="back">Back</string>
     <string name="mobile_hint">Enter you mobile number</string>
     <string name="address_hint">Enter your address (optional)</string>
+    <string name="choose_your_preferred_language">Choose your preferred language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
 
 </resources>
