@@ -19,7 +19,6 @@ class ProductAdapter(
 
     private lateinit var binding: ItemProductBinding
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ItemProductBinding.inflate(inflater, parent, false)
@@ -30,18 +29,15 @@ class ProductAdapter(
         val current = getItem(position)
 
         Glide.with(context)
-            .load(
-//                current.image?.src
-                "https://cdn.shopify.com/s/files/1/0552/9541/0251/products/85cc58608bf138a50036bcfe86a3a362.jpg?v=1700055984"
-            )
+            .load(current.image?.src)
             .apply(
                 RequestOptions()
                     .placeholder(R.drawable.loading_img)
                     .error(R.drawable.ic_broken_image)
             )
             .into(holder.binding.productImage)
-        holder.binding.productName.text = "Ankle Boots"//current.title
-        holder.binding.productPrice.text = "$49.99"//current.variants?.get(0)?.price.toString()
+        holder.binding.productName.text = current.title
+        holder.binding.productPrice.text = current.variants?.get(0)?.price.toString()
         holder.binding.row.setOnClickListener { onItemClick(current) }
     }
 
