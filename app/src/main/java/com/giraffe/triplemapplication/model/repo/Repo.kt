@@ -26,6 +26,9 @@ class Repo private constructor(
     override suspend fun getLanguage() = localSource.getLanguage()
 
     override suspend fun setLanguage(code: Constants.Languages) = localSource.setLanguage(code)
+    override suspend fun getFirstTimeFlag()= localSource.getFirstTimeFlag()
+
+    override suspend fun setFirstTimeFlag(flag: Boolean) = localSource.setFirstTimeFlag(flag)
 
 
 }

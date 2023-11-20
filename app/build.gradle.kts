@@ -56,6 +56,12 @@ dependencies {
     //glide
     implementation("com.github.bumptech.glide:glide:4.12.0")
 
+    //phoenix
+    implementation("com.jakewharton:process-phoenix:2.1.2")
+
+    //localizationactivity
+    //implementation("com.akexorcist:localizationactivity:1.2.2")
+
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
