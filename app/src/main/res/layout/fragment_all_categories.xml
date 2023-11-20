@@ -57,8 +57,8 @@
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="16dp"
-                android:text="Men's Apparel"
                 android:visibility="gone"
+                tools:text="Men's Apparel"
                 tools:visibility="visible" />
 
             <androidx.cardview.widget.CardView

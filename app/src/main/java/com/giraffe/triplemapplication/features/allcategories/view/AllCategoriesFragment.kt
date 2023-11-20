@@ -31,7 +31,9 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         binding.closeButton.setOnClickListener { navigateUp() }
 
         // Recycler View
-        brandsAdapter = BrandsAdapter(requireContext()) { Toast.makeText(context, "${it.handle} clicked", Toast.LENGTH_SHORT).show() }
+        brandsAdapter = BrandsAdapter(requireContext()) {
+            binding.brandNameLabel.text = it.handle
+        }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -59,6 +61,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
+                        binding.brandNameLabel.text = it.value.smart_collections[0].handle
                         dismissLoading()
                         setVisibility()
                     }
