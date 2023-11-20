@@ -52,6 +52,8 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         observeGetAllCategories()
     }
 
+    override fun handleClicks() { }
+
     private fun observeGetAllBrands() {
         lifecycleScope.launch {
             mViewModel.allBrandsFlow.collect {

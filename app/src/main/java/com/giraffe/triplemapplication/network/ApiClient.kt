@@ -35,4 +35,12 @@ object ApiClient: RemoteSource {
     override suspend fun getAllProducts() = flow {
         emit(apiServices.getAllProducts())
     }
+
+    override suspend fun getAllCategories() = flow {
+        emit(apiServices.getAllCategories())
+    }
+
+    override suspend fun getAllBrands() = flow {
+        emit(apiServices.getAllBrands())
+    }
 }

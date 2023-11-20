@@ -60,8 +60,6 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         observeGetAllBrands()
     }
 
-    override fun handleClicks() {}
-
     private fun observeGetAllProducts() {
         lifecycleScope.launch {
             mViewModel.allProductsFlow.collect {
@@ -94,7 +92,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         }
     }
 
-    private fun handleClicks() {
+    override fun handleClicks() {
         binding.brandsSeeAll.setOnClickListener { navigateToAllCategoriesScreen() }
     }
 

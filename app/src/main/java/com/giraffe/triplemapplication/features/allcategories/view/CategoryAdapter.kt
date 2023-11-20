@@ -31,7 +31,6 @@ class CategoryAdapter(
         holder.binding.text.text = current.handle
         holder.binding.item.setOnClickListener { onItemClick(current) }
 
-        Log.i("hahahahahahaha", "onBindViewHolder: ${current.image.src}")
         Glide.with(context)
             .load(current.image.src)
             .apply(
