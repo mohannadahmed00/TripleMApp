@@ -3,6 +3,7 @@ package com.giraffe.triplemapplication.utils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.giraffe.triplemapplication.SharedVM
+import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCategoriesVM
 import com.giraffe.triplemapplication.features.cart.viewmodel.CartVM
 import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
@@ -26,8 +27,10 @@ class ViewModelFactory(private val repo: RepoInterface) : ViewModelProvider.Fact
             SharedVM(repo) as T
         } else if (modelClass.isAssignableFrom(CheckoutVM::class.java)) {
             CheckoutVM(repo) as T
-        }else if (modelClass.isAssignableFrom(UserInfoVM::class.java)) {
+        } else if (modelClass.isAssignableFrom(UserInfoVM::class.java)) {
             UserInfoVM(repo) as T
+        } else if (modelClass.isAssignableFrom(AllCategoriesVM::class.java)) {
+            AllCategoriesVM(repo) as T
         } else {
             throw IllegalArgumentException("can't create ${modelClass.simpleName}")
         }

@@ -3,18 +3,22 @@ package com.giraffe.triplemapplication.features.allcategories.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentAllCategoriesBinding
-import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
+import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCategoriesVM
+import com.giraffe.triplemapplication.model.brands.SmartCollection
+import com.giraffe.triplemapplication.utils.Resource
+import kotlinx.coroutines.launch
 
-class AllCategoriesFragment : BaseFragment<HomeVM, FragmentAllCategoriesBinding>() {
-    override fun getViewModel(): Class<HomeVM> = HomeVM::class.java
-    private lateinit var recyclerAdapterAll: CategoriesAdapter
-    private lateinit var recyclerAdapter: CategoryAdapter
+class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategoriesBinding>() {
+    override fun getViewModel(): Class<AllCategoriesVM> = AllCategoriesVM::class.java
+
+    private lateinit var brandsAdapter: BrandsAdapter
+    private lateinit var subCategoriesAdapter: CategoryAdapter
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -26,21 +30,50 @@ class AllCategoriesFragment : BaseFragment<HomeVM, FragmentAllCategoriesBinding>
         binding.closeButton.setOnClickListener { navigateUp() }
 
         // Recycler View
-        recyclerAdapterAll = CategoriesAdapter(requireContext()) { Toast.makeText(context, "${it.text} clicked", Toast.LENGTH_SHORT).show() }
-        binding.categoriesRecyclerView.apply {
-            adapter = recyclerAdapterAll
+        brandsAdapter = BrandsAdapter(requireContext()) { Toast.makeText(context, "${it.handle} clicked", Toast.LENGTH_SHORT).show() }
+        binding.brandsRecyclerView.apply {
+            adapter = brandsAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.VERTICAL
             }
         }
-        val categories = listOf(Category(R.drawable.apparel, "Apparel"), Category(R.drawable.apparel, "Apparel"), Category(R.drawable.apparel, "Apparel"))
-        recyclerAdapterAll.submitList(categories)
-        val items = listOf("T-shirts", "Shirts", "Pants & Jeans", "Socks & Ties", "Underwear", "Jackets", "Coats", "Sweaters")
-        recyclerAdapter = CategoryAdapter(items) { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
+
+        observeGetAllBrands()
+        observeGetAllCategories()
+
+        subCategoriesAdapter = CategoryAdapter { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
         binding.categoryRecyclerView.apply {
-            adapter = recyclerAdapter
+            adapter = subCategoriesAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.VERTICAL
+            }
+        }
+    }
+
+    private fun observeGetAllBrands() {
+        lifecycleScope.launch {
+            mViewModel.allBrandsFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { }
+                    Resource.Loading -> { }
+                    is Resource.Success -> {
+                        brandsAdapter.submitList(it.value.smart_collections)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeGetAllCategories() {
+        lifecycleScope.launch {
+            mViewModel.allCategoriesFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { }
+                    Resource.Loading -> { }
+                    is Resource.Success -> {
+                        subCategoriesAdapter.submitList(it.value.custom_collections)
+                    }
+                }
             }
         }
     }

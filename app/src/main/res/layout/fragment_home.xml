@@ -22,10 +22,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/brands_see_all"
+            style="@style/subtitle_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/see_all"
+            app:layout_constraintTop_toTopOf="@id/categories_label"
+            app:layout_constraintBottom_toBottomOf="@id/categories_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/red"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/brands_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:itemCount="1"
             app:layout_constraintTop_toBottomOf="@+id/categories_label"
             tools:listitem="@layout/item_brand"/>
 
