@@ -64,6 +64,7 @@
     <string name="usd">USD</string>
     <string name="eur">EUR</string>
     <string name="gbp">GBP</string>
+    <string name="log_out">LOG OUT</string>
 
 
 </resources>
