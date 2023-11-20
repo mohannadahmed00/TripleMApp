@@ -20,6 +20,10 @@ fun View.show(){
     this.visibility = View.VISIBLE
 }
 
+fun View.gone(){
+    this.visibility = View.GONE
+}
+
 suspend fun <T> ViewModel.safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
     return withContext(Dispatchers.IO) {
         var resource:Resource<T> = Resource.Loading

@@ -8,6 +8,7 @@ import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
 import com.giraffe.triplemapplication.features.search.viewmodel.SearchVM
+import com.giraffe.triplemapplication.features.splash.viewmodel.SplashVM
 import com.giraffe.triplemapplication.features.userinfo.viewmodel.UserInfoVM
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 
@@ -28,6 +29,8 @@ class ViewModelFactory(private val repo: RepoInterface) : ViewModelProvider.Fact
             CheckoutVM(repo) as T
         }else if (modelClass.isAssignableFrom(UserInfoVM::class.java)) {
             UserInfoVM(repo) as T
+        }else if (modelClass.isAssignableFrom(SplashVM::class.java)) {
+            SplashVM(repo) as T
         } else {
             throw IllegalArgumentException("can't create ${modelClass.simpleName}")
         }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.giraffe.triplemapplication.database.ConcreteLocalSource
@@ -17,9 +18,12 @@ import com.giraffe.triplemapplication.network.ApiClient
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.ViewModelFactory
+import com.giraffe.triplemapplication.utils.gone
+import com.giraffe.triplemapplication.utils.show
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
+
 
 class MainActivity : AppCompatActivity(),OnActivityCallback{
     companion object{
@@ -35,15 +39,18 @@ class MainActivity : AppCompatActivity(),OnActivityCallback{
         sharedVM = ViewModelProvider(this, factory)[SharedVM::class.java]
         sharedVM.getLanguage()
         observeGetLanguage()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
+        navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, bundle: Bundle? ->
+            if (navDestination.id == R.id.homeFragment || navDestination.id == R.id.searchFragment || navDestination.id == R.id.cartFragment || navDestination.id == R.id.profileFragment) {
+                binding.bottomNavView.show()
+            } else {
+                binding.bottomNavView.gone()
+            }
+        }
     }
 
     private fun observeGetLanguage() {
