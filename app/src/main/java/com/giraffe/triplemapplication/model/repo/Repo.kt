@@ -32,6 +32,8 @@ class Repo private constructor(
     override suspend fun setFirstTimeFlag(flag: Boolean) = localSource.setFirstTimeFlag(flag)
     override suspend fun getCurrencies() = remoteSource.getCurrencies()
     override suspend fun setExchangeRates(exchangeRates: ExchangeRatesResponse) = localSource.setExchangeRates(exchangeRates)
+    override suspend fun getCurrency() = localSource.getCurrency()
+    override suspend fun setCurrency(currency: Constants.Currencies) = localSource.setCurrency(currency)
 
 
 }

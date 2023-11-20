@@ -39,4 +39,15 @@ class ConcreteLocalSource(context: Context) : LocalSource {
             emit(exchangeRatesDao.insertExchangeRates(exchangeRates))
         }
     }
+
+    override suspend fun getCurrency(): Flow<String> {
+        return flow {
+            val currency = shared.read(Constants.CURRENCY) ?: Constants.Currencies.EGP.value
+            emit(currency)
+        }
+    }
+
+    override suspend fun setCurrency(currency: Constants.Currencies) {
+        shared.store(Constants.CURRENCY, currency.value)
+    }
 }

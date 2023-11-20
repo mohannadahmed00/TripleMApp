@@ -14,4 +14,8 @@ interface LocalSource {
 
     suspend fun setExchangeRates(exchangeRates: ExchangeRatesResponse): Flow<Long>
 
+    suspend fun getCurrency(): Flow<String>
+
+    suspend fun setCurrency(currency:Constants.Currencies)
+
 }

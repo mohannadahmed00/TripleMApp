@@ -59,6 +59,11 @@
     <string name="clear">CLEAR</string>
     <string name="refresh">REFRESH</string>
     <string name="languages">Languages</string>
+    <string name="choose_your_preferred_currency">Choose your preferred currency</string>
+    <string name="egp">EGP</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
+    <string name="gbp">GBP</string>
 
 
 </resources>

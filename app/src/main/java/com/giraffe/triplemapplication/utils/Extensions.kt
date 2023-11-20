@@ -2,6 +2,8 @@ package com.giraffe.triplemapplication.utils
 
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -9,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.HttpException
+
 
 fun View.hide(){
     this.visibility = View.INVISIBLE
@@ -57,4 +60,8 @@ suspend fun <T> safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
         }
         resource
     }
+}
+
+fun ImageView.load(url:String){
+    Glide.with(this.context).load(url).into(this)
 }
