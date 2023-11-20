@@ -13,6 +13,7 @@ import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
+import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
     override fun handleView() {
         // Recycler View
-        productsAdapter = ProductAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        productsAdapter = ProductAdapter(requireContext()) { navigateToProductInfoScreen(it) }
         binding.productsRecyclerView.apply {
             adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -98,6 +99,11 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
     private fun navigateToAllCategoriesScreen() {
         val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToAllCategoriesFragment()
+        findNavController(requireView()).navigate(action)
+    }
+
+    private fun navigateToProductInfoScreen(product: Product) {
+        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment(product)
         findNavController(requireView()).navigate(action)
     }
 
