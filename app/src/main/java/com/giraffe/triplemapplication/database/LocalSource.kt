@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.database
 
+import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.utils.Constants
 import kotlinx.coroutines.flow.Flow
 
@@ -10,4 +11,7 @@ interface LocalSource {
 
     suspend fun getFirstTimeFlag(): Flow<Boolean>
     suspend fun setFirstTimeFlag(flag:Boolean)
+
+    suspend fun setExchangeRates(exchangeRates: ExchangeRatesResponse): Flow<Long>
+
 }

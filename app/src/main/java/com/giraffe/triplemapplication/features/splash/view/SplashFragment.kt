@@ -1,6 +1,7 @@
-package com.giraffe.triplemapplication.features
+package com.giraffe.triplemapplication.features.splash.view
 
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -16,6 +17,9 @@ import kotlinx.coroutines.launch
 
 
 class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
+    companion object{
+        private const val TAG = "SplashFragment"
+    }
     override fun getViewModel(): Class<SplashVM> = SplashVM::class.java
 
     override fun getFragmentBinding(
@@ -31,9 +35,29 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
         handler.postDelayed({
             mViewModel.getFirstTimeFlag()
             observeGetFirstTimeFlag()
+            mViewModel.getCurrencies()
+            observeGetCurrencies()
         }, 4000)
     }
 
+    private fun observeGetCurrencies() {
+        lifecycleScope.launch { 
+            mViewModel.currenciesFlow.collect{
+                when (it){
+                    is Resource.Failure -> {
+                        Log.e(TAG, "observeGetCurrencies: ${it.errorCode}: ${it.errorBody}")
+                    }
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeGetCurrencies: ")
+                    }
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeGetCurrencies: ${it.value}")
+                        mViewModel.setExchangeRates(it.value)
+                    }
+                }
+            }
+        }
+    }
     private fun observeGetFirstTimeFlag() {
         lifecycleScope.launch {
             mViewModel.firstFlagFlow.collect {
@@ -45,7 +69,6 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                             mViewModel.setFirstTimeFlag(false)
                             //start currency worker here
                             //must go to onboard graph
-
                         }else{
                             //should check here if authorized (go to main graph) or not (go to auth graph)
                         }
@@ -56,6 +79,5 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
             }
         }
     }
-
     override fun handleClicks() {}
 }

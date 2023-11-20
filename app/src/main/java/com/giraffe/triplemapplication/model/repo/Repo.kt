@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.model.repo
 
 import com.giraffe.triplemapplication.database.LocalSource
+import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
 
@@ -26,9 +27,11 @@ class Repo private constructor(
     override suspend fun getLanguage() = localSource.getLanguage()
 
     override suspend fun setLanguage(code: Constants.Languages) = localSource.setLanguage(code)
-    override suspend fun getFirstTimeFlag()= localSource.getFirstTimeFlag()
+    override suspend fun getFirstTimeFlag() = localSource.getFirstTimeFlag()
 
     override suspend fun setFirstTimeFlag(flag: Boolean) = localSource.setFirstTimeFlag(flag)
+    override suspend fun getCurrencies() = remoteSource.getCurrencies()
+    override suspend fun setExchangeRates(exchangeRates: ExchangeRatesResponse) = localSource.setExchangeRates(exchangeRates)
 
 
 }

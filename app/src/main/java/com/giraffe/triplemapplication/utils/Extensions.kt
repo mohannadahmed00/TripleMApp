@@ -2,7 +2,6 @@ package com.giraffe.triplemapplication.utils
 
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.ViewModel
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +9,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.HttpException
-
 
 fun View.hide(){
     this.visibility = View.INVISIBLE
@@ -24,7 +22,7 @@ fun View.gone(){
     this.visibility = View.GONE
 }
 
-suspend fun <T> ViewModel.safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
+suspend fun <T> safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
     return withContext(Dispatchers.IO) {
         var resource:Resource<T> = Resource.Loading
         try {

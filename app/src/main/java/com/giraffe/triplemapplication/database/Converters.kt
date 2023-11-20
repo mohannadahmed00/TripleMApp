@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.database
 
 import androidx.room.TypeConverter
+import com.giraffe.triplemapplication.model.currency.Rates
 import com.giraffe.triplemapplication.model.products.Image
 import com.giraffe.triplemapplication.model.products.Option
 import com.giraffe.triplemapplication.model.products.Product
@@ -17,7 +18,6 @@ class Converters {
     fun toProduct(json: String): Product {
         return Gson().fromJson(json, Product::class.java)
     }
-
     @TypeConverter
     fun fromImage(image:Image): String {
         return Gson().toJson(image)
@@ -26,8 +26,6 @@ class Converters {
     fun toImage(json: String): Image {
         return Gson().fromJson(json, Image::class.java)
     }
-
-
     @TypeConverter
     fun fromImages(hourly: List<Image>?): String {
         return Gson().toJson(hourly)
@@ -68,4 +66,13 @@ class Converters {
     }
 
     private inline fun <reified T> Gson.fromJson(json: String) = fromJson<T>(json, object : TypeToken<T>() {}.type)
+
+    @TypeConverter
+    fun fromRates(rates: Rates): String {
+        return Gson().toJson(rates)
+    }
+    @TypeConverter
+    fun toRates(json: String): Rates {
+        return Gson().fromJson(json, Rates::class.java)
+    }
 }

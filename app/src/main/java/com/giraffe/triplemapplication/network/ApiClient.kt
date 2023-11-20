@@ -7,26 +7,33 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient: RemoteSource {
-    //http://api.exchangeratesapi.io/v1/latest?access_key=4ee6d3381b90ee1d4e7a0c551205269f&symbols=USD,EUR,GBP,EGP&format=1
-    private fun provideOkHttpClient(): OkHttpClient {
+    private fun provideOkHttpClient(header:String=Constants.SHOPIFY_HEADER,value:String=Constants.ACCESS_TOKEN): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("X-Shopify-Access-Token", Constants.ACCESS_TOKEN)
+                .addHeader(header, value)
                 .build()
             chain.proceed(request)
         }
         return httpClient.build()
     }
 
-    private fun getApiServices(url:String = Constants.URL) = Retrofit.Builder()
+    private fun getApiServices(url:String = Constants.URL):ApiServices {
+        val apiServices = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .client(provideOkHttpClient())
             .baseUrl(url)
-            .build().create(ApiServices::class.java)
+        if (url==Constants.URL){
+            apiServices.client(provideOkHttpClient())
+        }
+        return apiServices.build().create(ApiServices::class.java)
+    }
 
 
     override suspend fun getAllProducts() = flow {
         emit(getApiServices().getAllProducts())
+    }
+
+    override suspend fun getCurrencies()= flow {
+        emit(getApiServices(Constants.CURRENCY_URL).getExchangeRates())
     }
 }
