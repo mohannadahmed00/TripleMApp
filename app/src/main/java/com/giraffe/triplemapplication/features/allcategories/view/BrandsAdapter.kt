@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.features.allcategories.view
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -18,6 +19,7 @@ class BrandsAdapter(
 ): ListAdapter<SmartCollection, BrandsAdapter.ViewHolder>(BrandsDataDiffUtil()) {
 
     private lateinit var binding: ItemBrandBinding
+    private var selectedItem = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -37,7 +39,20 @@ class BrandsAdapter(
             )
             .into(holder.binding.brandImage)
         holder.binding.brandName.text = current.handle
-        holder.binding.item.setOnClickListener { onItemClick(current) }
+        if (position == selectedItem) {
+            holder.binding.brandName.setTextColor(Color.RED)
+        } else {
+            holder.binding.brandName.setTextColor(Color.BLACK)
+        }
+        holder.binding.item.setOnClickListener {
+            onItemClick(current)
+            if (selectedItem != position) {
+                val previousItem = selectedItem
+                selectedItem = position
+                notifyItemChanged(previousItem)
+                notifyItemChanged(selectedItem)
+            }
+        }
     }
 
     inner class ViewHolder(var binding: ItemBrandBinding): RecyclerView.ViewHolder(binding.root)
