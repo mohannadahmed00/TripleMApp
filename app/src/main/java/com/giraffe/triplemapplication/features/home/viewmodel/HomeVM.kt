@@ -3,6 +3,7 @@ package com.giraffe.triplemapplication.features.home.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
@@ -18,16 +19,28 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 class HomeVM(private val repo:RepoInterface):ViewModel() {
-    private val _allProductsFlow:MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
-    val allProductsFlow:StateFlow<Resource<AllProductsResponse>> = _allProductsFlow.asStateFlow()
 
-    fun getAllProducts(){
+    private val _allProductsFlow: MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
+    val allProductsFlow: StateFlow<Resource<AllProductsResponse>> = _allProductsFlow.asStateFlow()
+
+    private val _allCategoriesFlow: MutableStateFlow<Resource<AllCategoriesResponse>> = MutableStateFlow(Resource.Loading)
+    val allCategoriesFlow: StateFlow<Resource<AllCategoriesResponse>> = _allCategoriesFlow.asStateFlow()
+
+    init {
+        getAllProducts()
+        getAllCategories()
+    }
+
+    private fun getAllProducts() {
         viewModelScope.launch(Dispatchers.IO) {
             _allProductsFlow.emit(safeApiCalls {repo.getAllProducts()})
         }
     }
 
-    fun getAllCategories() {
+    private fun getAllCategories() {
+        viewModelScope.launch {
+            _allCategoriesFlow.emit(safeApiCalls { repo.getAllCategories() })
+        }
     }
 
     private suspend fun <T> safeApiCalls(apiCall: suspend () -> Flow<T>): Resource<T> {

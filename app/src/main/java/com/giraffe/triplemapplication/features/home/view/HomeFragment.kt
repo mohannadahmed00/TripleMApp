@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.features.home.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -47,8 +48,8 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         sliderAdapter = SliderAdapter(requireContext(), images)
         binding.sliderViewPager.adapter = sliderAdapter
 
-        mViewModel.getAllProducts()
         observeGetAllProducts()
+        observeGetAllCategories()
     }
 
     private fun observeGetAllProducts() {
@@ -59,6 +60,21 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                     Resource.Loading -> { }
                     is Resource.Success -> {
                         recyclerAdapter.submitList(it.value.products)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeGetAllCategories() {
+        lifecycleScope.launch {
+            mViewModel.allCategoriesFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { }
+                    Resource.Loading -> { }
+                    is Resource.Success -> {
+//                        recyclerAdapter.submitList(it.value.custom_collections)
+                        Log.i("hhhhhhhhhhhhhh", "observeGetAllCategories: ${it.value}")
                     }
                 }
             }
