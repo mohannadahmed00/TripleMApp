@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentAllCategoriesBinding
 import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCategoriesVM
-import com.giraffe.triplemapplication.model.brands.SmartCollection
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -41,16 +40,16 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
             }
         }
 
-        observeGetAllBrands()
-        observeGetAllCategories()
-
-        subCategoriesAdapter = CategoryAdapter { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
+        subCategoriesAdapter = CategoryAdapter(requireContext()) { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
         binding.categoryRecyclerView.apply {
             adapter = subCategoriesAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.VERTICAL
             }
         }
+
+        observeGetAllBrands()
+        observeGetAllCategories()
     }
 
     private fun observeGetAllBrands() {

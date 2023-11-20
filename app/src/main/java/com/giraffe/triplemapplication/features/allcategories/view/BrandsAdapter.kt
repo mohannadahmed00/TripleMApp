@@ -38,12 +38,14 @@ class BrandsAdapter(
                     .error(R.drawable.ic_broken_image)
             )
             .into(holder.binding.brandImage)
+
         holder.binding.brandName.text = current.handle
         if (position == selectedItem) {
             holder.binding.brandName.setTextColor(Color.RED)
         } else {
             holder.binding.brandName.setTextColor(Color.BLACK)
         }
+
         holder.binding.item.setOnClickListener {
             onItemClick(current)
             if (selectedItem != position) {
