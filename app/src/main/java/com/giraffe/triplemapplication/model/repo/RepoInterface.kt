@@ -12,4 +12,7 @@ interface RepoInterface {
     suspend fun getAllBrands(): Flow<AllBrandsResponse>
     suspend fun getLanguage(): Flow<String>
     suspend fun setLanguage(code: Constants.Languages)
+
+    suspend fun getFirstTimeFlag(): Flow<Boolean>
+    suspend fun setFirstTimeFlag(flag:Boolean)
 }

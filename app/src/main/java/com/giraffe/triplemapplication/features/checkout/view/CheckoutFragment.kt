@@ -16,6 +16,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     ): FragmentCheckoutBinding = FragmentCheckoutBinding.inflate(inflater, container, false)
 
     override fun handleView() {}
+    override fun handleClicks() {}
 
 
 }

@@ -15,7 +15,7 @@
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:navGraph="@navigation/nav_graph" />
+        app:navGraph="@navigation/splash_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"

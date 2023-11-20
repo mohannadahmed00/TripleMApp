@@ -9,6 +9,7 @@ object Constants {
     const val UNKNOWN_AREA = "UNKNOWN_AREA"
     const val LANGUAGE = "LANGUAGE"
     const val CURRENCY = "CURRENCY"
+    const val FIRST_TIME_FLAG = "FIRST_TIME_FLAG"
 
 
 
