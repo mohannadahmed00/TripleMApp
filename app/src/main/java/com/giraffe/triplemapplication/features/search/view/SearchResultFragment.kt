@@ -7,19 +7,25 @@ import com.giraffe.triplemapplication.databinding.FragmentSearchResultBinding
 import com.giraffe.triplemapplication.features.search.viewmodel.SearchVM
 
 class SearchResultFragment :  BaseFragment<SearchVM, FragmentSearchResultBinding>() {
-    override fun getViewModel(): Class<SearchVM> {
-        TODO("Not yet implemented")
-    }
+
+
+
+    override fun getViewModel(): Class<SearchVM> = SearchVM::class.java
+
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         b: Boolean,
-    ): FragmentSearchResultBinding {
-        TODO("Not yet implemented")
-    }
+
+    ): FragmentSearchResultBinding = FragmentSearchResultBinding.inflate(inflater,container,false)
 
     override fun handleView() {
+
+    TODO("Not yet implemented")
+    }
+
+    override fun handleClicks() {
         TODO("Not yet implemented")
     }
 }

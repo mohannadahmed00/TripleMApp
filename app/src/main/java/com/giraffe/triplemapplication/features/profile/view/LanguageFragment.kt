@@ -1,8 +1,12 @@
 package com.giraffe.triplemapplication.features.profile.view
 
+import android.app.Activity
+import android.content.Context
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import com.giraffe.triplemapplication.OnActivityCallback
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentLanguageBinding
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
@@ -11,8 +15,10 @@ import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.hide
 import com.giraffe.triplemapplication.utils.show
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
+    private lateinit var onActivityCallback: OnActivityCallback
     override fun getViewModel(): Class<ProfileVM>  = ProfileVM::class.java
 
     override fun getFragmentBinding(
@@ -22,27 +28,31 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
     ): FragmentLanguageBinding = FragmentLanguageBinding.inflate(inflater,container,false)
 
     override fun handleView() {
-        mViewModel.getLanguage()
+        onActivityCallback = activity as OnActivityCallback
+        sharedViewModel.getLanguage()
         observeGetLanguage()
         handleClicks()
     }
 
-    private fun handleClicks() {
+    override fun handleClicks() {
+
         binding.tvEnglish.setOnClickListener {
             binding.ivEnglishCorrect.show()
             binding.ivArabicCorrect.hide()
             mViewModel.setLanguage(Constants.Languages.ENGLISH)
+            onActivityCallback.onLanguageSelected(Constants.Languages.ENGLISH.value)
         }
         binding.tvArabic.setOnClickListener {
             binding.ivEnglishCorrect.hide()
             binding.ivArabicCorrect.show()
             mViewModel.setLanguage(Constants.Languages.ARABIC)
+            onActivityCallback.onLanguageSelected(Constants.Languages.ARABIC.value)
         }
     }
 
     private fun observeGetLanguage() {
         lifecycleScope.launch {
-            mViewModel.languageFlow.collect{
+            sharedViewModel.languageFlow.collect{
                 when(it){
                     is Resource.Failure -> {}
                     Resource.Loading -> {}

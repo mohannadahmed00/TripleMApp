@@ -62,6 +62,8 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         }*/
     }
 
+    override fun handleClicks() {}
+
     private fun observeGetAllProducts() {
         lifecycleScope.launch {
 

@@ -6,12 +6,13 @@ import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentSignUpBinding
 import com.giraffe.triplemapplication.features.register.viewmodel.RegisterVM
 import com.giraffe.triplemapplication.utils.Resource
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,26 +25,19 @@ class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         b: Boolean,
+
     ): FragmentSignUpBinding = FragmentSignUpBinding.inflate(inflater, container, false)
 
     override fun handleView() {
 
         setTextListeners()
         observeData()
-        onClickListeners()
+
     }
 
-    private fun onClickListeners() {
-        binding.signUpBtn.setOnClickListener {
-            register(binding.emailEditText.text.toString() , binding.passwordEditText.text.toString(), binding.confirmPasswordText.text.toString())
-        }
-        binding.loginBtn.setOnClickListener {
-            navigateToLogin()
-        }
-    }
 
     private fun navigateToLogin() {
-        findNavController().navigate(R.id.loginFragment)
+        findNavController().navigateUp()
     }
 
     private fun register(email: String, password: String, confirmPassword: String) {
@@ -122,12 +116,25 @@ class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
 
     }
 
-    private fun showSuccess(it: Resource.Success<FirebaseUser>) {
-        findNavController().navigate(R.id.homeFragment)
+    private fun showSuccess(it: Resource.Success<Task<AuthResult>>) {
+        val action = SignUpFragmentDirections.actionSignUpFragmentToUserInfoFragment()
+        findNavController().navigate(action)
+
     }
 
     private fun showFailure(it: Resource.Failure) {
        Snackbar.make(requireView() , it.errorBody.toString() , Snackbar.LENGTH_SHORT).show()
+    }
+
+
+
+    override fun handleClicks() {
+        binding.signUpBtn.setOnClickListener {
+            register(binding.emailEditText.text.toString() , binding.passwordEditText.text.toString(), binding.confirmPasswordText.text.toString())
+        }
+        binding.loginBtn.setOnClickListener {
+            navigateToLogin()
+        }
     }
 
 

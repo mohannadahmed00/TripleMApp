@@ -1,72 +1,15 @@
 package com.giraffe.triplemapplication.features.profile.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Constants
-import com.giraffe.triplemapplication.utils.Resource
-import com.google.gson.JsonSyntaxException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
-import retrofit2.HttpException
 
-class ProfileVM(private val repo: RepoInterface): ViewModel() {
-    private val _languageFlow:MutableStateFlow<Resource<String>> = MutableStateFlow(Resource.Loading)
-    val languageFlow:StateFlow<Resource<String>> = _languageFlow.asStateFlow()
-    fun getLanguage(){
-        viewModelScope.launch {
-            _languageFlow.emit(safeApiCalls { repo.getLanguage() })
-        }
-    }
-    fun setLanguage(code:Constants.Languages){
+class ProfileVM(private val repo: RepoInterface) : ViewModel() {
+    fun setLanguage(code: Constants.Languages) {
         viewModelScope.launch {
             repo.setLanguage(code)
-        }
-    }
-
-    private suspend fun <T> safeApiCalls(apiCall: suspend () -> Flow<T>): Resource<T> {
-        return withContext(Dispatchers.IO) {
-            var resource:Resource<T> = Resource.Loading
-            try {
-                apiCall.invoke()
-                    .catch {
-                        resource = Resource.Failure(true,0,it)
-                    }.collect{
-                        resource = Resource.Success(it)
-                    }
-            }catch (throwable: Throwable){
-                when (throwable) {
-                    is HttpException -> {
-                        Log.e("BaseRepoHttpErrorBody->","${throwable.response()!!.errorBody()}")
-                        resource = Resource.Failure(
-                            false,
-                            throwable.code(),
-                            throwable.response()!!.errorBody() as ResponseBody
-                        )
-                    }
-                    is JsonSyntaxException -> {
-                        Log.e("BaseRepoJsonErrorBody->", throwable.localizedMessage)
-                        resource = Resource.Failure(
-                            false,
-                            0,
-                            throwable.localizedMessage
-                        )
-                    }
-                    else -> {
-                        resource = Resource.Failure(true, null, null)
-                    }
-                }
-            }
-            resource
         }
     }
 }

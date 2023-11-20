@@ -1,13 +1,18 @@
 package com.giraffe.triplemapplication.network
 
 import com.giraffe.triplemapplication.utils.Constants
+
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.await
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.flow.Flow
+
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -15,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient : RemoteSource {
     //http://api.exchangeratesapi.io/v1/latest?access_key=4ee6d3381b90ee1d4e7a0c551205269f
+
 
     private fun provideOkHttpClient(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
@@ -27,49 +33,47 @@ object ApiClient : RemoteSource {
         return httpClient.build()
     }
 
-    private val apiServices = Retrofit.Builder()
+
+    private fun getApiServices(url: String = Constants.URL) = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .client(provideOkHttpClient())
-        .baseUrl(Constants.URL)
+        .baseUrl(url)
         .build().create(ApiServices::class.java)
 
+
     override suspend fun getAllProducts() = flow {
-        emit(apiServices.getAllProducts())
+        emit(getApiServices().getAllProducts())
     }
 
     override suspend fun signUpFirebase(
         email: String,
         password: String,
 
-    ): Resource<FirebaseUser> {
-        return try{
-
-            val result = createFirebaseAuth().createUserWithEmailAndPassword(email, password).await()
-//            result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
-            Resource.Success(result.user!!)
-        }catch (e:Exception){
-            e.printStackTrace()
-            Resource.Failure(true ,e.hashCode() , e.message)
-        }
-
+        ): Flow<Task<AuthResult>> = flow {
+        val result = createFirebaseAuth().createUserWithEmailAndPassword(email, password)
+        emit(result)
     }
 
     override suspend fun signInFirebase(
         email: String,
         password: String,
-    ): Resource<FirebaseUser> {
-
-        return try{
-            val result = createFirebaseAuth().signInWithEmailAndPassword(email, password).await()
-            Resource.Success(result.user!!)
-        }catch (e:Exception){
-            e.printStackTrace()
-            Resource.Failure(true ,e.hashCode() , e)
-        }
+    ): Flow<Task<AuthResult>> = flow {
+        val result = createFirebaseAuth().signInWithEmailAndPassword(email, password)
+        emit(result)
     }
 
-    override suspend fun addUsername(name: String) {
-        TODO("Not yet implemented")
+
+    override fun getCurrentUser(): FirebaseUser {
+
+        return createFirebaseAuth().currentUser!!
+    }
+
+    override fun isLoggedIn(): Boolean {
+        return createFirebaseAuth().currentUser != null
+    }
+
+    override fun logout() {
+        FirebaseAuth.getInstance().signOut()
     }
 
 

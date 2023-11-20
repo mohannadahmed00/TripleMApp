@@ -45,6 +45,8 @@ class AllCategoriesFragment : BaseFragment<HomeVM, FragmentAllCategoriesBinding>
         }
     }
 
+    override fun handleClicks() {}
+
     private fun navigateUp() {
         findNavController().navigateUp()
     }

@@ -10,17 +10,24 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     private val dao: FavoritesDao = AppDataBase.getInstance(context).getFavoritesDao()
     override suspend fun getLanguage(): Flow<String> {
         return flow {
-            val lang = shared.read(Constants.LANGUAGE)
-            if (lang != null){
-                emit(lang)
-            }else{
-                emit(Constants.Languages.ENGLISH.value)
-            }
+            val lang = shared.read(Constants.LANGUAGE) ?: Constants.Languages.ENGLISH.value
+            emit(lang)
         }
     }
 
     override suspend fun setLanguage(code: Constants.Languages) {
-        shared.store(Constants.LANGUAGE,code.value)
+        shared.store(Constants.LANGUAGE, code.value)
+    }
+
+    override suspend fun getFirstTimeFlag(): Flow<Boolean> {
+        return flow {
+            val flag = shared.read(Constants.FIRST_TIME_FLAG)
+            emit(flag == null)
+        }
+    }
+
+    override suspend fun setFirstTimeFlag(flag: Boolean) {
+        shared.store(Constants.FIRST_TIME_FLAG, flag.toString())
     }
 
 

@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.safeCall
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.gson.JsonSyntaxException
@@ -21,8 +24,9 @@ import okhttp3.ResponseBody
 import retrofit2.HttpException
 
 class RegisterVM(private val repo: RepoInterface) : ViewModel() {
-    private val _firebaseUser : MutableStateFlow<Resource<FirebaseUser>> = MutableStateFlow(Resource.Loading)
-    val currentUser : StateFlow<Resource<FirebaseUser>> = _firebaseUser.asStateFlow()
+    private val _firebaseUser: MutableStateFlow<Resource<Task<AuthResult>>> =
+        MutableStateFlow(Resource.Loading)
+    val currentUser: StateFlow<Resource<Task<AuthResult>>> = _firebaseUser.asStateFlow()
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
@@ -30,6 +34,7 @@ class RegisterVM(private val repo: RepoInterface) : ViewModel() {
     val isEmailValid = MutableLiveData<Boolean>()
     val isPasswordValid = MutableLiveData<Boolean>()
     val doPasswordsMatch = MutableLiveData<Boolean>()
+
     init {
         isEmailValid.value = false
         isPasswordValid.value = false
@@ -62,10 +67,21 @@ class RegisterVM(private val repo: RepoInterface) : ViewModel() {
 
     fun signUp(email: String, password: String, confirmPassword: String) {
 
-            viewModelScope.launch(Dispatchers.IO) {
-                 _firebaseUser.emit(repo.signUpFirebase(email, password , confirmPassword))
+        viewModelScope.launch(Dispatchers.IO) {
+            if (repo.isDataValid(email, password, confirmPassword)) {
+                _firebaseUser.emit(safeCall {
+                    repo.signUpFirebase(
+                        email,
+                        password,
+                        confirmPassword
+                    )
+                })
+
+            } else {
+                _firebaseUser.value = Resource.Failure(true , 200 ,"Please check your input")
 
             }
+        }
 
 
     }
