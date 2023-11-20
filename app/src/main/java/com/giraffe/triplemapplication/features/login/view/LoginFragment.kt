@@ -11,20 +11,16 @@ import com.giraffe.triplemapplication.databinding.FragmentLoginBinding
 import com.giraffe.triplemapplication.features.login.viewmodel.LoginVM
 
 class LoginFragment : BaseFragment<LoginVM ,FragmentLoginBinding >() {
-    override fun getViewModel(): Class<LoginVM> {
-        TODO("Not yet implemented")
-    }
+    override fun getViewModel(): Class<LoginVM>  = LoginVM::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         b: Boolean,
-    ): FragmentLoginBinding {
-        TODO("Not yet implemented")
-    }
+    ): FragmentLoginBinding =FragmentLoginBinding.inflate(inflater ,container , false)
 
     override fun handleView() {
-        TODO("Not yet implemented")
+
     }
 
 }

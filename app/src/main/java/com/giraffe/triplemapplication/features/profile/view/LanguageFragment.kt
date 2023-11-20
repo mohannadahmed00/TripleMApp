@@ -55,6 +55,8 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
                             binding.ivArabicCorrect.hide()
                         }
                     }
+
+
                 }
             }
         }
