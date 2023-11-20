@@ -384,9 +384,22 @@
                 android:textColor="@color/gary"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/line6"
-                app:layout_constraintEnd_toStartOf="@id/iv_enter_currency"
+                app:layout_constraintEnd_toStartOf="@id/tv_currency_code"
                 app:layout_constraintStart_toEndOf="@id/iv_currency"
                 app:layout_constraintTop_toBottomOf="@id/line5" />
+
+            <TextView
+                android:id="@+id/tv_currency_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="19dp"
+                android:text="EGP"
+                android:textColor="@color/gary"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_currency"
+                app:layout_constraintEnd_toStartOf="@id/iv_enter_currency"
+                app:layout_constraintStart_toEndOf="@id/tv_currency"
+                app:layout_constraintTop_toTopOf="@id/tv_currency" />
 
             <ImageView
                 android:id="@+id/iv_enter_currency"
@@ -395,7 +408,7 @@
                 android:src="@drawable/enter_ic"
                 app:layout_constraintBottom_toBottomOf="@id/tv_currency"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_currency"
+                app:layout_constraintStart_toEndOf="@id/tv_currency_code"
                 app:layout_constraintTop_toTopOf="@id/tv_currency" />
 
             <View
@@ -425,13 +438,26 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="19dp"
-                android:text="Languages"
+                android:text="@string/languages"
                 android:textColor="@color/gary"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/iv_enter_languages"
+                app:layout_constraintEnd_toStartOf="@id/tv_language_code"
                 app:layout_constraintStart_toEndOf="@id/iv_languages"
                 app:layout_constraintTop_toBottomOf="@id/line6" />
+
+            <TextView
+                android:id="@+id/tv_language_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="19dp"
+                android:text="@string/english"
+                android:textColor="@color/gary"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_languages"
+                app:layout_constraintEnd_toStartOf="@id/iv_enter_languages"
+                app:layout_constraintStart_toEndOf="@id/tv_languages"
+                app:layout_constraintTop_toTopOf="@id/tv_languages" />
 
             <ImageView
                 android:id="@+id/iv_enter_languages"
@@ -440,7 +466,7 @@
                 android:src="@drawable/enter_ic"
                 app:layout_constraintBottom_toBottomOf="@id/tv_languages"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_languages"
+                app:layout_constraintStart_toEndOf="@id/tv_language_code"
                 app:layout_constraintTop_toTopOf="@id/tv_languages" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

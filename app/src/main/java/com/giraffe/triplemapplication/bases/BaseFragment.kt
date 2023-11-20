@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.SharedVM
 import com.giraffe.triplemapplication.database.ConcreteLocalSource
 import com.giraffe.triplemapplication.model.repo.Repo
@@ -41,6 +39,7 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding> : Fragment() {
             mViewModel = ViewModelProvider(this, factory)[getViewModel()]//mViewModel::class.java
             sharedViewModel = ViewModelProvider(requireActivity(), factory)[SharedVM::class.java]
             handleView()
+            handleClicks()
             rootView = binding.root
         } else {
             (rootView?.parent as? ViewGroup)?.removeView(rootView)
@@ -53,6 +52,8 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding> : Fragment() {
     abstract fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?, b: Boolean): B
 
     abstract fun handleView()
+
+    abstract fun handleClicks()
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -16,4 +16,5 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
     ): FragmentSearchBinding = FragmentSearchBinding.inflate(inflater, container, false)
 
     override fun handleView() {}
+    override fun handleClicks() {}
 }
