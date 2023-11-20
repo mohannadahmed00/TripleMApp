@@ -1,9 +1,12 @@
 package com.giraffe.triplemapplication.model.products
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "products_table")
+@Parcelize
 data class Product(
     @PrimaryKey val id: Long,
     val admin_graphql_api_id: String?,
@@ -23,4 +26,4 @@ data class Product(
     val updated_at: String?,
     val variants: List<Variant>?,
     val vendor: String?
-)
+): Parcelable

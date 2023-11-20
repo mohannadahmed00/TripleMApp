@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_allCategoriesFragment"
             app:destination="@id/allCategoriesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_productInfoFragment"
+            app:destination="@id/productInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -42,9 +45,18 @@
         tools:layout="@layout/fragment_language" />
     <fragment
         android:id="@+id/allCategoriesFragment"
-        android:name="com.giraffe.triplemapplication.features.home.view.AllCategoriesFragment"
+        android:name="com.giraffe.triplemapplication.features.allcategories.view.AllCategoriesFragment"
         android:label="fragment_all_categories"
         tools:layout="@layout/fragment_all_categories" />
+    <fragment
+        android:id="@+id/productInfoFragment"
+        android:name="com.giraffe.triplemapplication.features.details.view.ProductInfoFragment"
+        android:label="fragment_product_info"
+        tools:layout="@layout/fragment_product_info" >
+        <argument
+            android:name="product"
+            app:argType="com.giraffe.triplemapplication.model.products.Product" />
+    </fragment>
 
 
 </navigation>

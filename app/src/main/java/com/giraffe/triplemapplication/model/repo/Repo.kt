@@ -22,6 +22,9 @@ class Repo private constructor(
 
     override suspend fun getAllProducts() = remoteSource.getAllProducts()
 
+    override suspend fun getAllCategories() = remoteSource.getAllCategories()
+
+    override suspend fun getAllBrands() = remoteSource.getAllBrands()
 
     override suspend fun getLanguage() = localSource.getLanguage()
 
