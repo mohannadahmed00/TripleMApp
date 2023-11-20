@@ -1,5 +1,9 @@
 package com.giraffe.triplemapplication.model.products
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Image(
     val admin_graphql_api_id: String?,
     //val alt: Any?,
@@ -10,6 +14,6 @@ data class Image(
     val product_id: Long?,
     val src: String?,
     val updated_at: String?,
-    val variant_ids: List<Any>?,
+//    val variant_ids: List<Any>?,
     val width: Int?
-)
+): Parcelable
