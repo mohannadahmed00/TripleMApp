@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.features.home.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -63,10 +64,12 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         lifecycleScope.launch {
             mViewModel.allProductsFlow.collect {
                 when(it) {
-                    is Resource.Failure -> { }
-                    Resource.Loading -> { }
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         productsAdapter.submitList(it.value.products)
+                        dismissLoading()
+                        binding.homeScreen.visibility = View.VISIBLE
                     }
                 }
             }
@@ -77,10 +80,12 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         lifecycleScope.launch {
             mViewModel.allBrandsFlow.collect {
                 when(it) {
-                    is Resource.Failure -> { }
-                    Resource.Loading -> { }
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
+                        dismissLoading()
+                        binding.homeScreen.visibility = View.VISIBLE
                     }
                 }
             }

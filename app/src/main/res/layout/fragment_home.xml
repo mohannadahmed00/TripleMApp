@@ -2,11 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context=".features.home.view.HomeFragment">
+    android:visibility="gone"
+    tools:context=".features.home.view.HomeFragment"
+    tools:visibility="visible">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,37 +32,37 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/see_all"
-            app:layout_constraintTop_toTopOf="@id/categories_label"
+            android:textColor="@color/red"
             app:layout_constraintBottom_toBottomOf="@id/categories_label"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="@color/red"/>
+            app:layout_constraintTop_toTopOf="@id/categories_label" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/brands_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:itemCount="1"
             app:layout_constraintTop_toBottomOf="@+id/categories_label"
-            tools:listitem="@layout/item_brand"/>
+            tools:itemCount="1"
+            tools:listitem="@layout/item_brand" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/see_all_image"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/see_all"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@id/shoes_image"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/categories_label" />-->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/see_all_image"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:src="@drawable/see_all"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toEndOf="@id/shoes_image"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/categories_label" />-->
 
-<!--        <TextView-->
-<!--            android:id="@+id/see_all_label"-->
-<!--            style="@style/subtitle_text"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/see_all"-->
-<!--            app:layout_constraintEnd_toEndOf="@id/see_all_image"-->
-<!--            app:layout_constraintStart_toStartOf="@id/see_all_image"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/see_all_image" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/see_all_label"-->
+        <!--            style="@style/subtitle_text"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@string/see_all"-->
+        <!--            app:layout_constraintEnd_toEndOf="@id/see_all_image"-->
+        <!--            app:layout_constraintStart_toStartOf="@id/see_all_image"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/see_all_image" />-->
 
         <TextView
             android:id="@+id/latest_label"

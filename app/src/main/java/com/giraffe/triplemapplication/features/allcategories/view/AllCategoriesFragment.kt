@@ -28,7 +28,6 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     ): FragmentAllCategoriesBinding = FragmentAllCategoriesBinding.inflate(inflater, container, false)
 
     override fun handleView() {
-        showLoading()
         binding.closeButton.setOnClickListener { navigateUp() }
 
         // Recycler View
@@ -57,10 +56,11 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
             mViewModel.allBrandsFlow.collect {
                 when(it) {
                     is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> {  }
+                    Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
                         dismissLoading()
+                        setVisibility()
                     }
                 }
             }
@@ -72,16 +72,20 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
             mViewModel.allCategoriesFlow.collect {
                 when(it) {
                     is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> { }
+                    Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         subCategoriesAdapter.submitList(it.value.custom_collections)
                         dismissLoading()
-                        binding.categoryCard.visibility = View.VISIBLE
-                        binding.brandNameLabel.visibility = View.VISIBLE
+                        setVisibility()
                     }
                 }
             }
         }
+    }
+
+    private fun setVisibility() {
+        binding.categoryCard.visibility = View.VISIBLE
+        binding.brandNameLabel.visibility = View.VISIBLE
     }
 
     private fun navigateUp() {
