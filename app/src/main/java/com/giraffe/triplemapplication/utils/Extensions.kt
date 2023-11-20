@@ -2,7 +2,8 @@ package com.giraffe.triplemapplication.utils
 
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.ViewModel
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,7 @@ fun View.gone(){
     this.visibility = View.GONE
 }
 
-suspend fun <T> ViewModel.safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
+suspend fun <T> safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
     return withContext(Dispatchers.IO) {
         var resource:Resource<T> = Resource.Loading
         try {
@@ -59,4 +60,8 @@ suspend fun <T> ViewModel.safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
         }
         resource
     }
+}
+
+fun ImageView.load(url:String){
+    Glide.with(this.context).load(url).into(this)
 }

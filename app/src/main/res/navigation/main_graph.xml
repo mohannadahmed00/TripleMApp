@@ -37,6 +37,9 @@
             app:popUpTo="@id/profileFragment"
             android:id="@+id/action_profileFragment_to_languageFragment"
             app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_currencyFragment"
+            app:destination="@id/currencyFragment" />
     </fragment>
     <fragment
         android:id="@+id/languageFragment"
@@ -48,6 +51,12 @@
         android:name="com.giraffe.triplemapplication.features.allcategories.view.AllCategoriesFragment"
         android:label="fragment_all_categories"
         tools:layout="@layout/fragment_all_categories" />
+    <fragment
+        android:id="@+id/currencyFragment"
+        android:name="com.giraffe.triplemapplication.features.profile.view.CurrencyFragment"
+        android:label="CurrencyFragment"
+        tools:layout="@layout/fragment_currency"/>
+
     <fragment
         android:id="@+id/filterFragment"
         android:name="com.giraffe.triplemapplication.features.search.view.SearchResultFragment"

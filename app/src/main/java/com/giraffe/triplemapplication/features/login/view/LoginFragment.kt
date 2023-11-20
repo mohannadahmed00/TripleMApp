@@ -8,7 +8,6 @@ import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentLoginBinding
-import com.giraffe.triplemapplication.features.SplashFragmentDirections
 import com.giraffe.triplemapplication.features.login.viewmodel.LoginVM
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.gms.tasks.Task

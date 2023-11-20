@@ -2,9 +2,9 @@ package com.giraffe.triplemapplication.model.repo
 
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
+import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.utils.Constants
-import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
@@ -30,5 +30,12 @@ interface RepoInterface {
 
     suspend fun getFirstTimeFlag(): Flow<Boolean>
     suspend fun setFirstTimeFlag(flag:Boolean)
+    suspend fun getCurrencies(): Flow<ExchangeRatesResponse>
+
+    suspend fun setExchangeRates(exchangeRates: ExchangeRatesResponse): Flow<Long>
+
+    suspend fun getCurrency(): Flow<String>
+
+    suspend fun setCurrency(currency:Constants.Currencies)
 
 }

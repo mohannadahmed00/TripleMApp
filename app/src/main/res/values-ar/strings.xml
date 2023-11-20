@@ -53,6 +53,12 @@
     <string name="fitting">FITTING</string>
     <string name="select_size">SELECT SIZE (US)</string>
     <string name="languages">اللغة</string>
+    <string name="choose_your_preferred_currency">Choose your preferred currency</string>
+    <string name="egp">EGP</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
+    <string name="gbp">GBP</string>
+    <string name="log_out">LOG OUT</string>
 
 
 </resources>
