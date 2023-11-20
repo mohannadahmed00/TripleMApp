@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
     override fun getViewModel(): Class<HomeVM> = HomeVM::class.java
 
-    private lateinit var recyclerAdapter: ProductAdapter
+    private lateinit var productsAdapter: ProductAdapter
+    private lateinit var brandsAdapter: BrandsAdapter
     private lateinit var images: ArrayList<Int>
     private lateinit var sliderAdapter: SliderAdapter
 
@@ -31,15 +32,20 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
     override fun handleView() {
         // Recycler View
-        recyclerAdapter = ProductAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
-        binding.recyclerView.apply {
-            adapter = recyclerAdapter
+        productsAdapter = ProductAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        binding.productsRecyclerView.apply {
+            adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.HORIZONTAL
             }
         }
-
-        handleClicks()
+        brandsAdapter = BrandsAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        binding.brandsRecyclerView.apply {
+            adapter = brandsAdapter
+            layoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.HORIZONTAL
+            }
+        }
 
         images = arrayListOf()
         images.add(R.drawable.banner)
@@ -53,10 +59,6 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         observeGetAllBrands()
     }
 
-    private fun handleClicks() {
-        binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
-    }
-
     private fun observeGetAllProducts() {
         lifecycleScope.launch {
             mViewModel.allProductsFlow.collect {
@@ -64,7 +66,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                     is Resource.Failure -> { }
                     Resource.Loading -> { }
                     is Resource.Success -> {
-                        recyclerAdapter.submitList(it.value.products)
+                        productsAdapter.submitList(it.value.products)
                     }
                 }
             }
@@ -79,7 +81,6 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                     Resource.Loading -> { }
                     is Resource.Success -> {
 //                        recyclerAdapter.submitList(it.value.custom_collections)
-                        Log.i("hhhhhhhhhhhhhh", "observeGetAllCategories: ${it.value}")
                     }
                 }
             }
@@ -93,8 +94,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                     is Resource.Failure -> { }
                     Resource.Loading -> { }
                     is Resource.Success -> {
-//                        recyclerAdapter.submitList(it.value.custom_collections)
-                        Log.i("hhhhhhhhhhhhhh", "observeGetAllBrands: ${it.value}")
+                        brandsAdapter.submitList(it.value.smart_collections)
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.giraffe.triplemapplication.features.home.view
+package com.giraffe.triplemapplication.features.allcategories.view
 
 import android.content.Context
 import android.view.LayoutInflater

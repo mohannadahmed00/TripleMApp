@@ -42,7 +42,7 @@
         tools:layout="@layout/fragment_language" />
     <fragment
         android:id="@+id/allCategoriesFragment"
-        android:name="com.giraffe.triplemapplication.features.home.view.AllCategoriesFragment"
+        android:name="com.giraffe.triplemapplication.features.allcategories.view.AllCategoriesFragment"
         android:label="fragment_all_categories"
         tools:layout="@layout/fragment_all_categories" />
 

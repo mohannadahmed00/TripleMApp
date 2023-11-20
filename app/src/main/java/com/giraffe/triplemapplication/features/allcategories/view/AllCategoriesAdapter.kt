@@ -1,4 +1,4 @@
-package com.giraffe.triplemapplication.features.home.view
+package com.giraffe.triplemapplication.features.allcategories.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.databinding.ItemAllCategoriesBinding
-import com.giraffe.triplemapplication.databinding.ItemCategoryBinding
 
 class CategoriesAdapter(
     private val context: Context,

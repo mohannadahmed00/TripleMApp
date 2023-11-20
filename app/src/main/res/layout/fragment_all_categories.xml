@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".features.home.view.AllCategoriesFragment">
+    tools:context=".features.allcategories.view.AllCategoriesFragment">
 
     <ImageView
         android:id="@+id/close_button"
