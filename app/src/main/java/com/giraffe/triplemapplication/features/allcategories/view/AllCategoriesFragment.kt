@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.features.allcategories.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +28,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     ): FragmentAllCategoriesBinding = FragmentAllCategoriesBinding.inflate(inflater, container, false)
 
     override fun handleView() {
+        showLoading()
         binding.closeButton.setOnClickListener { navigateUp() }
 
         // Recycler View
@@ -54,10 +56,11 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         lifecycleScope.launch {
             mViewModel.allBrandsFlow.collect {
                 when(it) {
-                    is Resource.Failure -> { }
-                    Resource.Loading -> { }
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> {  }
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
+                        dismissLoading()
                     }
                 }
             }
@@ -68,10 +71,13 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         lifecycleScope.launch {
             mViewModel.allCategoriesFlow.collect {
                 when(it) {
-                    is Resource.Failure -> { }
+                    is Resource.Failure -> { dismissLoading() }
                     Resource.Loading -> { }
                     is Resource.Success -> {
                         subCategoriesAdapter.submitList(it.value.custom_collections)
+                        dismissLoading()
+                        binding.categoryCard.visibility = View.VISIBLE
+                        binding.brandNameLabel.visibility = View.VISIBLE
                     }
                 }
             }
