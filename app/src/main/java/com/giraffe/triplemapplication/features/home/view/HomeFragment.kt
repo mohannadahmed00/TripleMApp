@@ -39,7 +39,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
             }
         }
 
-        binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
+        handleClicks()
 
         images = arrayListOf()
         images.add(R.drawable.banner)
@@ -50,6 +50,11 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
         observeGetAllProducts()
         observeGetAllCategories()
+        observeGetAllBrands()
+    }
+
+    private fun handleClicks() {
+        binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
     }
 
     private fun observeGetAllProducts() {
@@ -75,6 +80,21 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                     is Resource.Success -> {
 //                        recyclerAdapter.submitList(it.value.custom_collections)
                         Log.i("hhhhhhhhhhhhhh", "observeGetAllCategories: ${it.value}")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeGetAllBrands() {
+        lifecycleScope.launch {
+            mViewModel.allBrandsFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { }
+                    Resource.Loading -> { }
+                    is Resource.Success -> {
+//                        recyclerAdapter.submitList(it.value.custom_collections)
+                        Log.i("hhhhhhhhhhhhhh", "observeGetAllBrands: ${it.value}")
                     }
                 }
             }

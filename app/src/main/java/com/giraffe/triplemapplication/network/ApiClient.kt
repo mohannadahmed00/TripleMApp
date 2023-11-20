@@ -1,6 +1,8 @@
 package com.giraffe.triplemapplication.network
 
+import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.utils.Constants
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -30,5 +32,9 @@ object ApiClient: RemoteSource {
 
     override suspend fun getAllCategories() = flow {
         emit(apiServices.getAllCategories())
+    }
+
+    override suspend fun getAllBrands() = flow {
+        emit(apiServices.getAllBrands())
     }
 }
