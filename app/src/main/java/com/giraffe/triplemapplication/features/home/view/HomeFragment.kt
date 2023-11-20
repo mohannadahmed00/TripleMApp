@@ -12,6 +12,7 @@ import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
+import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
@@ -37,7 +38,6 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
             }
         }
 
-        //binding.categoriesScrollView.isHorizontalScrollBarEnabled = false
         binding.seeAllImage.setOnClickListener { navigateToAllCategoriesScreen() }
 
         images = arrayListOf()
@@ -49,22 +49,19 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
         mViewModel.getAllProducts()
         observeGetAllProducts()
-
-        /*lifecycleScope.launch {
-            mViewModel.uiState.collect {
-                recyclerAdapter.submitList(it.products)
-                if (it.categories != emptyList<String?>()) {
-                    binding.apparelLabel.text = it.categories[0]?.lowercase()
-                    binding.beautyLabel.text = it.categories[1]?.lowercase()
-                    binding.shoesLabel.text = it.categories[2]?.lowercase()
-                }
-            }
-        }*/
     }
 
     private fun observeGetAllProducts() {
         lifecycleScope.launch {
-
+            mViewModel.allProductsFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { }
+                    Resource.Loading -> { }
+                    is Resource.Success -> {
+                        recyclerAdapter.submitList(it.value.products)
+                    }
+                }
+            }
         }
     }
 

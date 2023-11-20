@@ -26,7 +26,10 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
             _allProductsFlow.emit(safeApiCalls {repo.getAllProducts()})
         }
     }
-    fun getAllCategories(){}
+
+    fun getAllCategories() {
+    }
+
     private suspend fun <T> safeApiCalls(apiCall: suspend () -> Flow<T>): Resource<T> {
         return withContext(Dispatchers.IO) {
             var resource:Resource<T> = Resource.Loading
