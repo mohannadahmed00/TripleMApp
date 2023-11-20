@@ -68,10 +68,14 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                         if (it.value){
                             mViewModel.setFirstTimeFlag(false)
                             //start currency worker here
+
                             //must go to onboard graph
                         }else{
+
+
                             //should check here if authorized (go to main graph) or not (go to auth graph)
                         }
+                        //val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
                         val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
                         findNavController().navigate(action)
                     }

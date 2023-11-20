@@ -1,5 +1,7 @@
 package com.giraffe.triplemapplication.network
 
+import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
+import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import retrofit2.http.GET
@@ -16,4 +18,11 @@ interface ApiServices {
         @Query("symbols") symbols: String = "USD,EUR,GBP,EGP",
         @Query("format") format: Int = 1
     ): ExchangeRatesResponse
+
+    @GET("custom_collections.json")
+    suspend fun getAllCategories(): AllCategoriesResponse
+
+    @GET("smart_collections.json")
+    suspend fun getAllBrands(): AllBrandsResponse
+
 }

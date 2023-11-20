@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "452652252756",
+    "project_id": "triple-m-app-afa21",
+    "storage_bucket": "triple-m-app-afa21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452652252756:android:afa20c40f267450f41b7c1",
+        "android_client_info": {
+          "package_name": "com.giraffe.triplemapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1xj5bCXw8b0D3YHKM-GEbh7Z_mDA08rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

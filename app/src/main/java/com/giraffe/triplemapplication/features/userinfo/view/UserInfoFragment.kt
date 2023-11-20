@@ -2,6 +2,7 @@ package com.giraffe.triplemapplication.features.userinfo.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentUserInfoBinding
 import com.giraffe.triplemapplication.features.userinfo.viewmodel.UserInfoVM
@@ -16,5 +17,9 @@ class UserInfoFragment : BaseFragment<UserInfoVM, FragmentUserInfoBinding>() {
     ): FragmentUserInfoBinding = FragmentUserInfoBinding.inflate(inflater, container, false)
 
     override fun handleView() {}
-    override fun handleClicks() {}
+    override fun handleClicks() {
+        binding.backBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
 }
