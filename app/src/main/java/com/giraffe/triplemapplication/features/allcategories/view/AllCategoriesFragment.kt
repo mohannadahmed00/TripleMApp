@@ -77,7 +77,9 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                     is Resource.Failure -> { dismissLoading() }
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
-                        subCategoriesAdapter.submitList(it.value.custom_collections)
+                        val categories = it.value.custom_collections.toMutableList()
+                        categories.removeAt(0) // Remove front page
+                        subCategoriesAdapter.submitList(categories)
                         dismissLoading()
                         setVisibility()
                     }
