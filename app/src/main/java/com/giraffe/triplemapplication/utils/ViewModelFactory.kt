@@ -8,7 +8,9 @@ import com.giraffe.triplemapplication.features.cart.viewmodel.CartVM
 import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
 import com.giraffe.triplemapplication.features.details.viewmodel.ProductInfoVM
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
+import com.giraffe.triplemapplication.features.login.viewmodel.LoginVM
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
+import com.giraffe.triplemapplication.features.register.viewmodel.RegisterVM
 import com.giraffe.triplemapplication.features.search.viewmodel.SearchVM
 import com.giraffe.triplemapplication.features.splash.viewmodel.SplashVM
 import com.giraffe.triplemapplication.features.userinfo.viewmodel.UserInfoVM
@@ -28,9 +30,14 @@ class ViewModelFactory(private val repo: RepoInterface) : ViewModelProvider.Fact
             SharedVM(repo) as T
         } else if (modelClass.isAssignableFrom(CheckoutVM::class.java)) {
             CheckoutVM(repo) as T
-        }else if (modelClass.isAssignableFrom(UserInfoVM::class.java)) {
+        } else if (modelClass.isAssignableFrom(UserInfoVM::class.java)) {
             UserInfoVM(repo) as T
-        }else if (modelClass.isAssignableFrom(SplashVM::class.java)) {
+
+        } else if (modelClass.isAssignableFrom(RegisterVM::class.java)) {
+            RegisterVM(repo) as T
+        } else if (modelClass.isAssignableFrom(LoginVM::class.java)) {
+            LoginVM(repo) as T
+        } else if (modelClass.isAssignableFrom(SplashVM::class.java)) {
             SplashVM(repo) as T
         } else if (modelClass.isAssignableFrom(AllCategoriesVM::class.java)) {
             AllCategoriesVM(repo) as T
