@@ -29,6 +29,9 @@ class Repo private constructor(
 
     override suspend fun getAllProducts() = remoteSource.getAllProducts()
 
+    override suspend fun getAllCategories() = remoteSource.getAllCategories()
+
+    override suspend fun getAllBrands() = remoteSource.getAllBrands()
 
     override suspend fun getLanguage() = localSource.getLanguage()
 
@@ -63,7 +66,7 @@ class Repo private constructor(
         remoteSource.logout()
     }
 
-    override suspend fun createCustomer(customer: Request): Flow<CustomerResponse> =
+    override fun createCustomer(customer: Request): Flow<CustomerResponse> =
         remoteSource.createCustomer(customer)
 
 

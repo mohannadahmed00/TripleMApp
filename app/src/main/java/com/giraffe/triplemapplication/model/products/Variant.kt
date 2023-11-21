@@ -1,5 +1,9 @@
 package com.giraffe.triplemapplication.model.products
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Variant(
     val admin_graphql_api_id: String?,
     //val barcode: Any?,
@@ -27,4 +31,4 @@ data class Variant(
     val updated_at: String?,
     val weight: Double?,
     val weight_unit: String?
-)
+): Parcelable

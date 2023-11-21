@@ -1,9 +1,9 @@
 package com.giraffe.triplemapplication.network
 
+
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.utils.Constants
-
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
@@ -11,16 +11,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
-
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object ApiClient : RemoteSource {
+object ApiClient: RemoteSource {
     //http://api.exchangeratesapi.io/v1/latest?access_key=4ee6d3381b90ee1d4e7a0c551205269f
-
-
     private fun provideOkHttpClient(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor { chain ->
@@ -31,17 +28,23 @@ object ApiClient : RemoteSource {
         }
         return httpClient.build()
     }
-
-
     private fun getApiServices(url: String = Constants.URL) = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .client(provideOkHttpClient())
         .baseUrl(url)
         .build().create(ApiServices::class.java)
-
-
+        
+        
     override suspend fun getAllProducts() = flow {
         emit(getApiServices().getAllProducts())
+    }
+
+    override suspend fun getAllCategories() = flow {
+        emit(getApiServices().getAllCategories())
+    }
+
+    override suspend fun getAllBrands() = flow {
+        emit(getApiServices().getAllBrands())
     }
 
     override fun signUpFirebase(
