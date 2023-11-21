@@ -41,7 +41,7 @@ class AllCategoriesVM(private val repo: RepoInterface): ViewModel() {
         }
     }
 
-    fun getAllProducts(categoryId: String) {
+    fun getProductsFromCategoryId(categoryId: String) {
         viewModelScope.launch {
             _allProductsFlow.emit(safeCall { repo.getProductsFromCategoryId(categoryId) })
         }

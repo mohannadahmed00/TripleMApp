@@ -65,7 +65,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllBrands() {
         val brandsAdapter = BrandsAdapter<SmartCollection>(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
-            mViewModel.getAllProducts(it.id.toString())
+            mViewModel.getProductsFromCategoryId(it.id.toString())
         }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
@@ -82,7 +82,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
                         binding.brandNameLabel.text = it.value.smart_collections[selectedItemFromHome].handle
-                        mViewModel.getAllProducts(it.value.smart_collections[selectedItemFromHome].id.toString())
+                        mViewModel.getProductsFromCategoryId(it.value.smart_collections[selectedItemFromHome].id.toString())
                         mViewModel.allProductsFlow.collect { products ->
                             when(products) {
                                 is Resource.Failure -> { dismissLoading() }
@@ -103,6 +103,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllCategories() {
         val categoriesAdapter = BrandsAdapter<CustomCollection>(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
+            mViewModel.getProductsFromCategoryId(it.id.toString())
         }
         binding.brandsRecyclerView.apply {
             adapter = categoriesAdapter
@@ -121,8 +122,18 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                         categories.removeAt(0) // Remove front page
                         categoriesAdapter.submitList(categories)
                         binding.brandNameLabel.text = it.value.custom_collections[selectedItemFromHome + 1].handle
-                        dismissLoading()
-                        setVisibility()
+                        mViewModel.getProductsFromCategoryId(it.value.custom_collections[selectedItemFromHome + 1].id.toString())
+                        mViewModel.allProductsFlow.collect { products ->
+                            when(products) {
+                                is Resource.Failure -> { dismissLoading() }
+                                Resource.Loading -> { showLoading() }
+                                is Resource.Success -> {
+                                    dismissLoading()
+                                    setVisibility()
+                                    productsAdapter.submitList(products.value.products)
+                                }
+                            }
+                        }
                     }
                 }
             }
