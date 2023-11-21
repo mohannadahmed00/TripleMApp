@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.features.allcategories.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
@@ -24,6 +25,7 @@ class AllCategoriesVM(private val repo: RepoInterface): ViewModel() {
     val allBrandsFlow: StateFlow<Resource<AllBrandsResponse>> = _allBrandsFlow.asStateFlow()
 
     private val _allProductsFlow: MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
+    val allProductsFlow = _allProductsFlow.asStateFlow()
 
     private val _filteredProductsFlow: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
     val filteredProductsFlow: StateFlow<List<Product>> = _filteredProductsFlow.asStateFlow()
@@ -53,10 +55,12 @@ class AllCategoriesVM(private val repo: RepoInterface): ViewModel() {
     }
 
     fun setFilterToProducts(isBrand: Boolean, handle: String) {
+        Log.i("TAGTAG", "setFilterToProducts: $handle")
         if (isBrand) {
             try {
                 _filteredProductsFlow.value = (_allProductsFlow.value as Resource.Success).value.products.filter { it.vendor?.lowercase() == handle.lowercase() }
             } catch (e: Exception) {
+                Log.i("TAGTAG", "setFilterToProducts: $e")
                 e.printStackTrace()
             }
         }

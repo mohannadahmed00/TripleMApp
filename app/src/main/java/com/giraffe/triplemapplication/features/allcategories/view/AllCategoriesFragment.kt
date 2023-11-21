@@ -51,7 +51,6 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         } else {
             observeGetAllCategories()
         }
-
         observeGetAllProducts()
     }
 
@@ -84,7 +83,9 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
                         binding.brandNameLabel.text = it.value.smart_collections[selectedItemFromHome].handle
-                        mViewModel.setFilterToProducts(isBrand, it.value.smart_collections[selectedItemFromHome].handle)
+                        mViewModel.allProductsFlow.collect { _ ->
+                            mViewModel.setFilterToProducts(isBrand, it.value.smart_collections[selectedItemFromHome].handle)
+                        }
                         dismissLoading()
                         setVisibility()
                     }
@@ -96,7 +97,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllCategories() {
         val categoriesAdapter = BrandsAdapter<CustomCollection>(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
-            mViewModel.setFilterToProducts(isBrand, it.handle)
+//            mViewModel.setFilterToProducts(isBrand, it.handle)
         }
         binding.brandsRecyclerView.apply {
             adapter = categoriesAdapter
@@ -115,7 +116,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                         categories.removeAt(0) // Remove front page
                         categoriesAdapter.submitList(categories)
                         binding.brandNameLabel.text = it.value.custom_collections[selectedItemFromHome + 1].handle
-                        mViewModel.setFilterToProducts(isBrand, it.value.custom_collections[selectedItemFromHome + 1].handle)
+//                        mViewModel.setFilterToProducts(isBrand, it.value.custom_collections[selectedItemFromHome + 1].handle)
                         dismissLoading()
                         setVisibility()
                     }
@@ -129,7 +130,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
             mViewModel.filteredProductsFlow.collect {
                 productsAdapter.submitList(it)
                 dismissLoading()
-                binding.categoryCard.visibility = View.VISIBLE
+                setVisibility()
             }
         }
     }
