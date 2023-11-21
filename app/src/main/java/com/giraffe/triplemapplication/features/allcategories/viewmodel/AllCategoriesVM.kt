@@ -56,7 +56,9 @@ class AllCategoriesVM(private val repo: RepoInterface): ViewModel() {
         if (isBrand) {
             try {
                 _filteredProductsFlow.value = (_allProductsFlow.value as Resource.Success).value.products.filter { it.vendor?.lowercase() == handle.lowercase() }
-            } catch (e: Exception) { }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }

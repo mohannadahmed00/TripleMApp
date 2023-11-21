@@ -144,7 +144,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     }
 
     private fun navigateToProductInfoScreen(product: Product) {
-        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment(product)
+        val action: NavDirections = AllCategoriesFragmentDirections.actionAllCategoriesFragmentToProductInfoFragment(product)
         Navigation.findNavController(requireView()).navigate(action)
     }
 }
