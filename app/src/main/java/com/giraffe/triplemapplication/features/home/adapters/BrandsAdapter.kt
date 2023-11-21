@@ -1,4 +1,4 @@
-package com.giraffe.triplemapplication.features.home.view
+package com.giraffe.triplemapplication.features.home.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,9 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.databinding.ItemBrandBinding
-import com.giraffe.triplemapplication.databinding.ItemProductBinding
 import com.giraffe.triplemapplication.model.brands.SmartCollection
-import com.giraffe.triplemapplication.model.products.Product
 
 class BrandsAdapter(
     private val context: Context,

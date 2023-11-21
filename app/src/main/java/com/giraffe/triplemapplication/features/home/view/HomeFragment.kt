@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
+import com.giraffe.triplemapplication.features.home.adapters.BrandsAdapter
+import com.giraffe.triplemapplication.features.home.adapters.CategoriesAdapter
+import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
+import com.giraffe.triplemapplication.features.home.adapters.SliderAdapter
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
@@ -22,6 +26,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
     private lateinit var productsAdapter: ProductAdapter
     private lateinit var brandsAdapter: BrandsAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var images: ArrayList<Int>
     private lateinit var sliderAdapter: SliderAdapter
 
@@ -47,6 +52,13 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                 orientation = RecyclerView.HORIZONTAL
             }
         }
+        categoriesAdapter = CategoriesAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        binding.categoriesRecyclerView.apply {
+            adapter = categoriesAdapter
+            layoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.HORIZONTAL
+            }
+        }
 
         handleClicks()
 
@@ -58,23 +70,8 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         binding.sliderViewPager.adapter = sliderAdapter
 
         observeGetAllProducts()
+        observeGetAllCategories()
         observeGetAllBrands()
-    }
-
-    private fun observeGetAllProducts() {
-        lifecycleScope.launch {
-            mViewModel.allProductsFlow.collect {
-                when(it) {
-                    is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> { showLoading() }
-                    is Resource.Success -> {
-                        productsAdapter.submitList(it.value.products)
-                        dismissLoading()
-                        binding.homeScreen.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
     }
 
     private fun observeGetAllBrands() {
@@ -93,8 +90,41 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         }
     }
 
+    private fun observeGetAllCategories() {
+        lifecycleScope.launch {
+            mViewModel.allCategoriesFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
+                    is Resource.Success -> {
+                        val categories = it.value.custom_collections.toMutableList()
+                        categories.removeAt(0) // Remove front page
+                        categoriesAdapter.submitList(categories)
+                        dismissLoading()
+                        binding.homeScreen.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeGetAllProducts() {
+        lifecycleScope.launch {
+            mViewModel.allProductsFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
+                    is Resource.Success -> {
+                        productsAdapter.submitList(it.value.products)
+                        dismissLoading()
+                        binding.homeScreen.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+    }
+
     override fun handleClicks() {
-        binding.brandsSeeAll.setOnClickListener { navigateToAllCategoriesScreen() }
     }
 
     private fun navigateToAllCategoriesScreen() {
