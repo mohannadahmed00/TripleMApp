@@ -1,11 +1,13 @@
 package com.giraffe.triplemapplication.features.register.view
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentSignUpBinding
 import com.giraffe.triplemapplication.features.register.viewmodel.RegisterVM
@@ -41,27 +43,36 @@ class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
     }
 
     private fun register(email: String, password: String, confirmPassword: String) {
-        mViewModel.signUp(email, password, confirmPassword)
-        lifecycleScope.launch {
 
-            mViewModel.currentUser.collectLatest { it ->
-                when (it) {
-                    is Resource.Failure -> {
-                        showFailure(it)
-                        dismissLoading()
+        if(mViewModel.isDataValid(email, password, confirmPassword)){
+
+            mViewModel.signUp(email, password, confirmPassword)
+            lifecycleScope.launch {
+
+                mViewModel.currentUser.collectLatest { it ->
+                    when (it) {
+                        is Resource.Failure -> {
+                            showFailure(it)
+                            dismissLoading()
+                        }
+
+                        Resource.Loading -> {
+                            showLoading()
+                        }
+
+                        is Resource.Success -> {
+                            showSuccess()
+                            dismissLoading()
+                        }
+
                     }
-
-                    Resource.Loading -> {
-                        showLoading()
-                    }
-
-                    is Resource.Success -> {
-                        showSuccess(it)
-                        dismissLoading()
-                    }
-
                 }
             }
+
+
+        }else{
+            Snackbar.make(requireView() , "Please check your inputs" , Snackbar.LENGTH_SHORT).show()
+
         }
 
     }
@@ -116,9 +127,11 @@ class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
 
     }
 
-    private fun showSuccess(it: Resource.Success<Task<AuthResult>>) {
-        val action = SignUpFragmentDirections.actionSignUpFragmentToUserInfoFragment()
-        findNavController().navigate(action)
+    private fun showSuccess() {
+        val bundle= Bundle()
+        bundle.putString("email" , binding.emailEditText.text.toString())
+        bundle.putString("password" , binding.passwordEditText.text.toString())
+        findNavController().navigate(R.id.userInfoFragment , bundle)
 
     }
 
@@ -136,6 +149,5 @@ class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
             navigateToLogin()
         }
     }
-
 
 }

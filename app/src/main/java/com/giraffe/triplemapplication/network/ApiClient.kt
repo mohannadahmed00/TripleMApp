@@ -1,15 +1,14 @@
 package com.giraffe.triplemapplication.network
 
+import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.utils.Constants
 
-import com.giraffe.triplemapplication.utils.Resource
-import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
 
@@ -45,7 +44,7 @@ object ApiClient : RemoteSource {
         emit(getApiServices().getAllProducts())
     }
 
-    override suspend fun signUpFirebase(
+    override fun signUpFirebase(
         email: String,
         password: String,
 
@@ -54,7 +53,7 @@ object ApiClient : RemoteSource {
         emit(result)
     }
 
-    override suspend fun signInFirebase(
+    override fun signInFirebase(
         email: String,
         password: String,
     ): Flow<Task<AuthResult>> = flow {
@@ -75,6 +74,11 @@ object ApiClient : RemoteSource {
     override fun logout() {
         FirebaseAuth.getInstance().signOut()
     }
+
+    override fun createCustomer(customerResponse: Request) : Flow<CustomerResponse>  = flow{
+        emit(getApiServices().createCustomer(customerResponse))
+    }
+
 
 
     private fun createFirebaseAuth(): FirebaseAuth = Firebase.auth
