@@ -3,8 +3,9 @@ package com.giraffe.triplemapplication.features.allcategories.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +14,10 @@ import com.giraffe.triplemapplication.databinding.FragmentAllCategoriesBinding
 import com.giraffe.triplemapplication.features.allcategories.adapters.BrandsAdapter
 import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
 import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCategoriesVM
+import com.giraffe.triplemapplication.features.home.view.HomeFragmentDirections
 import com.giraffe.triplemapplication.model.brands.SmartCollection
 import com.giraffe.triplemapplication.model.categories.CustomCollection
+import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -35,7 +38,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         getNavArguments()
 
         // Recycler View
-        productsAdapter = ProductsAdapter(requireContext()) { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
+        productsAdapter = ProductsAdapter(requireContext()) { navigateToProductInfoScreen(it) }
         binding.categoryRecyclerView.apply {
             adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -140,5 +143,10 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
     private fun navigateUp() {
         findNavController().navigateUp()
+    }
+
+    private fun navigateToProductInfoScreen(product: Product) {
+        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment(product)
+        Navigation.findNavController(requireView()).navigate(action)
     }
 }
