@@ -67,6 +67,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllBrands() {
         val brandsAdapter = BrandsAdapter<SmartCollection>(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
+            mViewModel.setFilterToProducts(isBrand, it.handle)
         }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
@@ -83,6 +84,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
                         binding.brandNameLabel.text = it.value.smart_collections[selectedItemFromHome].handle
+                        mViewModel.setFilterToProducts(isBrand, it.value.smart_collections[selectedItemFromHome].handle)
                         dismissLoading()
                         setVisibility()
                     }
@@ -94,6 +96,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllCategories() {
         val categoriesAdapter = BrandsAdapter<CustomCollection>(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
+            mViewModel.setFilterToProducts(isBrand, it.handle)
         }
         binding.brandsRecyclerView.apply {
             adapter = categoriesAdapter
@@ -112,6 +115,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                         categories.removeAt(0) // Remove front page
                         categoriesAdapter.submitList(categories)
                         binding.brandNameLabel.text = it.value.custom_collections[selectedItemFromHome + 1].handle
+                        mViewModel.setFilterToProducts(isBrand, it.value.custom_collections[selectedItemFromHome + 1].handle)
                         dismissLoading()
                         setVisibility()
                     }
@@ -122,16 +126,10 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
     private fun observeGetAllProducts() {
         lifecycleScope.launch {
-            mViewModel.allProductsFlow.collect {
-                when(it) {
-                    is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> { showLoading() }
-                    is Resource.Success -> {
-                        productsAdapter.submitList(it.value.products)
-                        dismissLoading()
-                        binding.categoryCard.visibility = View.VISIBLE
-                    }
-                }
+            mViewModel.filteredProductsFlow.collect {
+                productsAdapter.submitList(it)
+                dismissLoading()
+                binding.categoryCard.visibility = View.VISIBLE
             }
         }
     }
