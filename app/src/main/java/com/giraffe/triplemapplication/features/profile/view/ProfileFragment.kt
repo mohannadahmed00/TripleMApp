@@ -14,6 +14,9 @@ import com.giraffe.triplemapplication.utils.load
 import kotlinx.coroutines.launch
 
 class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
+    companion object{
+        private const val TAG = "ProfileFragment"
+    }
     override fun getViewModel(): Class<ProfileVM> = ProfileVM::class.java
 
     override fun getFragmentBinding(
@@ -55,11 +58,18 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
     }
 
     override fun handleClicks() {
-        binding.ivEnterLanguages.setOnClickListener {
+        binding.btnAddress.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToAddressesFragment()
+            findNavController().navigate(action)
+        }
+        binding.btnPayment.setOnClickListener {
+
+        }
+        binding.btnLanguage.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToLanguageFragment()
             findNavController().navigate(action)
         }
-        binding.ivEnterCurrency.setOnClickListener {
+        binding.btnCurrency.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToCurrencyFragment()
             findNavController().navigate(action)
         }

@@ -33,13 +33,14 @@
         android:label="@string/me"
         tools:layout="@layout/fragment_profile" >
         <action
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/profileFragment"
             android:id="@+id/action_profileFragment_to_languageFragment"
             app:destination="@id/languageFragment" />
         <action
             android:id="@+id/action_profileFragment_to_currencyFragment"
             app:destination="@id/currencyFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addressesFragment"
+            app:destination="@id/addressesFragment" />
     </fragment>
     <fragment
         android:id="@+id/languageFragment"
@@ -70,5 +71,26 @@
         <argument
             android:name="product"
             app:argType="com.giraffe.triplemapplication.model.products.Product" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressesFragment"
+        android:name="com.giraffe.triplemapplication.features.profile.view.AddressesFragment"
+        android:label="fragment_addresses"
+        tools:layout="@layout/fragment_addresses" >
+        <action
+            android:id="@+id/action_addressesFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.giraffe.triplemapplication.features.profile.view.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <argument
+            android:name="lat"
+            app:argType="float" />
+        <argument
+            android:name="lon"
+            app:argType="float" />
     </fragment>
 </navigation>

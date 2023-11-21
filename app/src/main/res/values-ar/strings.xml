@@ -59,6 +59,7 @@
     <string name="eur">EUR</string>
     <string name="gbp">GBP</string>
     <string name="log_out">LOG OUT</string>
+    <string name="choose_your_preferred_address">Choose your preferred address</string>
 
 
 </resources>
