@@ -53,6 +53,10 @@ object ApiClient: RemoteSource {
         emit(getApiServices().getAllBrands())
     }
 
+    override suspend fun getProductsFromCategoryId(categoryId: String) = flow {
+        emit(getApiServices().getProductsFromCategoryId(categoryId))
+    }
+
     override suspend fun signUpFirebase(
         email: String,
         password: String,

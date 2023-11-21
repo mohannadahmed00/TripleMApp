@@ -23,4 +23,5 @@ interface RemoteSource {
     fun logout()
     suspend fun getAllCategories(): Flow<AllCategoriesResponse>
     suspend fun getAllBrands(): Flow<AllBrandsResponse>
+    suspend fun getProductsFromCategoryId(categoryId: String): Flow<AllProductsResponse>
 }

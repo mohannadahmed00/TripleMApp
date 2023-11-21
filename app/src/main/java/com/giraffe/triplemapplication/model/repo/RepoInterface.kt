@@ -14,6 +14,7 @@ interface RepoInterface {
     suspend fun getAllProducts(): Flow<AllProductsResponse>
     suspend fun getAllCategories(): Flow<AllCategoriesResponse>
     suspend fun getAllBrands(): Flow<AllBrandsResponse>
+    suspend fun getProductsFromCategoryId(categoryId: String): Flow<AllProductsResponse>
     suspend fun getLanguage(): Flow<String>
     suspend fun setLanguage(code: Constants.Languages)
 

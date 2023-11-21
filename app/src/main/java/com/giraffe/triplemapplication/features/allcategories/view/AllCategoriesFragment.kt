@@ -14,7 +14,6 @@ import com.giraffe.triplemapplication.databinding.FragmentAllCategoriesBinding
 import com.giraffe.triplemapplication.features.allcategories.adapters.BrandsAdapter
 import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
 import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCategoriesVM
-import com.giraffe.triplemapplication.features.home.view.HomeFragmentDirections
 import com.giraffe.triplemapplication.model.brands.SmartCollection
 import com.giraffe.triplemapplication.model.categories.CustomCollection
 import com.giraffe.triplemapplication.model.products.Product
@@ -66,7 +65,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllBrands() {
         val brandsAdapter = BrandsAdapter<SmartCollection>(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
-            mViewModel.setFilterToProducts(isBrand, it.handle)
+            mViewModel.getAllProducts(it.id.toString())
         }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
@@ -83,11 +82,18 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
                         binding.brandNameLabel.text = it.value.smart_collections[selectedItemFromHome].handle
-                        mViewModel.allProductsFlow.collect { _ ->
-                            mViewModel.setFilterToProducts(isBrand, it.value.smart_collections[selectedItemFromHome].handle)
+                        mViewModel.getAllProducts(it.value.smart_collections[selectedItemFromHome].id.toString())
+                        mViewModel.allProductsFlow.collect { products ->
+                            when(products) {
+                                is Resource.Failure -> { dismissLoading() }
+                                Resource.Loading -> { showLoading() }
+                                is Resource.Success -> {
+                                    dismissLoading()
+                                    setVisibility()
+                                    productsAdapter.submitList(products.value.products)
+                                }
+                            }
                         }
-                        dismissLoading()
-                        setVisibility()
                     }
                 }
             }
@@ -97,7 +103,6 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllCategories() {
         val categoriesAdapter = BrandsAdapter<CustomCollection>(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
-//            mViewModel.setFilterToProducts(isBrand, it.handle)
         }
         binding.brandsRecyclerView.apply {
             adapter = categoriesAdapter
@@ -116,7 +121,6 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
                         categories.removeAt(0) // Remove front page
                         categoriesAdapter.submitList(categories)
                         binding.brandNameLabel.text = it.value.custom_collections[selectedItemFromHome + 1].handle
-//                        mViewModel.setFilterToProducts(isBrand, it.value.custom_collections[selectedItemFromHome + 1].handle)
                         dismissLoading()
                         setVisibility()
                     }
@@ -127,10 +131,16 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
     private fun observeGetAllProducts() {
         lifecycleScope.launch {
-            mViewModel.filteredProductsFlow.collect {
-                productsAdapter.submitList(it)
-                dismissLoading()
-                setVisibility()
+            mViewModel.allProductsFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
+                    is Resource.Success -> {
+                        productsAdapter.submitList(it.value.products)
+                        dismissLoading()
+                        setVisibility()
+                    }
+                }
             }
         }
     }
