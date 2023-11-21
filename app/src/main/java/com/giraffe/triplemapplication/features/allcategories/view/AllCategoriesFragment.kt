@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategoriesBinding>() {
     override fun getViewModel(): Class<AllCategoriesVM> = AllCategoriesVM::class.java
 
-    private lateinit var subCategoriesAdapter: ProductsAdapter
+    private lateinit var productsAdapter: ProductsAdapter
     private var isBrand = true
     private var selectedItemFromHome = 0
 
@@ -35,9 +35,9 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         getNavArguments()
 
         // Recycler View
-        subCategoriesAdapter = ProductsAdapter(requireContext()) { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
+        productsAdapter = ProductsAdapter(requireContext()) { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
         binding.categoryRecyclerView.apply {
-            adapter = subCategoriesAdapter
+            adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.VERTICAL
             }
@@ -48,6 +48,8 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         } else {
             observeGetAllCategories()
         }
+
+        observeGetAllProducts()
     }
 
     private fun getNavArguments() {
@@ -115,8 +117,20 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         }
     }
 
-    private fun setBrandsOrCategoriesRecyclerView() {
-
+    private fun observeGetAllProducts() {
+        lifecycleScope.launch {
+            mViewModel.allProductsFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
+                    is Resource.Success -> {
+                        productsAdapter.submitList(it.value.products)
+                        dismissLoading()
+                        binding.categoryCard.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 
     private fun setVisibility() {

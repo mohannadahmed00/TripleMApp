@@ -11,11 +11,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.databinding.ItemCategoryBinding
 import com.giraffe.triplemapplication.model.categories.CustomCollection
+import com.giraffe.triplemapplication.model.products.Product
 
 class ProductsAdapter(
     private val context: Context,
-    private val onItemClick: (CustomCollection) -> Unit
-): ListAdapter<CustomCollection, ProductsAdapter.ViewHolder>(CategoriesDataDiffUtil()) {
+    private val onItemClick: (Product) -> Unit
+): ListAdapter<Product, ProductsAdapter.ViewHolder>(CategoriesDataDiffUtil()) {
 
     private lateinit var binding: ItemCategoryBinding
 
@@ -31,7 +32,7 @@ class ProductsAdapter(
         holder.binding.item.setOnClickListener { onItemClick(current) }
 
         Glide.with(context)
-            .load(current.image.src)
+            .load(current.image?.src)
             .apply(
                 RequestOptions()
                     .placeholder(R.drawable.loading_img)
@@ -42,12 +43,12 @@ class ProductsAdapter(
 
     inner class ViewHolder(var binding: ItemCategoryBinding): RecyclerView.ViewHolder(binding.root)
 
-    class CategoriesDataDiffUtil: DiffUtil.ItemCallback<CustomCollection>() {
-        override fun areItemsTheSame(oldItem: CustomCollection, newItem: CustomCollection): Boolean {
+    class CategoriesDataDiffUtil: DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: CustomCollection, newItem: CustomCollection): Boolean {
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
         }
 
