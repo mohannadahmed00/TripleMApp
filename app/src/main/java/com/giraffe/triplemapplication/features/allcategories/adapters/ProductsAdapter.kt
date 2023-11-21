@@ -1,7 +1,6 @@
-package com.giraffe.triplemapplication.features.allcategories.view
+package com.giraffe.triplemapplication.features.allcategories.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -13,10 +12,10 @@ import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.databinding.ItemCategoryBinding
 import com.giraffe.triplemapplication.model.categories.CustomCollection
 
-class CategoryAdapter(
+class ProductsAdapter(
     private val context: Context,
     private val onItemClick: (CustomCollection) -> Unit
-): ListAdapter<CustomCollection, CategoryAdapter.ViewHolder>(CategoriesDataDiffUtil()) {
+): ListAdapter<CustomCollection, ProductsAdapter.ViewHolder>(CategoriesDataDiffUtil()) {
 
     private lateinit var binding: ItemCategoryBinding
 

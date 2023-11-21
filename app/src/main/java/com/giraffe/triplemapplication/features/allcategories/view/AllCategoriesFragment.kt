@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentAllCategoriesBinding
+import com.giraffe.triplemapplication.features.allcategories.adapters.BrandsAdapter
+import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
 import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCategoriesVM
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
@@ -18,7 +20,9 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     override fun getViewModel(): Class<AllCategoriesVM> = AllCategoriesVM::class.java
 
     private lateinit var brandsAdapter: BrandsAdapter
-    private lateinit var subCategoriesAdapter: CategoryAdapter
+    private lateinit var subCategoriesAdapter: ProductsAdapter
+    private var isBrand = true
+    private var selectedItemFromHome = 0
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -27,10 +31,10 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     ): FragmentAllCategoriesBinding = FragmentAllCategoriesBinding.inflate(inflater, container, false)
 
     override fun handleView() {
-        binding.closeButton.setOnClickListener { navigateUp() }
+        getNavArguments()
 
         // Recycler View
-        brandsAdapter = BrandsAdapter(requireContext()) {
+        brandsAdapter = BrandsAdapter(requireContext(), selectedItemFromHome) {
             binding.brandNameLabel.text = it.handle
         }
         binding.brandsRecyclerView.apply {
@@ -40,7 +44,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
             }
         }
 
-        subCategoriesAdapter = CategoryAdapter(requireContext()) { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
+        subCategoriesAdapter = ProductsAdapter(requireContext()) { Toast.makeText(context, "$it clicked", Toast.LENGTH_SHORT).show() }
         binding.categoryRecyclerView.apply {
             adapter = subCategoriesAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -52,7 +56,14 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         observeGetAllCategories()
     }
 
-    override fun handleClicks() { }
+    private fun getNavArguments() {
+        isBrand = AllCategoriesFragmentArgs.fromBundle(requireArguments()).isBrand
+        selectedItemFromHome = AllCategoriesFragmentArgs.fromBundle(requireArguments()).selectedItemFromHome
+    }
+
+    override fun handleClicks() {
+        binding.closeButton.setOnClickListener { navigateUp() }
+    }
 
     private fun observeGetAllBrands() {
         lifecycleScope.launch {

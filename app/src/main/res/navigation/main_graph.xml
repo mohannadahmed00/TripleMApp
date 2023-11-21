@@ -50,7 +50,14 @@
         android:id="@+id/allCategoriesFragment"
         android:name="com.giraffe.triplemapplication.features.allcategories.view.AllCategoriesFragment"
         android:label="fragment_all_categories"
-        tools:layout="@layout/fragment_all_categories" />
+        tools:layout="@layout/fragment_all_categories" >
+        <argument
+            android:name="isBrand"
+            app:argType="boolean" />
+        <argument
+            android:name="selectedItemFromHome"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/currencyFragment"
         android:name="com.giraffe.triplemapplication.features.profile.view.CurrencyFragment"

@@ -14,7 +14,7 @@ import com.giraffe.triplemapplication.model.brands.SmartCollection
 
 class BrandsAdapter(
     private val context: Context,
-    private val onItemClick: (SmartCollection) -> Unit
+    private val onItemClick: (Int) -> Unit
 ): ListAdapter<SmartCollection, BrandsAdapter.ViewHolder>(BrandsDataDiffUtil()) {
 
     private lateinit var binding: ItemBrandBinding
@@ -37,7 +37,7 @@ class BrandsAdapter(
             )
             .into(holder.binding.brandImage)
         holder.binding.brandName.text = current.handle
-        holder.binding.item.setOnClickListener { onItemClick(current) }
+        holder.binding.item.setOnClickListener { onItemClick(position) }
     }
 
     inner class ViewHolder(var binding: ItemBrandBinding): RecyclerView.ViewHolder(binding.root)

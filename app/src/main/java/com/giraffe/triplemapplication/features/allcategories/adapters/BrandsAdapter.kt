@@ -1,4 +1,4 @@
-package com.giraffe.triplemapplication.features.allcategories.view
+package com.giraffe.triplemapplication.features.allcategories.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -15,11 +15,12 @@ import com.giraffe.triplemapplication.model.brands.SmartCollection
 
 class BrandsAdapter(
     private val context: Context,
+    selectedItemFromHome: Int,
     private val onItemClick: (SmartCollection) -> Unit
 ): ListAdapter<SmartCollection, BrandsAdapter.ViewHolder>(BrandsDataDiffUtil()) {
 
     private lateinit var binding: ItemBrandBinding
-    private var selectedItem = 0
+    private var selectedItem = selectedItemFromHome
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

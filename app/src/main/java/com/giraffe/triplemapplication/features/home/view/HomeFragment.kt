@@ -3,7 +3,6 @@ package com.giraffe.triplemapplication.features.home.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
@@ -45,14 +44,14 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                 orientation = RecyclerView.HORIZONTAL
             }
         }
-        brandsAdapter = BrandsAdapter(requireContext()) { navigateToAllCategoriesScreen() }
+        brandsAdapter = BrandsAdapter(requireContext()) { navigateToAllCategoriesScreen(true, it) }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.HORIZONTAL
             }
         }
-        categoriesAdapter = CategoriesAdapter(requireContext()) { navigateToAllCategoriesScreen() }
+        categoriesAdapter = CategoriesAdapter(requireContext()) { navigateToAllCategoriesScreen(false, it) }
         binding.categoriesRecyclerView.apply {
             adapter = categoriesAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -127,8 +126,8 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
     override fun handleClicks() {
     }
 
-    private fun navigateToAllCategoriesScreen() {
-        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToAllCategoriesFragment()
+    private fun navigateToAllCategoriesScreen(isBrand: Boolean, selectedItemFromHome: Int) {
+        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToAllCategoriesFragment(isBrand, selectedItemFromHome)
         findNavController(requireView()).navigate(action)
     }
 
