@@ -45,14 +45,14 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                 orientation = RecyclerView.HORIZONTAL
             }
         }
-        brandsAdapter = BrandsAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        brandsAdapter = BrandsAdapter(requireContext()) { navigateToAllCategoriesScreen() }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.HORIZONTAL
             }
         }
-        categoriesAdapter = CategoriesAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        categoriesAdapter = CategoriesAdapter(requireContext()) { navigateToAllCategoriesScreen() }
         binding.categoriesRecyclerView.apply {
             adapter = categoriesAdapter
             layoutManager = LinearLayoutManager(context).apply {
