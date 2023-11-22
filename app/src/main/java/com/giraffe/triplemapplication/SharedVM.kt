@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeCall
@@ -13,9 +14,16 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     private val _languageFlow: MutableStateFlow<Resource<String>> =
         MutableStateFlow(Resource.Loading)
     val languageFlow: StateFlow<Resource<String>> = _languageFlow.asStateFlow()
+    private val _currentProduct : MutableStateFlow<Resource<Product>> = MutableStateFlow(Resource.Loading)
+    val currentProduct : StateFlow<Resource<Product>> = _currentProduct.asStateFlow()
     fun getLanguage() {
         viewModelScope.launch {
             _languageFlow.emit(safeCall { repo.getLanguage() })
+        }
+    }
+    fun setCurrentProduct(product: Product){
+        viewModelScope.launch {
+            _currentProduct.emit(Resource.Success(product))
         }
     }
 }
