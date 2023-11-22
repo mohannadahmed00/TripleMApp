@@ -37,7 +37,8 @@ class AddressesAdapter(private val addresses: MutableList<Address>,private val o
         /*if(position==addresses.size-1){
             holder.binding.line.hide()
         }*/
-        holder.binding.tvAddress.text = "${item.name}\n${item.address1}, ${item.city}, ${item.country}"
+        holder.binding.tvAddressTitle.text = item.name
+        holder.binding.tvAddress.text = item.address1
         holder.binding.ivDelete.setOnClickListener {
             onAddressClick.onAddressClick(item,position)
         }

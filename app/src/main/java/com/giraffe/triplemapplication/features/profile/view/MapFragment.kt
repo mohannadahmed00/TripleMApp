@@ -84,15 +84,18 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
 
     override fun handleClicks() {
         binding.btnConfirm.setOnClickListener {
+            Log.i(TAG, "handleClicks: ")
             val tag = binding.edtTag.text
             if (!tag.isNullOrBlank()){
+                Log.i(TAG, "handleClicks: isNotNullOrBlank")
                 val addressRequest = AddressRequest(
                     address = Address(
-                        address1 = street,
+                        address1 = binding.tvAddress.text.toString(),
+                        address2 = street,
                         city = city,
                         //first_name = tag.trim().toString(),
                         //last_name = " ",
-                        province = area,
+                        province = area?.replace(" Governorate",""),
                         zip = postalCode,
                         name = tag.trim().toString(),
                         country_code = countryCode,

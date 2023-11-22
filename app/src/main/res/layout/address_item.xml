@@ -8,16 +8,29 @@
     android:paddingHorizontal="19dp">
 
     <TextView
-        android:id="@+id/tv_address"
+        android:id="@+id/tv_address_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingVertical="9dp"
+        android:textStyle="bold"
+        android:paddingTop="9dp"
         android:textColor="@color/gary"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@id/iv_delete"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line"
+        app:layout_constraintTop_toBottomOf="@id/tv_address"
         app:layout_constraintTop_toTopOf="parent"
+        tools:text="Home" />
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp"
+        android:textColor="@color/gary"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/iv_delete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/line"
+        app:layout_constraintTop_toBottomOf="@id/tv_address_title"
         tools:text="Cairo" />
 
     <ImageView
@@ -29,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_address"
-        app:layout_constraintTop_toTopOf="@id/tv_address" />
+        app:layout_constraintTop_toTopOf="@id/tv_address_title" />
 
     <View
         android:id="@+id/line"
