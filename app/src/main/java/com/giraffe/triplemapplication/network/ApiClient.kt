@@ -1,6 +1,12 @@
 package com.giraffe.triplemapplication.network
 
+
+
+import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.Request
+
 import com.giraffe.triplemapplication.utils.Constants
+import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
@@ -51,26 +57,28 @@ object ApiClient: RemoteSource {
 
     override suspend fun getAllBrands() = flow {
         emit(getApiServices().getAllBrands())
+
     }
 
     override suspend fun getProductsFromCategoryId(categoryId: String) = flow {
         emit(getApiServices().getProductsFromCategoryId(categoryId))
+
     }
 
-    override suspend fun signUpFirebase(
+    override fun signUpFirebase(
         email: String,
         password: String,
 
-        ): Flow<Task<AuthResult>> = flow {
-        val result = createFirebaseAuth().createUserWithEmailAndPassword(email, password)
+        ): Flow<AuthResult> = flow {
+        val result = createFirebaseAuth().createUserWithEmailAndPassword(email, password).await()
         emit(result)
     }
 
-    override suspend fun signInFirebase(
+    override fun signInFirebase(
         email: String,
         password: String,
-    ): Flow<Task<AuthResult>> = flow {
-        val result = createFirebaseAuth().signInWithEmailAndPassword(email, password)
+    ): Flow<AuthResult> = flow{
+        val result = createFirebaseAuth().signInWithEmailAndPassword(email, password).await()
         emit(result)
     }
 
@@ -87,6 +95,11 @@ object ApiClient: RemoteSource {
     override fun logout() {
         FirebaseAuth.getInstance().signOut()
     }
+
+    override fun createCustomer(customerResponse: Request) : Flow<CustomerResponse>  = flow{
+        emit(getApiServices().createCustomer(customerResponse))
+    }
+
 
 
     private fun createFirebaseAuth(): FirebaseAuth = Firebase.auth

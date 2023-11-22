@@ -46,7 +46,7 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                     }
 
                     is Resource.Success -> {
-                        showSuccess(it)
+                        showSuccess()
                         dismissLoading()
                     }
                 }
@@ -55,10 +55,8 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
 
     }
 
-    private fun showSuccess(it: Resource.Success<Task<AuthResult>>) {
-
+    private fun showSuccess() {
         findNavController().setGraph(R.navigation.main_graph)
-
     }
 
     private fun showFailure(it: Resource.Failure) {
@@ -84,14 +82,11 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
         binding.signUpBtn.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment()
             findNavController().navigate(action)
-
         }
         binding.forgetPasswordBtn.setOnClickListener {
-
         }
         binding.emailEditText.addTextChangedListener {
             binding.emailTextInputLayout.error = null
-
         }
         binding.passwordEditText.addTextChangedListener {
 

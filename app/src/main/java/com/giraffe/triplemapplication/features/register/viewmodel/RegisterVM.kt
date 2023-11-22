@@ -24,9 +24,9 @@ import okhttp3.ResponseBody
 import retrofit2.HttpException
 
 class RegisterVM(private val repo: RepoInterface) : ViewModel() {
-    private val _firebaseUser: MutableStateFlow<Resource<Task<AuthResult>>> =
+    private val _firebaseUser: MutableStateFlow<Resource<AuthResult>> =
         MutableStateFlow(Resource.Loading)
-    val currentUser: StateFlow<Resource<Task<AuthResult>>> = _firebaseUser.asStateFlow()
+    val currentUser: StateFlow<Resource<AuthResult>> = _firebaseUser.asStateFlow()
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
@@ -39,51 +39,43 @@ class RegisterVM(private val repo: RepoInterface) : ViewModel() {
         isEmailValid.value = false
         isPasswordValid.value = false
         doPasswordsMatch.value = false
-
-        // Observe changes in email, password, and confirmPassword
         email.observeForever {
             isEmailValid.value = repo.isEmailValid(it)
         }
-
         password.observeForever {
             isPasswordValid.value = repo.isPasswordValid(it)
             checkPasswordMatching()
-
         }
-
         confirmPassword.observeForever {
             checkPasswordMatching()
-
         }
-
     }
 
     private fun checkPasswordMatching() {
         val passwordValue = password.value ?: ""
         val confirmPasswordValue = confirmPassword.value ?: ""
         doPasswordsMatch.value = repo.doPasswordsMatch(passwordValue, confirmPasswordValue)
-
     }
 
     fun signUp(email: String, password: String, confirmPassword: String) {
 
+
         viewModelScope.launch(Dispatchers.IO) {
-            if (repo.isDataValid(email, password, confirmPassword)) {
-                _firebaseUser.emit(safeCall {
-                    repo.signUpFirebase(
-                        email,
-                        password,
-                        confirmPassword
-                    )
-                })
 
-            } else {
-                _firebaseUser.value = Resource.Failure(true , 200 ,"Please check your input")
+            _firebaseUser.emit(safeCall {
+                repo.signUpFirebase(
+                    email,
+                    password,
+                    confirmPassword
+                )
+            })
 
-            }
+
         }
 
-
     }
+
+    fun isDataValid(email: String, password: String, confirmPassword: String): Boolean =
+        repo.isDataValid(email, password, confirmPassword)
 
 }
