@@ -1,6 +1,5 @@
 package com.giraffe.triplemapplication
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -78,11 +77,18 @@ class MainActivity : AppCompatActivity(),OnActivityCallback{
     }
 
     private fun setLocale(languageCode: String) {
-        val locale = Locale(languageCode)
+        /*val locale = Locale(languageCode)
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)
-        baseContext.resources.updateConfiguration(config,baseContext.resources.displayMetrics)
+        baseContext.resources.updateConfiguration(config,baseContext.resources.displayMetrics)*/
+
+        val res = resources
+        val dm = res.displayMetrics
+        val conf = res.configuration
+        conf.setLocale(Locale(languageCode))
+        conf.setLayoutDirection(Locale(languageCode))
+        res.updateConfiguration(conf, dm)
     }
 
     override fun onLanguageSelected(code: String) {
