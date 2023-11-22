@@ -27,5 +27,12 @@
         android:id="@+id/userInfoFragment"
         android:name="com.giraffe.triplemapplication.features.userinfo.view.UserInfoFragment"
         android:label="fragment_user_info"
-        tools:layout="@layout/fragment_user_info" />
+        tools:layout="@layout/fragment_user_info" >
+        <argument
+            android:name="email"
+            app:argType="string" />
+        <argument
+            android:name="password"
+            app:argType="string" />
+    </fragment>
 </navigation>

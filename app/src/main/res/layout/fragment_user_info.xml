@@ -72,13 +72,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/nameTextInputLayout"
                 app:startIconDrawable="@drawable/tel_ic"
+                app:prefixText="+20"
+                android:editable="false"
                 app:startIconTint="@color/gary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mobileEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="phone"
+                    android:maxLength="10"
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout

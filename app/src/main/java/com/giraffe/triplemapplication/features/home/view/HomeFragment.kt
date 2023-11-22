@@ -3,7 +3,6 @@ package com.giraffe.triplemapplication.features.home.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
@@ -12,6 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
+import com.giraffe.triplemapplication.features.home.adapters.BrandsAdapter
+import com.giraffe.triplemapplication.features.home.adapters.CategoriesAdapter
+import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
+import com.giraffe.triplemapplication.features.home.adapters.SliderAdapter
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
@@ -22,6 +25,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
     private lateinit var productsAdapter: ProductAdapter
     private lateinit var brandsAdapter: BrandsAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var images: ArrayList<Int>
     private lateinit var sliderAdapter: SliderAdapter
 
@@ -40,9 +44,16 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
                 orientation = RecyclerView.HORIZONTAL
             }
         }
-        brandsAdapter = BrandsAdapter(requireContext()) { Toast.makeText(context, "${it.title} clicked", Toast.LENGTH_SHORT).show() }
+        brandsAdapter = BrandsAdapter(requireContext()) { navigateToAllCategoriesScreen(true, it) }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
+            layoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.HORIZONTAL
+            }
+        }
+        categoriesAdapter = CategoriesAdapter(requireContext()) { navigateToAllCategoriesScreen(false, it) }
+        binding.categoriesRecyclerView.apply {
+            adapter = categoriesAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.HORIZONTAL
             }
@@ -58,23 +69,8 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         binding.sliderViewPager.adapter = sliderAdapter
 
         observeGetAllProducts()
+        observeGetAllCategories()
         observeGetAllBrands()
-    }
-
-    private fun observeGetAllProducts() {
-        lifecycleScope.launch {
-            mViewModel.allProductsFlow.collect {
-                when(it) {
-                    is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> { showLoading() }
-                    is Resource.Success -> {
-                        productsAdapter.submitList(it.value.products)
-                        dismissLoading()
-                        binding.homeScreen.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
     }
 
     private fun observeGetAllBrands() {
@@ -93,12 +89,45 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         }
     }
 
-    override fun handleClicks() {
-        binding.brandsSeeAll.setOnClickListener { navigateToAllCategoriesScreen() }
+    private fun observeGetAllCategories() {
+        lifecycleScope.launch {
+            mViewModel.allCategoriesFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
+                    is Resource.Success -> {
+                        val categories = it.value.custom_collections.toMutableList()
+                        categories.removeAt(0) // Remove front page
+                        categoriesAdapter.submitList(categories)
+                        dismissLoading()
+                        binding.homeScreen.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 
-    private fun navigateToAllCategoriesScreen() {
-        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToAllCategoriesFragment()
+    private fun observeGetAllProducts() {
+        lifecycleScope.launch {
+            mViewModel.allProductsFlow.collect {
+                when(it) {
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
+                    is Resource.Success -> {
+                        productsAdapter.submitList(it.value.products)
+                        dismissLoading()
+                        binding.homeScreen.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+    }
+
+    override fun handleClicks() {
+    }
+
+    private fun navigateToAllCategoriesScreen(isBrand: Boolean, selectedItemFromHome: Int) {
+        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToAllCategoriesFragment(isBrand, selectedItemFromHome)
         findNavController(requireView()).navigate(action)
     }
 
@@ -106,5 +135,4 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment(product)
         findNavController(requireView()).navigate(action)
     }
-
 }

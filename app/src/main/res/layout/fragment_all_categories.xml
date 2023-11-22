@@ -37,7 +37,7 @@
             android:id="@+id/brands_recycler_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="55dp"
+            android:layout_marginBottom="100dp"
             android:layout_weight="2"
             android:paddingTop="16dp"
             tools:listitem="@layout/item_brand" />
@@ -66,6 +66,7 @@
                 style="@style/card_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
                 android:visibility="gone"
                 tools:visibility="visible">
 
