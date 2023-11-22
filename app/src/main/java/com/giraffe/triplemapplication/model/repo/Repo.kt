@@ -100,5 +100,11 @@ class Repo private constructor(
         address: AddressRequest
     ) = remoteSource.addNewAddress(customerId, address)
 
+    override suspend fun getAddresses(customerId: String) = remoteSource.getAddresses(customerId)
+    override suspend fun deleteAddress(
+        customerId: String,
+        addressId: String
+    ) = remoteSource.deleteAddress(customerId, addressId)
+
 
 }

@@ -85,12 +85,5 @@
         android:id="@+id/mapFragment"
         android:name="com.giraffe.triplemapplication.features.profile.view.MapFragment"
         android:label="fragment_map"
-        tools:layout="@layout/fragment_map" >
-        <argument
-            android:name="lat"
-            app:argType="float" />
-        <argument
-            android:name="lon"
-            app:argType="float" />
-    </fragment>
+        tools:layout="@layout/fragment_map" />
 </navigation>

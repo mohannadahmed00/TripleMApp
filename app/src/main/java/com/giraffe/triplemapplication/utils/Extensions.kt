@@ -108,3 +108,7 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> Flow<Response<T>>): Resource<
 fun ImageView.load(url:String){
     Glide.with(this.context).load(url).into(this)
 }
+
+fun convert(euro:Double,selectedCurrency:Double){
+
+}

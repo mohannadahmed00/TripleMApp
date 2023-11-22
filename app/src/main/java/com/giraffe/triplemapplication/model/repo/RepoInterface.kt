@@ -2,6 +2,7 @@ package com.giraffe.triplemapplication.model.repo
 
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
+import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
@@ -45,5 +46,14 @@ interface RepoInterface {
         customerId:String,
         address: AddressRequest
     ): Flow<Response<AddressResponse>>
+
+    suspend fun getAddresses(
+        customerId:String,
+    ):Flow<Response<AddressesResponse>>
+
+    suspend fun deleteAddress(
+        customerId:String,
+        addressId:String,
+    ):Flow<Response<Void>>
 
 }

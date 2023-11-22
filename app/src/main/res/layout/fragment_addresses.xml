@@ -43,6 +43,7 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_addresses"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             tools:listitem="@layout/address_item"

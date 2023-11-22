@@ -1,15 +1,16 @@
 package com.giraffe.triplemapplication.features.profile.view
 
-import  android.annotation.SuppressLint
+import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentMapBinding
@@ -19,6 +20,10 @@ import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -41,9 +46,11 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
 
     private var mGoogleApiClient: GoogleApiClient? = null
     private var gMap: GoogleMap? = null
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private var location: Location? = null
     private var lat: Double = 0.0
     private var lon: Double = 0.0
-    private val args: MapFragmentArgs by navArgs()
+
 
     private var postalCode:String?= null
     private var street:String?= null
@@ -52,6 +59,12 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
     private var province:String?= null
     private var country:String?= null
     private var countryCode:String?= null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getLocation()
+    }
+
 
 
     override fun getViewModel(): Class<ProfileVM> = ProfileVM::class.java
@@ -63,43 +76,22 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
     ): FragmentMapBinding = FragmentMapBinding.inflate(inflater, container, false)
 
     override fun handleView() {
-        binding.edtTag.setText("mo")
 
-
-        lat = args.lat.toDouble()
-        lon = args.lon.toDouble()
-        getAddress(requireContext(),lat,lon)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
+
 
     override fun handleClicks() {
         binding.btnConfirm.setOnClickListener {
             val tag = binding.edtTag.text
             if (!tag.isNullOrBlank()){
-                /*val address = Address(
-                    first_name = tag.trim().toString(),
-                    zip = postalCode?:"",
-                    address1 = street?:"",
-                    city = city?:"",
-                    address2 = area?:"",
-                    province = province?:"",
-                    country = country?:"",
-                    country_code = countryCode?:"",
-                    country_name =  country?:"",
-                    name = tag.trim().toString(),
-                    province_code =  province?:"",
-                    phone =  "+201101105574",
-                    company =  "",
-                    last_name =  "",
-                )
-                val addressRequest = AddressRequest(address)*/
                 val addressRequest = AddressRequest(
                     address = Address(
                         address1 = street,
                         city = city,
-                        first_name = tag.trim().toString(),
-                        last_name = "",
+                        //first_name = tag.trim().toString(),
+                        //last_name = " ",
                         province = area,
                         zip = postalCode,
                         name = tag.trim().toString(),
@@ -170,34 +162,69 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
 
 
     private fun getAddress(context: Context, latitude: Double, longitude: Double){
-        val geoCoder = Geocoder(context)
-        val address = geoCoder.getFromLocation(latitude, longitude, 1)
-        if (!address.isNullOrEmpty()) {
-            postalCode = address[0].postalCode
-            street = address[0].thoroughfare
-            city = address[0].subAdminArea
-            province = address[0].subAdminArea
-            area = address[0].adminArea
-            country = address[0].countryName
-            countryCode = address[0].countryCode
-            var mAddress = "${address[0].postalCode}, ${address[0].thoroughfare}, ${address[0].subAdminArea}, ${address[0].adminArea}, ${address[0].countryName}"
-            mAddress = mAddress.replace("null, ","")
-            binding.tvAddress.text= mAddress
-            Log.i(TAG, mAddress)
-            /*Log.i(TAG, "adminArea: ${address[0].adminArea}")
-            Log.i(TAG, "countryName: ${address[0].countryName}")
-            Log.i(TAG, "countryCode: ${address[0].countryCode}")
-            Log.i(TAG, "extras: ${address[0].extras}")
-            Log.i(TAG, "featureName: ${address[0].featureName}")
-            Log.i(TAG, "locale: ${address[0].locale}")
-            Log.i(TAG, "postalCode: ${address[0].postalCode}")
-            Log.i(TAG, "premises: ${address[0].premises}")
-            Log.i(TAG, "subAdminArea: ${address[0].subAdminArea}")
-            Log.i(TAG, "subLocality: ${address[0].subLocality}")
-            Log.i(TAG, "subThoroughfare: ${address[0].subThoroughfare}")
-            Log.i(TAG, "thoroughfare: ${address[0].thoroughfare}")
-            Log.i(TAG, "url: ${address[0].url}")*/
+        try {
+            val geoCoder = Geocoder(context)
+            val address = geoCoder.getFromLocation(latitude, longitude, 1)
+            if (!address.isNullOrEmpty()) {
+                postalCode = address[0].postalCode
+                street = address[0].thoroughfare
+                city = address[0].subAdminArea
+                province = address[0].subAdminArea
+                area = address[0].adminArea
+                country = address[0].countryName
+                countryCode = address[0].countryCode
+                var mAddress = "${address[0].postalCode}, ${address[0].thoroughfare}, ${address[0].subAdminArea}, ${address[0].adminArea}, ${address[0].countryName}"
+                mAddress = mAddress.replace("null, ","")
+                binding.tvAddress.text= mAddress
+                Log.i(TAG, mAddress)
+            }
+        }catch (e:Exception){
+            Log.e(TAG, "getAddress: ${e.message}")
         }
+
+    }
+
+
+    private fun getLocation() {
+        Log.i(TAG, "getLocation: ")
+        requestNewLocationData()
+        /*if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                requestNewLocationData()
+            } else {
+                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
+        } else {
+            requestPermissions()
+        }*/
+    }
+
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+
+        override fun onLocationResult(locationResult: LocationResult) {
+            location = locationResult.lastLocation
+            lat = location?.latitude ?: 0.0
+            lon = location?.longitude ?: 0.0
+            Log.i(TAG, "onLocationResult: $lat , $lon ")
+            fusedLocationProviderClient.removeLocationUpdates(this)
+            getAddress(requireContext(),lat,lon)
+            moveCamera(LatLng(lat, lon))
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocationData() {
+        Log.i(MapFragment.TAG, "requestNewLocationData: ")
+        val locationRequest = LocationRequest().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 0
+        }
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
     }
 
 

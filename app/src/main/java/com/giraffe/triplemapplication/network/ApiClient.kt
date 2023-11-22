@@ -14,7 +14,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object ApiClient: RemoteSource {
+object ApiClient : RemoteSource {
 
     private fun provideOkHttpClient(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
@@ -27,25 +27,25 @@ object ApiClient: RemoteSource {
         return httpClient.build()
     }
 
-    private fun getApiServices(url:String = Constants.URL):ApiServices {
+    private fun getApiServices(url: String = Constants.URL): ApiServices {
         val apiServices = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(url)
-        if (url==Constants.URL){
+        if (url == Constants.URL) {
             apiServices.client(provideOkHttpClient())
         }
         return apiServices.build().create(ApiServices::class.java)
     }
 
-        
-        
+
     override suspend fun getAllProducts() = flow {
         emit(getApiServices().getAllProducts())
     }
 
-    override suspend fun getCurrencies()= flow {
+    override suspend fun getCurrencies() = flow {
         emit(getApiServices(Constants.CURRENCY_URL).getExchangeRates())
     }
+
     override suspend fun getAllCategories() = flow {
         emit(getApiServices().getAllCategories())
     }
@@ -58,7 +58,20 @@ object ApiClient: RemoteSource {
         customerId: String,
         address: AddressRequest
     ) = flow {
-        emit(getApiServices().addNewAddress(customerId,address))
+        emit(getApiServices().addNewAddress(customerId, address))
+    }
+
+    override suspend fun getAddresses(
+        customerId: String,
+    ) = flow {
+        emit(getApiServices().getAddresses(customerId))
+    }
+
+    override suspend fun deleteAddress(
+        customerId: String,
+        addressId: String
+    ) = flow {
+        emit(getApiServices().deleteAddress(customerId, addressId))
     }
 
     override suspend fun signUpFirebase(
