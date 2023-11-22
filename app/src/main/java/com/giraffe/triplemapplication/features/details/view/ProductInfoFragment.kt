@@ -1,22 +1,24 @@
 package com.giraffe.triplemapplication.features.details.view
 
+
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentProductInfoBinding
 import com.giraffe.triplemapplication.features.details.viewmodel.ProductInfoVM
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.products.Review
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>() {
+class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>(), OnColorClickListener {
     override fun getViewModel(): Class<ProductInfoVM> = ProductInfoVM::class.java
 
     override fun getFragmentBinding(
@@ -61,14 +63,62 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
     private fun showData(product: Product) {
         binding.imageSlider.adapter = ImagePagerAdapter(requireContext() , product.images)
-        binding.brandName.text = product.vendor
         binding.productName.text = product.title
         binding.productPrice.text = product.variants!!.first().price.toString()
-        binding.skuText.text = product.variants!!.first().sku.toString()
-        binding.fittingText.text = product.variants!!.first().option1.toString()
-        binding.conditionName.text = product.status.toString()
-        binding.categoryText.text = product.product_type
+        showDetailsData(product)
+        showProductData(product)
+        showReviewsData()
 
+    }
+    private fun createReviewsList() : List<Review> {
+        val egyptianNames = listOf(
+            "Amir", "Yasmine", "Mohamed", "Nour", "Ahmed", "Laila", "Tarek", "Fatma"
+        )
+
+        val reviewMessages = listOf(
+            "منتج رائع جدًا!",
+            "يمكن أن يكون أفضل",
+            "جودة ممتازة",
+            "تجربة رائعة",
+            "أوصي به بشدة"
+
+        )
+
+        val reviews = mutableListOf<Review>()
+
+        val totalReviews = minOf(egyptianNames.size, reviewMessages.size)
+        for (i in 0 until totalReviews) {
+            val userName = egyptianNames[i]
+            val reviewMessage = reviewMessages[i]
+            val date = "7 Oct 2023"
+
+            val review = Review(userName, reviewMessage, date)
+            reviews.add(review)
+        }
+        return  reviews
+    }
+    private fun showReviewsData() {
+        val review = ReviewAdapter()
+        binding.reviewsRv.adapter =review
+        review.submitList(createReviewsList())
+    }
+
+    private fun showProductData(product: Product) {
+        val colorsAdapter =  ColorsAdapter(this)
+        binding.colorRv.adapter = colorsAdapter
+        colorsAdapter.submitList(product.options?.get(1)?.values)
+        val sizeAdapter = SizeAdapter()
+        sizeAdapter.submitList(product.options?.get(0)?.values)
+        binding.sizeRv.adapter = sizeAdapter
+    }
+
+    private fun showDetailsData(product: Product) {
+        binding.brandName.text = product.vendor
+        binding.statusText.text = product.status
+        binding.fittingText.text = product.options!!.first().values.toString()
+        binding.publishText.text = product.published_scope
+        binding.serialText.text = product.id.toString()
+        binding.categoryText.text = product.product_type
 
     }
 
@@ -105,6 +155,14 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         }
 
 
+    }
+
+    override fun onClick(imageView: ImageView) {
+        if(imageView.visibility == View.GONE){
+            imageView.visibility = View.VISIBLE
+        }else{
+            imageView.visibility = View.GONE
+        }
     }
 
 }

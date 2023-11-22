@@ -15,10 +15,10 @@
     <string name="reviews">Reviews</string>
     <string name="select_color">SELECT COLOR</string>
     <string name="brand">BRAND</string>
-    <string name="condition">CONDITION</string>
+    <string name="publish_title">PUBLISH AT</string>
     <string name="category">CATEGORY</string>
-    <string name="sku">SKU</string>
-    <string name="material">MATERIAL</string>
+    <string name="status">STATUS</string>
+    <string name="serial">SERIAL</string>
     <string name="fitting">FITTING</string>
     <string name="select_size">SELECT SIZE (US)</string>
 
