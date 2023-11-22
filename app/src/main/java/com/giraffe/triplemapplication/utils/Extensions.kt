@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.HttpException
+import retrofit2.Response
 
 
 fun View.hide(){
@@ -34,6 +35,48 @@ suspend fun <T> safeCall(apiCall: suspend () -> Flow<T>): Resource<T>{
                     resource = Resource.Failure(true,0,it)
                 }.collect{
                     resource = Resource.Success(it)
+                }
+        }catch (throwable: Throwable){
+            when (throwable) {
+                is HttpException -> {
+                    Log.e("BaseRepoHttpErrorBody->","${throwable.response()!!.errorBody()}")
+                    resource = Resource.Failure(
+                        false,
+                        throwable.code(),
+                        throwable.response()!!.errorBody() as ResponseBody
+                    )
+                }
+                is JsonSyntaxException -> {
+                    Log.e("BaseRepoJsonErrorBody->", throwable.localizedMessage)
+                    resource = Resource.Failure(
+                        false,
+                        0,
+                        throwable.localizedMessage
+                    )
+                }
+                else -> {
+                    resource = Resource.Failure(true, null, null)
+                }
+            }
+        }
+        resource
+    }
+}
+
+suspend fun <T> safeApiCall(apiCall: suspend () -> Flow<Response<T>>): Resource<T>{
+    return withContext(Dispatchers.IO) {
+        var resource:Resource<T> = Resource.Loading
+        try {
+            apiCall.invoke()
+                .catch {
+                    resource = Resource.Failure(true,0,it)
+                }.collect{
+                    resource = if (it.isSuccessful && it.body()!=null){
+                        Resource.Success(it.body()!!)
+                    }else{
+                        Resource.Failure(true,it.code(),it.errorBody())
+                    }
+
                 }
         }catch (throwable: Throwable){
             when (throwable) {

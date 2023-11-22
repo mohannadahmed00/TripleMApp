@@ -66,6 +66,7 @@
     <string name="gbp">GBP</string>
     <string name="log_out">LOG OUT</string>
     <string name="choose_your_preferred_address">Choose your preferred address</string>
+    <string name="enter_address_tag">Enter address tag</string>
 
 
 </resources>

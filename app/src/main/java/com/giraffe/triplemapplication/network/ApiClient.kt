@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.network
 
+import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.utils.Constants
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
@@ -51,6 +52,13 @@ object ApiClient: RemoteSource {
 
     override suspend fun getAllBrands() = flow {
         emit(getApiServices().getAllBrands())
+    }
+
+    override suspend fun addNewAddress(
+        customerId: String,
+        address: AddressRequest
+    ) = flow {
+        emit(getApiServices().addNewAddress(customerId,address))
     }
 
     override suspend fun signUpFirebase(

@@ -12,6 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/tl_tag"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/top_rounded_corners"/>
     <ImageView
         android:id="@+id/pin"
         android:layout_width="35dp"
@@ -23,7 +29,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/red" />
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/user_hint"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/tl_tag"
+        app:layout_constraintEnd_toEndOf="@id/tl_tag"
+        app:layout_constraintTop_toBottomOf="@id/tl_tag"
+        app:layout_constraintBottom_toTopOf="@id/btn_confirm"
+        android:textColor="@color/light_gray"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tl_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:hint="@string/enter_address_tag"
+        android:textColorHint="@color/gary"
+        app:boxBackgroundMode="none"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toTopOf="@id/tv_address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/tag_ic"
+        app:startIconTint="@color/gary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_tag"
+            android:textColor="@color/dark_gary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/btn_confirm"
         android:layout_width="0dp"
@@ -32,9 +75,10 @@
         android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_address"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="1"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

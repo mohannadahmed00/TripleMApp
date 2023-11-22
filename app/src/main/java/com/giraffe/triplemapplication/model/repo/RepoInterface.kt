@@ -1,5 +1,7 @@
 package com.giraffe.triplemapplication.model.repo
 
+import com.giraffe.triplemapplication.model.address.AddressRequest
+import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
@@ -9,6 +11,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 
 interface RepoInterface {
     suspend fun getAllProducts(): Flow<AllProductsResponse>
@@ -37,5 +40,10 @@ interface RepoInterface {
     suspend fun getCurrency(): Flow<String>
 
     suspend fun setCurrency(currency:Constants.Currencies)
+
+    suspend fun addNewAddress(
+        customerId:String,
+        address: AddressRequest
+    ): Flow<Response<AddressResponse>>
 
 }

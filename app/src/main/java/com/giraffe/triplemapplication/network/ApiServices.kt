@@ -1,10 +1,16 @@
 package com.giraffe.triplemapplication.network
 
+import com.giraffe.triplemapplication.model.address.AddressRequest
+import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -24,5 +30,11 @@ interface ApiServices {
 
     @GET("smart_collections.json")
     suspend fun getAllBrands(): AllBrandsResponse
+
+    @POST("customers/{customer_id}/addresses.json")
+    suspend fun addNewAddress(
+        @Path("customer_id") customerId:String,
+        @Body address: AddressRequest
+    ):Response<AddressResponse>
 
 }
