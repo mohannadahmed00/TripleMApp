@@ -1,7 +1,7 @@
 package com.giraffe.triplemapplication.model.repo
 
 import com.giraffe.triplemapplication.database.LocalSource
-
+import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
@@ -106,6 +106,16 @@ class Repo private constructor(
     override suspend fun setExchangeRates(exchangeRates: ExchangeRatesResponse) = localSource.setExchangeRates(exchangeRates)
     override suspend fun getCurrency() = localSource.getCurrency()
     override suspend fun setCurrency(currency: Constants.Currencies) = localSource.setCurrency(currency)
+    override suspend fun addNewAddress(
+        customerId: String,
+        address: AddressRequest
+    ) = remoteSource.addNewAddress(customerId, address)
+
+    override suspend fun getAddresses(customerId: String) = remoteSource.getAddresses(customerId)
+    override suspend fun deleteAddress(
+        customerId: String,
+        addressId: String
+    ) = remoteSource.deleteAddress(customerId, addressId)
 
 
 }

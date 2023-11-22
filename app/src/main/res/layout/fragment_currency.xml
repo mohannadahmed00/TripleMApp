@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="20dp"
-    tools:context=".features.profile.view.LanguageFragment">
+    tools:context=".features.profile.view.CurrencyFragment">
 
     <TextView
         android:id="@+id/tv_title"
