@@ -65,25 +65,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ViewFlipper
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/image_slider"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="45dp"
 
         android:autoStart="true"
-        android:inAnimation="@android:anim/slide_in_left"
-        android:outAnimation="@android:anim/slide_out_right"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/product_price">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/boots" />
-    </ViewFlipper>
+    </androidx.viewpager.widget.ViewPager>
 
     <RadioGroup
         android:id="@+id/view_changer_radio_group"
@@ -151,6 +144,7 @@
         android:id="@+id/product_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+
         app:layout_constraintBottom_toTopOf="@id/add_to_cart_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -195,14 +189,18 @@
             app:layout_constraintTop_toBottomOf="@id/color_rv" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/size_rv"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginTop="14dp"
+            android:layout_marginHorizontal="25dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="@id/color_rv"
-            app:layout_constraintStart_toStartOf="@id/select_color_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/select_size_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="100dp"
             tools:listitem="@layout/chips_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -235,9 +233,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/sku_title"
+            android:id="@+id/status_title"
             style="@style/subtitle_text"
-            android:text="@string/sku"
+            android:text="@string/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="25dp"
@@ -247,19 +245,19 @@
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
 
-            android:id="@+id/sku_text"
+            android:id="@+id/status_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/sku_title"
-            app:layout_constraintTop_toBottomOf="@id/sku_title"
+            app:layout_constraintEnd_toEndOf="@id/status_title"
+            app:layout_constraintTop_toBottomOf="@id/status_title"
             tools:text="5646544564545151"/>
         <TextView
-            android:id="@+id/condition_title"
+            android:id="@+id/publish_title"
             style="@style/subtitle_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="25dp"
-            android:text="@string/condition"
+            android:text="@string/publish_title"
             app:layout_constraintTop_toBottomOf="@id/brand_name"
             android:layout_marginTop="35dp"
             android:layout_marginBottom="14dp"
@@ -267,30 +265,30 @@
             />
         <TextView
 
-            android:id="@+id/condition_name"
-            app:layout_constraintStart_toStartOf="@id/condition_title"
-            app:layout_constraintTop_toBottomOf="@id/condition_title"
+            android:id="@+id/publish_text"
+            app:layout_constraintStart_toStartOf="@id/publish_title"
+            app:layout_constraintTop_toBottomOf="@id/publish_title"
             tools:text="Brand New With Box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/material_title"
+            android:id="@+id/serial_title"
             style="@style/subtitle_text"
-            android:text="@string/material"
+            android:text="@string/serial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="25dp"
             android:layout_marginTop="35dp"
             android:layout_marginBottom="14dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sku_text"
+            app:layout_constraintTop_toBottomOf="@id/status_text"
             />
         <TextView
-            android:id="@+id/material_text"
+            android:id="@+id/serial_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/material_title"
-            app:layout_constraintTop_toBottomOf="@id/material_title"
+            app:layout_constraintEnd_toEndOf="@id/serial_title"
+            app:layout_constraintTop_toBottomOf="@id/serial_title"
             tools:text="Faux Sued , Velvet"/>
         <TextView
             android:id="@+id/category_title"
@@ -299,7 +297,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="25dp"
             android:text="@string/category"
-            app:layout_constraintTop_toBottomOf="@id/condition_name"
+            app:layout_constraintTop_toBottomOf="@id/publish_text"
             android:layout_marginTop="35dp"
             android:layout_marginBottom="14dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -322,7 +320,7 @@
             android:layout_marginTop="35dp"
             android:layout_marginBottom="14dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/material_text"
+            app:layout_constraintTop_toBottomOf="@id/serial_text"
             />
         <TextView
             android:id="@+id/fitting_text"
@@ -347,7 +345,8 @@
         app:layout_constraintTop_toBottomOf="@id/view_changer_radio_group">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reviews_rv"
-            android:layout_margin="25dp"
+            android:layout_marginVertical="25dp"
+            android:layout_marginHorizontal="15dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

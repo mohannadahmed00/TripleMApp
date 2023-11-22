@@ -46,10 +46,10 @@
     <string name="reviews">Reviews</string>
     <string name="select_color">SELECT COLOR</string>
     <string name="brand">BRAND</string>
-    <string name="condition">CONDITION</string>
+    <string name="publish_title">PUBLISH AT</string>
     <string name="category">CATEGORY</string>
-    <string name="sku">SKU</string>
-    <string name="material">MATERIAL</string>
+    <string name="status">SKU</string>
+    <string name="serial">MATERIAL</string>
     <string name="fitting">FITTING</string>
     <string name="select_size">SELECT SIZE (US)</string>
     <string name="languages">اللغة</string>
@@ -59,8 +59,8 @@
     <string name="eur">EUR</string>
     <string name="gbp">GBP</string>
     <string name="log_out">LOG OUT</string>
+    <string name="choose_your_preferred_address">Choose your preferred address</string>
+    <string name="enter_address_tag">Enter address tag</string>
     <string name="products">Products</string>
     <string name="categories">Categories</string>
-
-
 </resources>

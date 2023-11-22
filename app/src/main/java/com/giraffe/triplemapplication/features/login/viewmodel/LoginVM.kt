@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 
 class LoginVM(private val repo: RepoInterface) : ViewModel() {
 
-    private val _firebaseUser: MutableStateFlow<Resource<Task<AuthResult>>> =
+    private val _firebaseUser: MutableStateFlow<Resource<AuthResult>> =
         MutableStateFlow(Resource.Loading)
-    val currentUser: StateFlow<Resource<Task<AuthResult>>> = _firebaseUser.asStateFlow()
+    val currentUser: StateFlow<Resource<AuthResult>> = _firebaseUser.asStateFlow()
 
 
     fun login(email : String , password : String ){

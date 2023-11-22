@@ -8,9 +8,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <TextView
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/textview"
+        android:layout_margin="10dp"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:textAlignment="center"
         tools:text="Denim Jeans"/>
 </androidx.cardview.widget.CardView>

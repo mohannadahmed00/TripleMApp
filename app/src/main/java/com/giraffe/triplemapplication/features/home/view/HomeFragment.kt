@@ -132,6 +132,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
     }
 
     private fun navigateToProductInfoScreen(product: Product) {
+        sharedViewModel.setCurrentProduct(product)
         val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment(product)
         findNavController(requireView()).navigate(action)
     }
