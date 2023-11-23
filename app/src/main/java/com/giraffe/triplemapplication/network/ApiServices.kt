@@ -6,10 +6,9 @@ import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
-import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -58,13 +57,13 @@ interface ApiServices {
     @GET("orders.json")
     suspend fun getOrders(@Query("status") status: String = "any"): AllOrdersResponse
 
-    @POST("orders.json")
-    suspend fun createOrder(@Query("") orderCreation: OrderCreation)
+//    @POST("orders.json")
+//    suspend fun createOrder(@Query("") orderCreation: OrderCreation)
 
     @DELETE("orders/{orderId}/.json")
     suspend fun delOrder(@Path("orderId") orderId: String)
-    @GET
-    suspend fun getCurrencies(): CurrencyResponse
+//    @GET
+//    suspend fun getCurrencies(): CurrencyResponse
 
     @POST("customers.json")
     suspend fun createCustomer(@Body customer : Request) : CustomerResponse

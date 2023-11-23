@@ -9,6 +9,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentAllCategoriesBinding
 import com.giraffe.triplemapplication.features.allcategories.adapters.BrandsAdapter
@@ -30,8 +31,9 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        b: Boolean
-    ): FragmentAllCategoriesBinding = FragmentAllCategoriesBinding.inflate(inflater, container, false)
+        b: Boolean,
+    ): FragmentAllCategoriesBinding =
+        FragmentAllCategoriesBinding.inflate(inflater, container, false)
 
     override fun handleView() {
         getNavArguments()
@@ -55,7 +57,8 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
     private fun getNavArguments() {
         isBrand = AllCategoriesFragmentArgs.fromBundle(requireArguments()).isBrand
-        selectedItemFromHome = AllCategoriesFragmentArgs.fromBundle(requireArguments()).selectedItemFromHome
+        selectedItemFromHome =
+            AllCategoriesFragmentArgs.fromBundle(requireArguments()).selectedItemFromHome
     }
 
     override fun handleClicks() {
@@ -76,17 +79,30 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
         lifecycleScope.launch {
             mViewModel.allBrandsFlow.collect {
-                when(it) {
-                    is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> { showLoading() }
+                when (it) {
+                    is Resource.Failure -> {
+                        dismissLoading()
+                    }
+
+                    Resource.Loading -> {
+                        showLoading()
+                    }
+
                     is Resource.Success -> {
                         brandsAdapter.submitList(it.value.smart_collections)
-                        binding.brandNameLabel.text = it.value.smart_collections[selectedItemFromHome].handle
+                        binding.brandNameLabel.text =
+                            it.value.smart_collections[selectedItemFromHome].handle
                         mViewModel.getProductsFromCategoryId(it.value.smart_collections[selectedItemFromHome].id.toString())
                         mViewModel.allProductsFlow.collect { products ->
-                            when(products) {
-                                is Resource.Failure -> { dismissLoading() }
-                                Resource.Loading -> { showLoading() }
+                            when (products) {
+                                is Resource.Failure -> {
+                                    dismissLoading()
+                                }
+
+                                Resource.Loading -> {
+                                    showLoading()
+                                }
+
                                 is Resource.Success -> {
                                     dismissLoading()
                                     setVisibility()
@@ -101,10 +117,11 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     }
 
     private fun observeGetAllCategories() {
-        val categoriesAdapter = BrandsAdapter<CustomCollection>(requireContext(), selectedItemFromHome) {
-            binding.brandNameLabel.text = it.handle
-            mViewModel.getProductsFromCategoryId(it.id.toString())
-        }
+        val categoriesAdapter =
+            BrandsAdapter<CustomCollection>(requireContext(), selectedItemFromHome) {
+                binding.brandNameLabel.text = it.handle
+                mViewModel.getProductsFromCategoryId(it.id.toString())
+            }
         binding.brandsRecyclerView.apply {
             adapter = categoriesAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -114,19 +131,32 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
         lifecycleScope.launch {
             mViewModel.allCategoriesFlow.collect {
-                when(it) {
-                    is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> { showLoading() }
+                when (it) {
+                    is Resource.Failure -> {
+                        dismissLoading()
+                    }
+
+                    Resource.Loading -> {
+                        showLoading()
+                    }
+
                     is Resource.Success -> {
                         val categories = it.value.custom_collections.toMutableList()
                         categories.removeAt(0) // Remove front page
                         categoriesAdapter.submitList(categories)
-                        binding.brandNameLabel.text = it.value.custom_collections[selectedItemFromHome + 1].handle
+                        binding.brandNameLabel.text =
+                            it.value.custom_collections[selectedItemFromHome + 1].handle
                         mViewModel.getProductsFromCategoryId(it.value.custom_collections[selectedItemFromHome + 1].id.toString())
                         mViewModel.allProductsFlow.collect { products ->
-                            when(products) {
-                                is Resource.Failure -> { dismissLoading() }
-                                Resource.Loading -> { showLoading() }
+                            when (products) {
+                                is Resource.Failure -> {
+                                    dismissLoading()
+                                }
+
+                                Resource.Loading -> {
+                                    showLoading()
+                                }
+
                                 is Resource.Success -> {
                                     dismissLoading()
                                     setVisibility()
@@ -143,9 +173,15 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     private fun observeGetAllProducts() {
         lifecycleScope.launch {
             mViewModel.allProductsFlow.collect {
-                when(it) {
-                    is Resource.Failure -> { dismissLoading() }
-                    Resource.Loading -> { showLoading() }
+                when (it) {
+                    is Resource.Failure -> {
+                        dismissLoading()
+                    }
+
+                    Resource.Loading -> {
+                        showLoading()
+                    }
+
                     is Resource.Success -> {
                         productsAdapter.submitList(it.value.products)
                         dismissLoading()
@@ -166,8 +202,13 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     }
 
     private fun navigateToProductInfoScreen(product: Product) {
-        sharedViewModel.setCurrentProduct(product)
-        val action: NavDirections = AllCategoriesFragmentDirections.actionAllCategoriesFragmentToProductInfoFragment(product)
-        Navigation.findNavController(requireView()).navigate(action)
+        if (product != null) {
+
+            sharedViewModel.setCurrentProduct(product)
+            val action =
+                AllCategoriesFragmentDirections.actionAllCategoriesFragmentToProductInfoFragment()
+            findNavController().navigate(action)
+
+        }
     }
 }
