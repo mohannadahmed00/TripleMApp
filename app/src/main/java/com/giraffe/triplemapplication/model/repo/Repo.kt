@@ -6,6 +6,7 @@ import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
 import com.google.android.gms.tasks.Task
@@ -116,6 +117,17 @@ class Repo private constructor(
         customerId: String,
         addressId: String
     ) = remoteSource.deleteAddress(customerId, addressId)
+
+    override fun getAllFavorites(): Flow<Product>  = localSource.getAllFavorites()
+
+
+    override suspend fun insertFavorite(product: Product): Long = localSource.insertFavorite(product)
+
+    override suspend fun deleteFavorite(product: Product): Int = localSource.deleteFavorite(product)
+
+    override suspend fun deleteAllFavorites() = localSource.deleteAllFavorites()
+
+    override suspend fun updateFavorite(product: Product) = localSource.updateFavorite(product)
 
 
 }

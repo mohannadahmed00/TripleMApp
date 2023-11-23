@@ -166,6 +166,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     }
 
     private fun navigateToProductInfoScreen(product: Product) {
+        sharedViewModel.setCurrentProduct(product)
         val action: NavDirections = AllCategoriesFragmentDirections.actionAllCategoriesFragmentToProductInfoFragment(product)
         Navigation.findNavController(requireView()).navigate(action)
     }
