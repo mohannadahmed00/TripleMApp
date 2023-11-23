@@ -37,34 +37,23 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         lifecycleScope.launch {
             sharedViewModel.currentProduct.collectLatest { it ->
                 when (it) {
-                    is Resource.Failure -> {
-                        dismissLoading()
-                        showFailure(it)
-                    }
-
-                    Resource.Loading -> {
-                        showLoading()
-                    }
-
-                    is Resource.Success -> {
-                        dismissLoading()
+                    is Product ->{
                         showSuccess(it)
                     }
-
                 }
             }
         }
 
     }
 
-    private fun showSuccess(it: Resource.Success<Product>) {
-        showData(it.value)
+    private fun showSuccess(it: Product) {
+        showData(it)
     }
 
     private fun showData(product: Product) {
         binding.imageSlider.adapter = ImagePagerAdapter(requireContext() , product.images)
         binding.productName.text = product.title
-        binding.productPrice.text = product.variants!!.first().price.toString()
+        binding.productPrice.text = product.variants?.first()?.price.toString()
         showDetailsData(product)
         showProductData(product)
         showReviewsData()
@@ -122,9 +111,6 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
     }
 
-    private fun showFailure(it: Resource.Failure) {
-        Snackbar.make(requireView() , it.errorBody.toString() , Snackbar.LENGTH_SHORT).show()
-    }
 
 
     override fun handleClicks() {

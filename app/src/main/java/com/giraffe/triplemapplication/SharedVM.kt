@@ -14,8 +14,8 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     private val _languageFlow: MutableStateFlow<Resource<String>> =
         MutableStateFlow(Resource.Loading)
     val languageFlow: StateFlow<Resource<String>> = _languageFlow.asStateFlow()
-    private val _currentProduct : MutableStateFlow<Resource<Product>> = MutableStateFlow(Resource.Loading)
-    val currentProduct : StateFlow<Resource<Product>> = _currentProduct.asStateFlow()
+    private val _currentProduct : MutableStateFlow<Product?> = MutableStateFlow(null)
+    val currentProduct : StateFlow<Product?> = _currentProduct.asStateFlow()
     fun getLanguage() {
         viewModelScope.launch {
             _languageFlow.emit(safeCall { repo.getLanguage() })
@@ -23,7 +23,7 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     }
     fun setCurrentProduct(product: Product){
         viewModelScope.launch {
-            _currentProduct.emit(Resource.Success(product))
+            _currentProduct.emit(product)
         }
     }
 }

@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.giraffe.triplemapplication.model.products.Image
+import com.giraffe.triplemapplication.utils.load
 
 class ImagePagerAdapter(private val context: Context, private val images: List<Image>?) :
     PagerAdapter() {
@@ -21,11 +22,11 @@ class ImagePagerAdapter(private val context: Context, private val images: List<I
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val imageView = ImageView(context)
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
-
+        imageView.load(images?.get(position)?.src.toString())
         // Load image using Glide
-        Glide.with(context)
-            .load(images?.get(position)?.src)
-            .into(imageView)
+//        Glide.with(context)
+//            .load(images?.get(position)?.src)
+//            .into(imageView)
 
         container.addView(imageView)
         return imageView

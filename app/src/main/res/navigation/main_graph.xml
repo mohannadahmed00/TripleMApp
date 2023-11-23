@@ -77,11 +77,7 @@
         android:id="@+id/productInfoFragment"
         android:name="com.giraffe.triplemapplication.features.details.view.ProductInfoFragment"
         android:label="fragment_product_info"
-        tools:layout="@layout/fragment_product_info" >
-        <argument
-            android:name="product"
-            app:argType="com.giraffe.triplemapplication.model.products.Product" />
-    </fragment>
+        tools:layout="@layout/fragment_product_info" />
     <fragment
         android:id="@+id/addressesFragment"
         android:name="com.giraffe.triplemapplication.features.profile.view.AddressesFragment"
