@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavoritesDao {
     @Query("SELECT * FROM products_table")
-    fun getAllFavorites(): Flow<Product>
+    fun getAllFavorites(): Flow<List<Product>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavorite(product: Product): Long

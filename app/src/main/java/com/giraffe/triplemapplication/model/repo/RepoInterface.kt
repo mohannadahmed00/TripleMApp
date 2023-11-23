@@ -73,7 +73,7 @@ interface RepoInterface {
         addressId:String,
     ):Flow<Response<Void>>
 
-    fun getAllFavorites(): Flow<Product>
+    fun getAllFavorites(): Flow<List<Product>>
 
 
     suspend fun insertFavorite(product: Product): Long

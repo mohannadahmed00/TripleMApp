@@ -4,6 +4,8 @@
     <string name="search">بحث</string>
     <string name="cart">سلة</string>
     <string name="me">أنا</string>
+
+    <string name="favourite">Favourite</string>
     <string name="edit_profile">EDIT PROFILE</string>
     <string name="all_my_orders">All My Orders</string>
     <string name="pending_payments">Pending Payments</string>
@@ -39,7 +41,8 @@
     <string name="refresh">REFRESH</string>
 
     <string name="add_to_cart">Add To Cart</string>
-    <string name="share_this">Share This</string>
+    <string name="add_to_fav_btn">Add To Fav</string>
+
 
     <string name="product">Product</string>
     <string name="details">Details</string>

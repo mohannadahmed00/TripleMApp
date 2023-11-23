@@ -77,7 +77,12 @@
         android:id="@+id/productInfoFragment"
         android:name="com.giraffe.triplemapplication.features.details.view.ProductInfoFragment"
         android:label="fragment_product_info"
-        tools:layout="@layout/fragment_product_info" />
+        tools:layout="@layout/fragment_product_info">
+    <action
+        android:id="@+id/action_productInfoFragment_to_cartFragment"
+        app:destination="@id/cartFragment" />
+   </fragment>
+
     <fragment
         android:id="@+id/addressesFragment"
         android:name="com.giraffe.triplemapplication.features.profile.view.AddressesFragment"
@@ -92,4 +97,9 @@
         android:name="com.giraffe.triplemapplication.features.profile.view.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/favFragment"
+        android:name="com.giraffe.triplemapplication.features.fav.view.FavFragment"
+        android:label="fragment_fav"
+        tools:layout="@layout/fragment_fav" />
 </navigation>

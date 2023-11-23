@@ -25,7 +25,7 @@ interface LocalSource {
     suspend fun setCurrency(currency:Constants.Currencies)
 
 
-    fun getAllFavorites(): Flow<Product>
+    fun getAllFavorites(): Flow<List<Product>>
     suspend fun insertFavorite(product: Product): Long
     suspend fun deleteFavorite(product: Product): Int
     suspend fun deleteAllFavorites()

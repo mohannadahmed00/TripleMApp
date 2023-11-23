@@ -5,8 +5,9 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="cart">Cart</string>
+    <string name="favourite">Favourite</string>
     <string name="add_to_cart">Add To Cart</string>
-    <string name="share_this">Share This</string>
+    <string name="add_to_fav_btn">Add To Fav</string>
     <string name="me">Me</string>
 
 
