@@ -1,14 +1,13 @@
 package com.giraffe.triplemapplication.network
 
+
 import com.giraffe.triplemapplication.model.address.AddressRequest
-
-
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
+import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
-
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +16,7 @@ import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -64,6 +64,29 @@ object ApiClient : RemoteSource {
     override suspend fun getProductsFromCategoryId(categoryId: String) = flow {
         emit(getApiServices().getProductsFromCategoryId(categoryId))
 
+    }
+
+    override suspend fun createNewDraftOrder(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return flow {
+            emit(getApiServices().createNewDraftOrder(draftRequest))
+        }
+    }
+
+    override suspend fun modifyDraftOrder(
+        draftOrderId: Long,
+        draftRequest: DraftRequest
+    ): Flow<Response<DraftResponse>> {
+        return flow {
+            emit(getApiServices().modifyDraftOrder(draftOrderId, draftRequest))
+        }
+    }
+
+    override suspend fun removeDraftOrder(
+        draftOrderId:Long
+    ): Flow<Response<Void>> {
+        return flow {
+            emit(getApiServices().removeDraftOrder(draftOrderId))
+        }
     }
 
     override suspend fun addNewAddress(

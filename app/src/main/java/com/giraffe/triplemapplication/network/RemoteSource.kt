@@ -1,21 +1,18 @@
 package com.giraffe.triplemapplication.network
 
+
+
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
-
+import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
+import com.giraffe.triplemapplication.model.cart.response.DraftResponse
+import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
+import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
-
-import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
-import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
-
-import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-
-
-
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -60,4 +57,15 @@ interface RemoteSource {
     ):Flow<Response<Void>>
     suspend fun getProductsFromCategoryId(categoryId: String): Flow<AllProductsResponse>
 
+
+    suspend fun createNewDraftOrder(draftRequest: DraftRequest):Flow<Response<DraftResponse>>
+
+    suspend fun modifyDraftOrder(
+        draftOrderId:Long,
+        draftRequest: DraftRequest
+    ):Flow<Response<DraftResponse>>
+
+    suspend fun removeDraftOrder(
+        draftOrderId:Long
+    ):Flow<Response<Void>>
 }
