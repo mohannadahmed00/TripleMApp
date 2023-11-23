@@ -17,6 +17,8 @@ class FavVM(private val repo: RepoInterface) : ViewModel() {
     private val _allFavProducts: MutableStateFlow<List<Product>?> =
         MutableStateFlow(null)
     val allFavProducts : StateFlow<List<Product>?> = _allFavProducts.asStateFlow()
+    private val _lastDeleted : MutableStateFlow<Product?> = MutableStateFlow(null)
+    val lastDeleted :StateFlow<Product?> = _lastDeleted
     init {
         getAllFavorites()
     }
@@ -30,6 +32,7 @@ class FavVM(private val repo: RepoInterface) : ViewModel() {
     }
     fun deleteFavourite(product: Product){
         viewModelScope.launch(Dispatchers.IO) {
+            _lastDeleted.emit(product)
             repo.deleteFavorite(product)
         }
     }
@@ -41,6 +44,11 @@ class FavVM(private val repo: RepoInterface) : ViewModel() {
     fun updateFavourite(product: Product){
         viewModelScope.launch(Dispatchers.IO) {
             repo.updateFavorite(product)
+        }
+    }
+    fun returnLastDeleted(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _lastDeleted.value?.let { repo.insertFavorite(it) }
         }
     }
 }

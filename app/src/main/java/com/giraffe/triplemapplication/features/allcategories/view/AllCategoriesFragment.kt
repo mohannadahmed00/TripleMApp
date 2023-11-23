@@ -202,13 +202,10 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
     }
 
     private fun navigateToProductInfoScreen(product: Product) {
-        if (product != null) {
+        sharedViewModel.setCurrentProduct(product)
+        val action =
+            AllCategoriesFragmentDirections.actionAllCategoriesFragmentToProductInfoFragment()
+        findNavController().navigate(action)
 
-            sharedViewModel.setCurrentProduct(product)
-            val action =
-                AllCategoriesFragmentDirections.actionAllCategoriesFragmentToProductInfoFragment()
-            findNavController().navigate(action)
-
-        }
     }
 }

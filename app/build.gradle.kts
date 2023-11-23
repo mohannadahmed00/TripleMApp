@@ -110,6 +110,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth")
+    //swipe decorator
+    implementation ("it.xabaras.android:recyclerview-swipedecorator:1.4")
 
     testImplementation("androidx.test:core-ktx:1.5.0")
     testImplementation("androidx.test.ext:junit-ktx:1.1.5")

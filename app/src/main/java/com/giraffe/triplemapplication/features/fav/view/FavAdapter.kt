@@ -13,7 +13,9 @@ import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.load
 
-class FavAdapter() :
+class FavAdapter(
+    private val onItemClick: (Product) -> Unit
+) :
     ListAdapter<Product, FavAdapter.ViewHolder>(ProductAdapter.ProductDataDiffUtil() ) {
 
     private lateinit var binding: FavItemBinding
@@ -31,6 +33,8 @@ class FavAdapter() :
         holder.binding.tvProductTitle.text = currentProduct.title
         holder.binding.tvPrice.text = currentProduct.variants?.first()?.price
         holder.binding.tvVariants.text = currentProduct.vendor
+        holder.binding.root.setOnClickListener { onItemClick(currentProduct) }
+
     }
 
 }
