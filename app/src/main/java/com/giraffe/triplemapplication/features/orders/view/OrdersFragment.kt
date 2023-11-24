@@ -8,10 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentOrdersBinding
-import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.orders.viewmodel.OrdersViewModel
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
@@ -19,7 +17,7 @@ import kotlinx.coroutines.launch
 class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
     override fun getViewModel(): Class<OrdersViewModel> = OrdersViewModel::class.java
 
-    private lateinit var adapter: OrdersAdapter
+    private lateinit var ordersAdapter: OrdersAdapter
 
     companion object{
         private const val TAG = "OrdersFragment"
@@ -41,9 +39,9 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
 
     override fun handleView() {
         // Recycler View
-        adapter = OrdersAdapter()
+        ordersAdapter = OrdersAdapter()
         binding.ordersRecyclerView.apply {
-            adapter = adapter
+            adapter = ordersAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.VERTICAL
             }
@@ -60,7 +58,7 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
                     Resource.Loading -> { dismissLoading() }
                     is Resource.Success -> {
                         dismissLoading()
-                        adapter.submitList(it.value.orders)
+                        ordersAdapter.submitList(it.value.orders)
                     }
                 }
             }
