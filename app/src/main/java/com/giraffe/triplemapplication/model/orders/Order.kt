@@ -3,7 +3,7 @@ package com.giraffe.triplemapplication.model.orders
 data class Order(
     val admin_graphql_api_id: String,
     val app_id: Long,
-    val billing_address: BillingAddress,
+    val billing_address: BillingAddress?,
     val browser_ip: Any,
     val buyer_accepts_marketing: Boolean,
     val cancel_reason: String,

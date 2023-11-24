@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.features.orders.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,9 +23,11 @@ class OrdersAdapter(
         return ViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val current = getItem(position)
-        holder.binding.orderNumber.text = current.order_number.toString()
+        holder.binding.orderPrice.text = current.total_price
+        holder.binding.orderCreatedAt.text = current.created_at
     }
 
     inner class ViewHolder(var binding: ItemOrderBinding) : RecyclerView.ViewHolder(binding.root)

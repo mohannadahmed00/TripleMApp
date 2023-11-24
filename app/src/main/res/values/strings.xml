@@ -69,4 +69,6 @@
     <string name="enter_address_tag">Enter address tag</string>
     <string name="products">Products</string>
     <string name="categories">Categories</string>
+    <string name="price">Price:</string>
+    <string name="created_at">Created at:</string>
 </resources>
