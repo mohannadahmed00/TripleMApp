@@ -20,9 +20,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 
     override fun handleClicks() {
         binding.btnClose.setOnClickListener { navigateUp() }
+        binding.btnCheckout.setOnClickListener { checkout() }
     }
 
     private fun navigateUp() { findNavController().navigateUp() }
 
-
+    private fun checkout() {
+        mViewModel.checkout()
+    }
 }
