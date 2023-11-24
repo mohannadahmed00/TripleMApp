@@ -57,7 +57,7 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding> : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        loading.cancel()
+//        loading.cancel()
     }
 
     fun showLoading() {
