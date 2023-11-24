@@ -11,11 +11,11 @@ import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-
+import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
+import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 
 
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -59,5 +59,9 @@ interface RemoteSource {
         addressId:String,
     ):Flow<Response<Void>>
     suspend fun getProductsFromCategoryId(categoryId: String): Flow<AllProductsResponse>
+
+    suspend fun createOrder(orderCreate: OrderCreate)
+    suspend fun getOrders(): Flow<AllOrdersResponse>
+    suspend fun delOrder(orderId: String)
 
 }

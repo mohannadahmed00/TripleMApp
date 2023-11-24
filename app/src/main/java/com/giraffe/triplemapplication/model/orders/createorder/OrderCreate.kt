@@ -1,5 +1,5 @@
 package com.giraffe.triplemapplication.model.orders.createorder
 
-data class OrderRequest(
+data class OrderCreate(
     val order: Order
 )

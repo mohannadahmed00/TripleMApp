@@ -3,17 +3,15 @@ package com.giraffe.triplemapplication.model.repo
 import com.giraffe.triplemapplication.database.LocalSource
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class Repo private constructor(
     private val remoteSource: RemoteSource,
@@ -128,6 +126,12 @@ class Repo private constructor(
     override suspend fun deleteAllFavorites() = localSource.deleteAllFavorites()
 
     override suspend fun updateFavorite(product: Product) = localSource.updateFavorite(product)
+
+    override suspend fun createOrder(orderCreate: OrderCreate) = remoteSource.createOrder(orderCreate)
+
+    override suspend fun getOrders() = remoteSource.getOrders()
+
+    override suspend fun delOrder(orderId: String) = remoteSource.delOrder(orderId)
 
 
 }

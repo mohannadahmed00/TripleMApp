@@ -1,14 +1,12 @@
 package com.giraffe.triplemapplication.network
 
+
 import com.giraffe.triplemapplication.model.address.AddressRequest
-
-
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
-
+import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -72,6 +70,18 @@ object ApiClient : RemoteSource {
             }
         }
         emit(getApiServices().getAllProductsFromIds(productsIds))
+    }
+
+    override suspend fun createOrder(orderCreate: OrderCreate) {
+        getApiServices().createOrder(orderCreate)
+    }
+
+    override suspend fun getOrders() = flow {
+        emit(getApiServices().getOrders())
+    }
+
+    override suspend fun delOrder(orderId: String) {
+        getApiServices().delOrder(orderId)
     }
 
     override suspend fun addNewAddress(
