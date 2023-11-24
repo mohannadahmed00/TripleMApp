@@ -72,8 +72,8 @@ object ApiClient : RemoteSource {
         emit(getApiServices().getAllProductsFromIds(productsIds))
     }
 
-    override suspend fun createOrder(orderCreate: OrderCreate) {
-        getApiServices().createOrder(orderCreate)
+    override suspend fun createOrder(orderCreate: OrderCreate) = flow {
+        emit(getApiServices().createOrder(orderCreate))
     }
 
     override suspend fun getOrders() = flow {

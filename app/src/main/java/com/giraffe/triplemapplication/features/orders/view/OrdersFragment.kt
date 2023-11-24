@@ -58,8 +58,8 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
         lifecycleScope.launch {
             mViewModel.ordersFlow.collect {
                 when (it) {
-                    is Resource.Failure -> { showLoading() }
-                    Resource.Loading -> { dismissLoading() }
+                    is Resource.Failure -> { dismissLoading() }
+                    Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         dismissLoading()
                         ordersAdapter.submitList(it.value.orders)

@@ -61,7 +61,7 @@ interface ApiServices {
     suspend fun getOrders(@Query("status") status: String = "any"): AllOrdersResponse
 
     @POST("orders.json")
-    suspend fun createOrder(@Body() orderCreate: OrderCreate)
+    suspend fun createOrder(@Body() orderCreate: OrderCreate): AllOrdersResponse
 
     @DELETE("orders/{orderId}/.json")
     suspend fun delOrder(@Path("orderId") orderId: String)

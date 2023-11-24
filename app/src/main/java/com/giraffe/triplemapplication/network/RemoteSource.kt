@@ -60,7 +60,7 @@ interface RemoteSource {
     ):Flow<Response<Void>>
     suspend fun getProductsFromCategoryId(categoryId: String): Flow<AllProductsResponse>
 
-    suspend fun createOrder(orderCreate: OrderCreate)
+    suspend fun createOrder(orderCreate: OrderCreate): Flow<AllOrdersResponse>
     suspend fun getOrders(): Flow<AllOrdersResponse>
     suspend fun delOrder(orderId: String)
 

@@ -78,7 +78,7 @@ interface RepoInterface {
 
     suspend fun updateFavorite(product: Product)
 
-    suspend fun createOrder(orderCreate: OrderCreate)
+    suspend fun createOrder(orderCreate: OrderCreate): Flow<AllOrdersResponse>
     suspend fun getOrders(): Flow<AllOrdersResponse>
     suspend fun delOrder(orderId: String)
 
