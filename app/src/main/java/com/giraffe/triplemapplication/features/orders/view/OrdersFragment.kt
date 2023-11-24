@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentOrdersBinding
+import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.orders.viewmodel.OrdersViewModel
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
@@ -16,15 +19,10 @@ import kotlinx.coroutines.launch
 class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
     override fun getViewModel(): Class<OrdersViewModel> = OrdersViewModel::class.java
 
+    private lateinit var adapter: OrdersAdapter
+
     companion object{
         private const val TAG = "OrdersFragment"
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_orders, container, false)
     }
 
     override fun getFragmentBinding(
@@ -33,10 +31,24 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
         b: Boolean
     ): FragmentOrdersBinding = FragmentOrdersBinding.inflate(inflater, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        handleView()
+    }
+
     override fun handleClicks() {
     }
 
     override fun handleView() {
+        // Recycler View
+        adapter = OrdersAdapter()
+        binding.ordersRecyclerView.apply {
+            adapter = adapter
+            layoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.VERTICAL
+            }
+        }
+
         observeGetOrders()
     }
 
@@ -44,10 +56,11 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
         lifecycleScope.launch {
             mViewModel.ordersFlow.collect {
                 when (it) {
-                    is Resource.Failure -> { }
-                    Resource.Loading -> { }
+                    is Resource.Failure -> { showLoading() }
+                    Resource.Loading -> { dismissLoading() }
                     is Resource.Success -> {
-                        Log.i(TAG, "observeGetOrders: ${it.value.orders}")
+                        dismissLoading()
+                        adapter.submitList(it.value.orders)
                     }
                 }
             }
