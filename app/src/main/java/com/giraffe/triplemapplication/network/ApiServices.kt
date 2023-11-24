@@ -22,6 +22,8 @@ interface ApiServices {
 
     @GET("products.json")
     suspend fun getAllProducts(): AllProductsResponse
+    @GET("products.json")
+    suspend fun getAllProductsFromIds(@Query("ids") ids: String): AllProductsResponse
     @GET("v1/latest")
     suspend fun getExchangeRates(
         @Query("access_key") accessKey: String="4ee6d3381b90ee1d4e7a0c551205269f",

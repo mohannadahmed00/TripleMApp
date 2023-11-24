@@ -5,6 +5,7 @@ import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeCall
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +25,12 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     fun setCurrentProduct(product: Product){
         viewModelScope.launch {
             _currentProduct.emit(product)
+        }
+    }
+
+    fun insertFavorite(product: Product){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.insertFavorite(product)
         }
     }
 }

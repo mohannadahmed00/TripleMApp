@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentProductInfoBinding
@@ -18,7 +19,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>(), OnColorClickListener {
+class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>(),
+    OnColorClickListener {
     override fun getViewModel(): Class<ProductInfoVM> = ProductInfoVM::class.java
 
     override fun getFragmentBinding(
@@ -37,7 +39,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         lifecycleScope.launch {
             sharedViewModel.currentProduct.collectLatest { it ->
                 when (it) {
-                    is Product ->{
+                    is Product -> {
                         showSuccess(it)
                     }
                 }
@@ -46,12 +48,28 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
     }
 
-    private fun showSuccess(it: Product) {
-        showData(it)
+    private fun showSuccess(product: Product) {
+        showData(product)
+        binding.addToFav.setOnClickListener {
+            sharedViewModel.insertFavorite(product)
+            navigateToFav()
+        }
+        binding.addToCartButton.setOnClickListener {
+            navigateToCart()
+        }
+    }
+
+    private fun navigateToFav() {
+        findNavController().navigate(R.id.favFragment)
+    }
+
+    private fun navigateToCart() {
+        val action = ProductInfoFragmentDirections.actionProductInfoFragmentToCartFragment()
+        findNavController().navigate(action)
     }
 
     private fun showData(product: Product) {
-        binding.imageSlider.adapter = ImagePagerAdapter(requireContext() , product.images)
+        binding.imageSlider.adapter = ImagePagerAdapter(requireContext(), product.images)
         binding.productName.text = product.title
         binding.productPrice.text = product.variants?.first()?.price.toString()
         showDetailsData(product)
@@ -59,7 +77,8 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         showReviewsData()
 
     }
-    private fun createReviewsList() : List<Review> {
+
+    private fun createReviewsList(): List<Review> {
         val egyptianNames = listOf(
             "Amir", "Yasmine", "Mohamed", "Nour", "Ahmed", "Laila", "Tarek", "Fatma"
         )
@@ -84,16 +103,17 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
             val review = Review(userName, reviewMessage, date)
             reviews.add(review)
         }
-        return  reviews
+        return reviews
     }
+
     private fun showReviewsData() {
         val review = ReviewAdapter()
-        binding.reviewsRv.adapter =review
+        binding.reviewsRv.adapter = review
         review.submitList(createReviewsList())
     }
 
     private fun showProductData(product: Product) {
-        val colorsAdapter =  ColorsAdapter(this)
+        val colorsAdapter = ColorsAdapter(this)
         binding.colorRv.adapter = colorsAdapter
         colorsAdapter.submitList(product.options?.get(1)?.values)
         val sizeAdapter = SizeAdapter()
@@ -112,11 +132,11 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     }
 
 
-
     override fun handleClicks() {
         binding.viewChangerRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             showSelectedLayout(checkedId)
         }
+
     }
 
     private fun showSelectedLayout(selectedLayoutId: Int) {
@@ -128,11 +148,13 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
                 binding.detailsLayout.visibility = View.GONE
                 binding.reviewsLayout.visibility = View.GONE
             }
+
             R.id.details_radio -> {
                 binding.productLayout.visibility = View.GONE
                 binding.detailsLayout.visibility = View.VISIBLE
                 binding.reviewsLayout.visibility = View.GONE
             }
+
             R.id.reviews_radio -> {
                 binding.productLayout.visibility = View.GONE
                 binding.detailsLayout.visibility = View.GONE
@@ -144,9 +166,9 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     }
 
     override fun onClick(imageView: ImageView) {
-        if(imageView.visibility == View.GONE){
+        if (imageView.visibility == View.GONE) {
             imageView.visibility = View.VISIBLE
-        }else{
+        } else {
             imageView.visibility = View.GONE
         }
     }

@@ -367,16 +367,16 @@
         android:text="@string/add_to_cart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/share_btn" />
+        app:layout_constraintStart_toEndOf="@id/add_to_fav" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/share_btn"
+        android:id="@+id/add_to_fav"
         style="@style/button_secondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/secondary_button"
-        android:text="@string/share_this"
+        android:text="@string/add_to_fav_btn"
         android:textColor="@color/gary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/add_to_cart_button"

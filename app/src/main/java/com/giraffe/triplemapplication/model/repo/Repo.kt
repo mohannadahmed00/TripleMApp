@@ -118,7 +118,7 @@ class Repo private constructor(
         addressId: String
     ) = remoteSource.deleteAddress(customerId, addressId)
 
-    override fun getAllFavorites(): Flow<Product>  = localSource.getAllFavorites()
+    override fun getAllFavorites(): Flow<List<Product>>  = localSource.getAllFavorites()
 
 
     override suspend fun insertFavorite(product: Product): Long = localSource.insertFavorite(product)

@@ -52,7 +52,8 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         shared.store(Constants.CURRENCY, currency.value)
     }
 
-    override fun getAllFavorites(): Flow<Product> = favoritesDao.getAllFavorites()
+    override fun getAllFavorites(): Flow<List<Product>> =
+        favoritesDao.getAllFavorites()
 
 
     override suspend fun insertFavorite(product: Product): Long = favoritesDao.insertFavorite(product)
