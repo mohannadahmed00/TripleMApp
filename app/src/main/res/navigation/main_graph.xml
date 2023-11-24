@@ -125,5 +125,20 @@
         android:id="@+id/checkoutFragment"
         android:name="com.giraffe.triplemapplication.features.checkout.view.CheckoutFragment"
         android:label="fragment_checkout"
-        tools:layout="@layout/fragment_checkout" />
+        tools:layout="@layout/fragment_checkout" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_orderPlacedFragment"
+            app:destination="@id/orderPlacedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderPlacedFragment"
+        android:name="com.giraffe.triplemapplication.features.checkout.view.OrderPlacedFragment"
+        android:label="fragment_order_placed"
+        tools:layout="@layout/fragment_order_placed" >
+        <action
+            android:id="@+id/action_orderPlacedFragment_to_ordersFragment"
+            app:destination="@id/ordersFragment"
+            app:popUpTo="@id/orderPlacedFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>

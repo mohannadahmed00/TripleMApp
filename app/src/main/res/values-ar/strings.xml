@@ -69,4 +69,6 @@
     <string name="price">Price:</string>
     <string name="created_at">Created at:</string>
     <string name="orders">Orders</string>
+    <string name="order_placed">Order Placed!</string>
+    <string name="my_orders">My Orders</string>
 </resources>
