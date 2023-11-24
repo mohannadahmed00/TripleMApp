@@ -2,6 +2,9 @@ package com.giraffe.triplemapplication.features.cart.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCartBinding
 import com.giraffe.triplemapplication.features.cart.viewmodel.CartVM
@@ -16,5 +19,12 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
     ): FragmentCartBinding = FragmentCartBinding.inflate(inflater, container, false)
 
     override fun handleView() {}
-    override fun handleClicks() {}
+    override fun handleClicks() {
+        binding.btnCheckout.setOnClickListener { navigateToCheckoutFragment() }
+    }
+
+    private fun navigateToCheckoutFragment() {
+        val action: NavDirections = CartFragmentDirections.actionCartFragmentToCheckoutFragment()
+        Navigation.findNavController(requireView()).navigate(action)
+    }
 }

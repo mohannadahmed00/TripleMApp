@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.bases.BaseFragment
@@ -35,7 +36,10 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
     }
 
     override fun handleClicks() {
+        binding.btnClose.setOnClickListener { navigateUp() }
     }
+
+    private fun navigateUp() { findNavController().navigateUp() }
 
     override fun handleView() {
         // Recycler View

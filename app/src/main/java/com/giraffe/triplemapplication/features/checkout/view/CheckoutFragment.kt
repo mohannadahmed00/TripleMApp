@@ -2,6 +2,7 @@ package com.giraffe.triplemapplication.features.checkout.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCheckoutBinding
 import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
@@ -16,7 +17,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     ): FragmentCheckoutBinding = FragmentCheckoutBinding.inflate(inflater, container, false)
 
     override fun handleView() {}
-    override fun handleClicks() {}
+
+    override fun handleClicks() {
+        binding.btnClose.setOnClickListener { navigateUp() }
+    }
+
+    private fun navigateUp() { findNavController().navigateUp() }
 
 
 }
