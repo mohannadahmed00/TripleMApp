@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(),OnActivityCallback{
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
         navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, bundle: Bundle? ->
-            if (navDestination.id == R.id.homeFragment || navDestination.id == R.id.searchFragment || navDestination.id == R.id.cartFragment || navDestination.id == R.id.profileFragment) {
+            if (navDestination.id == R.id.homeFragment || navDestination.id == R.id.searchResultFragment || navDestination.id == R.id.cartFragment || navDestination.id == R.id.profileFragment) {
                 binding.bottomNavView.show()
             } else {
                 binding.bottomNavView.gone()
