@@ -7,7 +7,8 @@ import com.giraffe.triplemapplication.model.products.Product
 
 @Entity(tableName = "cart_table")
 data class CartItem(
-    @PrimaryKey val productId: Long,
+    @PrimaryKey val variantId: Long,
     val product: Product,
-    val quantity: Int
+    val quantity: Int,
+    val isUploaded:Boolean
 )

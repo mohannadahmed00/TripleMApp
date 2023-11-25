@@ -19,10 +19,10 @@ interface LocalSource {
 
     suspend fun setCurrency(currency:Constants.Currencies)
 
-    suspend fun setDraftID(id:Long)
-    suspend fun getDraftID():Long?
+    suspend fun setCartID(id:Long)
+    suspend fun getCartID():Long?
 
-    fun getCartItems(): Flow<List<CartItem>>
+    suspend fun getCartItems(): Flow<List<CartItem>>
 
     suspend fun insertCartItem(cartItem: CartItem): Flow<Long>
 
@@ -31,5 +31,9 @@ interface LocalSource {
     suspend fun deleteAllCartItems()
 
     suspend fun updateCartItem(cartItem: CartItem)
+
+    suspend fun getExchangeRateOf(currencyCode:Constants.Currencies):Flow<Pair<Double,Double>>
+
+
 
 }

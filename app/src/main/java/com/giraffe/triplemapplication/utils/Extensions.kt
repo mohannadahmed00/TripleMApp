@@ -109,6 +109,11 @@ fun ImageView.load(url:String){
     Glide.with(this.context).load(url).into(this)
 }
 
-fun convert(euro:Double,selectedCurrency:Double){
-
+fun Double.convert(rates:Pair<Double,Double>?) :Double {
+    return if (rates != null) {
+        val formattedValue = String.format("%.2f", (this / rates.first) * rates.second)
+        formattedValue.toDouble()
+    } else {
+        0.0
+    }
 }

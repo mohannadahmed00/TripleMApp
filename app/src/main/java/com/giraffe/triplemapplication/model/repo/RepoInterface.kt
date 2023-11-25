@@ -1,19 +1,18 @@
 package com.giraffe.triplemapplication.model.repo
 
+
+
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
-
+import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
+import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.request.LineItem
+import com.giraffe.triplemapplication.model.cart.response.DraftResponse
+import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
+import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
-
-import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
-import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
-
-import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-
-
-
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.utils.Constants
 import com.google.android.gms.tasks.Task
@@ -66,5 +65,19 @@ interface RepoInterface {
         customerId:String,
         addressId:String,
     ):Flow<Response<Void>>
+
+
+    suspend fun uploadCartId(cartId: Long): Task<Void?>?
+
+    suspend fun insertCartItem(cartItem: CartItem): Flow<Long>
+
+    suspend fun modifyCartDraft(variants :List<LineItem>):Flow<Response<DraftResponse>>
+
+    suspend fun getCartItems(): Flow<List<CartItem>>
+
+    suspend fun getCartId(): Flow<Long>
+
+    suspend fun getExchangeRateOf(currencyCode:Constants.Currencies):Flow<Pair<Double,Double>>
+
 
 }

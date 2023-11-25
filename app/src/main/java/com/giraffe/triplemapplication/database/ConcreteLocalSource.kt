@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.flow
 class ConcreteLocalSource(context: Context) : LocalSource {
     private val shared: SharedHelper = SharedHelper.getInstance(context)
     private val favoritesDao: FavoritesDao = AppDataBase.getInstance(context).getFavoritesDao()
-    private val exchangeRatesDao: ExchangeRatesDao = AppDataBase.getInstance(context).getExchangeRatesDao()
+    private val exchangeRatesDao: ExchangeRatesDao =
+        AppDataBase.getInstance(context).getExchangeRatesDao()
     private val cartDao: CartDao = AppDataBase.getInstance(context).getCartDao()
 
     override suspend fun getLanguage(): Flow<String> {
@@ -41,6 +42,29 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         }
     }
 
+    override suspend fun getExchangeRateOf(currencyCode:Constants.Currencies) = flow {
+        exchangeRatesDao.getExchangeRateOf().collect{
+            val exchangeRates = it[0]
+            when (currencyCode.value) {
+                Constants.Currencies.EGP.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.EGP))
+                }
+
+                Constants.Currencies.USD.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.USD))
+                }
+
+                Constants.Currencies.EUR.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.EUR))
+                }
+
+                Constants.Currencies.GBP.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.GBP))
+                }
+            }
+        }
+    }
+
     override suspend fun getCurrency(): Flow<String> {
         return flow {
             val currency = shared.read(Constants.CURRENCY) ?: Constants.Currencies.EGP.value
@@ -52,15 +76,15 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         shared.store(Constants.CURRENCY, currency.value)
     }
 
-    override suspend fun setDraftID(id: Long) {
-        shared.store(Constants.DRAFT_ID,id.toString())
+    override suspend fun setCartID(id: Long) {
+        shared.store(Constants.CART_ID, id.toString())
     }
 
-    override suspend fun getDraftID(): Long? {
-        return shared.read(Constants.DRAFT_ID)?.toLong()
+    override suspend fun getCartID(): Long? {
+        return shared.read(Constants.CART_ID)?.toLong()
     }
 
-    override fun getCartItems(): Flow<List<CartItem>> {
+    override suspend fun getCartItems(): Flow<List<CartItem>> {
         return cartDao.getCartItems()
     }
 
@@ -83,4 +107,5 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     override suspend fun updateCartItem(cartItem: CartItem) {
         cartDao.updateCartItem(cartItem)
     }
+
 }
