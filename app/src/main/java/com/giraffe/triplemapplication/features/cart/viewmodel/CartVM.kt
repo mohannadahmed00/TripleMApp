@@ -12,23 +12,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class CartVM(private val repo: RepoInterface): ViewModel() {
-    private val _cartIdFlow: MutableStateFlow<Resource<Boolean>> = MutableStateFlow(
-        Resource.Loading)
-    val cartIdFlow: StateFlow<Resource<Boolean>> = _cartIdFlow.asStateFlow()
+
 
     private val _cartFlow: MutableStateFlow<Resource<List<CartItem>>> = MutableStateFlow(Resource.Loading)
     val cartFlow: StateFlow<Resource<List<CartItem>>> = _cartFlow.asStateFlow()
-    fun uploadCartId(cartId:Long){
-        viewModelScope.launch {
-            repo.uploadCartId(cartId).let {
-                if (it!=null && it.isSuccessful ){
-                    _cartIdFlow.emit(Resource.Success(true))
-                }else{
-                    _cartIdFlow.emit(Resource.Failure(false,0,it?.exception?.message))
-                }
-            }
-        }
-    }
+
 
     fun getCartItems(){
         viewModelScope.launch(Dispatchers.IO) {

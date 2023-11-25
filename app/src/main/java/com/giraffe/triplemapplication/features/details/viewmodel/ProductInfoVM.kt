@@ -24,6 +24,10 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
     private val _variantsFlow: MutableStateFlow<List<LineItem>> = MutableStateFlow(listOf())
     val variantsFlow: StateFlow<List<LineItem>> = _variantsFlow.asStateFlow()
 
+    private val _cartIdFlow: MutableStateFlow<Resource<Boolean>> = MutableStateFlow(
+        Resource.Loading)
+    val cartIdFlow: StateFlow<Resource<Boolean>> = _cartIdFlow.asStateFlow()
+
     fun insertCartItem(cartItem: CartItem) {
         viewModelScope.launch {
             _cartFlow.emit(safeCall { repo.insertCartItem(cartItem) })
@@ -36,7 +40,11 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
                 val lineItems = it.map {cartItem ->
                     LineItem(cartItem.quantity,cartItem.variantId)
                 }
-                _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(lineItems) })
+                if (lineItems.size<=1){
+                    _updateCartFlow.emit(safeApiCall { repo.createCartDraft(lineItems) })
+                }else{
+                    _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(lineItems) })
+                }
                 //_variantsFlow.emit(lineItems)
             }
         }
@@ -45,7 +53,15 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
         }
     }
 
-    fun getListOfVariants() {
-
+    fun uploadCartId(cartId:Long){
+        viewModelScope.launch {
+            repo.uploadCartId(cartId).let {
+                if (it!=null && it.isSuccessful ){
+                    _cartIdFlow.emit(Resource.Success(true))
+                }else{
+                    _cartIdFlow.emit(Resource.Failure(false,0,it?.exception?.message))
+                }
+            }
+        }
     }
 }

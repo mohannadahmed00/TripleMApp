@@ -125,7 +125,7 @@ class Repo private constructor(
     ) = remoteSource.deleteAddress(customerId, addressId)
 
     override suspend fun uploadCartId(cartId: Long): Task<Void?>? {
-        localSource.setCartID(cartId)
+        localSource.setCartID(cartId)//create fun here
         return remoteSource.uploadCartId(cartId)
     }
 
@@ -134,9 +134,11 @@ class Repo private constructor(
         return localSource.insertCartItem(cartItem)
     }
     override suspend fun modifyCartDraft(variants :List<LineItem>): Flow<Response<DraftResponse>> {
-        /*val listOfCartVariants = localSource.getListOfCartVariants()
-        Log.i(TAG, "modifyCartDraft: $listOfCartVariants")*/
-        return remoteSource.modifyCartDraft(969096560715, variants)
+        return remoteSource.modifyCartDraft(localSource.getCartID()?:0, variants)
+    }
+
+    override suspend fun createCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
+        return remoteSource.createNewCartDraft(variants)
     }
 
     override suspend fun getCartItems(): Flow<List<CartItem>>{
@@ -144,13 +146,6 @@ class Repo private constructor(
     }
 
     override suspend fun getCartId(): Flow<Long> {
-        /*flow.collect{
-            if (it>0) {
-                Log.i(TAG, "getting cart id successfully $it")
-            } else {
-                Log.i(TAG, "getting cart id failed $it")
-            }
-        }*/
         return remoteSource.getCartId()
     }
 

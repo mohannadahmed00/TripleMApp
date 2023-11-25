@@ -144,9 +144,9 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
         binding.addToCartButton.setOnClickListener {
             val cartItem = CartItem(
-                variantId = product.variants?.get(0)?.id?:40152908693579,
+                variantId = product.variants?.get(0)?.id?:40152908693579,//?????
                 product = product,
-                quantity = 2,
+                quantity = 1,
                 false
             )
             mViewModel.insertCartItem(cartItem)
@@ -214,6 +214,9 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
                     is Resource.Success -> {
                         Log.d(TAG, "observeUpdateCartDraft: (Success)")
+                        if (it.value.draft_order.line_items.size==1){
+                            mViewModel.uploadCartId(it.value.draft_order.id)
+                        }
                     }
                 }
             }

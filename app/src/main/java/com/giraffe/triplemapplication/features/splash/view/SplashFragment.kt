@@ -49,7 +49,7 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
             observeGetCartId()
             mViewModel.getFirstTimeFlag()
             observeGetFirstTimeFlag()
-            runExchangeRatesWorker()
+
 
         }, 4000)
     }
@@ -156,9 +156,12 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                     Resource.Loading -> {}
                     is Resource.Success -> {
                         if (it.value) {
+                            mViewModel.setFirstTimeFlag(false)
+
                             mViewModel.getCurrencies()
                             observeGetCurrencies()
-                            mViewModel.setFirstTimeFlag(false)
+                            runExchangeRatesWorker()
+
                             //start currency worker here
 
                             //must go to onboard graph
