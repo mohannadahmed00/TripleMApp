@@ -17,6 +17,7 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     val languageFlow: StateFlow<Resource<String>> = _languageFlow.asStateFlow()
     private val _currentProduct : MutableStateFlow<Product?> = MutableStateFlow(null)
     val currentProduct : StateFlow<Product?> = _currentProduct.asStateFlow()
+    val allProducts : MutableStateFlow<List<Product?>> = MutableStateFlow(listOf(null))
     fun getLanguage() {
         viewModelScope.launch {
             _languageFlow.emit(safeCall { repo.getLanguage() })
