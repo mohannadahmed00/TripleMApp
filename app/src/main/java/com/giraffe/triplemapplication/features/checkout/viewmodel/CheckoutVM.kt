@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeCall
@@ -14,9 +15,9 @@ import kotlinx.coroutines.launch
 
 class CheckoutVM(private val repo: RepoInterface): ViewModel() {
 
-    private val _ordersFlow: MutableStateFlow<Resource<AllOrdersResponse>> = MutableStateFlow(
+    private val _ordersFlow: MutableStateFlow<Resource<CreateOrderResponse>> = MutableStateFlow(
         Resource.Loading)
-    val ordersFlow: StateFlow<Resource<AllOrdersResponse>> = _ordersFlow.asStateFlow()
+    val ordersFlow: StateFlow<Resource<CreateOrderResponse>> = _ordersFlow.asStateFlow()
 
     fun checkout(orderCreate: OrderCreate) {
         viewModelScope.launch {

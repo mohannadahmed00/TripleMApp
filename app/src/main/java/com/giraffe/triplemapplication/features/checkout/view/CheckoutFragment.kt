@@ -10,8 +10,11 @@ import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCheckoutBinding
 import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
+import com.giraffe.triplemapplication.model.orders.createorder.LineItem
 import com.giraffe.triplemapplication.model.orders.createorder.Order
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.orders.createorder.TaxLine
+import com.giraffe.triplemapplication.model.orders.createorder.Transaction
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -36,10 +39,30 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private fun checkout() {
         val orderCreate = OrderCreate(
             Order(
-                currency = "",
-                line_items = listOf(),
-                total_tax = 0.0,
-                transactions = listOf()
+                currency = "EUR",
+                line_items = listOf(
+                    LineItem(
+                        title = "Big Brown Bear Boots",
+                        price = 74.99,
+                        grams = "1300",
+                        quantity = 3,
+                        tax_lines = listOf(
+                            TaxLine(
+                                price = 13.5,
+                                rate = 0.06,
+                                title = "State tax"
+                            )
+                        )
+                    )
+                ),
+                total_tax = 13.5,
+                transactions = listOf(
+                    Transaction(
+                        amount = 238.47,
+                        kind = "sale",
+                        status = "success"
+                    )
+                )
             )
         )
         mViewModel.checkout(orderCreate)
@@ -56,7 +79,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         dismissLoading()
-                        if (it.value.orders.isNotEmpty()) { navigateToOrderPlacedFragment() }
+                        navigateToOrderPlacedFragment()
                     }
                 }
             }

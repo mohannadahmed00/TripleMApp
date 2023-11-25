@@ -13,6 +13,7 @@ import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
 
 
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
@@ -60,7 +61,7 @@ interface RemoteSource {
     ):Flow<Response<Void>>
     suspend fun getProductsFromCategoryId(categoryId: String): Flow<AllProductsResponse>
 
-    suspend fun createOrder(orderCreate: OrderCreate): Flow<AllOrdersResponse>
+    suspend fun createOrder(orderCreate: OrderCreate): Flow<CreateOrderResponse>
     suspend fun getOrders(): Flow<AllOrdersResponse>
     suspend fun delOrder(orderId: String)
 

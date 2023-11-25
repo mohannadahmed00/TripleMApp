@@ -11,6 +11,7 @@ import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Constants
@@ -78,7 +79,7 @@ interface RepoInterface {
 
     suspend fun updateFavorite(product: Product)
 
-    suspend fun createOrder(orderCreate: OrderCreate): Flow<AllOrdersResponse>
+    suspend fun createOrder(orderCreate: OrderCreate): Flow<CreateOrderResponse>
     suspend fun getOrders(): Flow<AllOrdersResponse>
     suspend fun delOrder(orderId: String)
 
