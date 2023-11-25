@@ -12,7 +12,7 @@
 
     <string name="me">Me</string>
     <string name="sale">On Sale</string>
-    <string name="price">Price Range</string>
+    <string name="price_range">Price Range</string>
 
     <string name="adidas">Adidas</string>
     <string name="ascis">Ascis-Tiger</string>
@@ -88,4 +88,13 @@
     <string name="enter_address_tag">Enter address tag</string>
     <string name="products">Products</string>
     <string name="categories">Categories</string>
+    <string name="price">Price:</string>
+    <string name="created_at">Created at:</string>
+    <string name="orders">Orders</string>
+    <string name="order_placed">Order Placed!</string>
+    <string name="my_orders">My Orders</string>
+    <string name="your_order_was_placed_successfully_nfor_more_details_check_all_my_orders_npage_under_profile_tab">Your order was placed successfully.\nFor more details, check All My Orders\npage under Profile tab</string>
+    <string name="dialog_del_ok">Remove</string>
+    <string name="dialog_del_cancel">Cancel</string>
+    <string name="dialog_del">Are you sure you want to remove this order?</string>
 </resources>

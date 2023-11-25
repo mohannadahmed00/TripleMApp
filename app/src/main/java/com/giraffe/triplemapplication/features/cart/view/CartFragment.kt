@@ -3,6 +3,8 @@ package com.giraffe.triplemapplication.features.cart.view
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import androidx.lifecycle.lifecycleScope
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCartBinding
@@ -24,6 +26,14 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
         b: Boolean
     ): FragmentCartBinding = FragmentCartBinding.inflate(inflater, container, false)
 
+    override fun handleClicks() {
+        binding.btnCheckout.setOnClickListener { navigateToCheckoutFragment() }
+    }
+
+    private fun navigateToCheckoutFragment() {
+        val action: NavDirections = CartFragmentDirections.actionCartFragmentToCheckoutFragment()
+        Navigation.findNavController(requireView()).navigate(action)
+    }
     override fun handleView() {
         adapter = CartAdapter(mutableListOf())
         binding.rvProducts.adapter = adapter
@@ -55,9 +65,4 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
         }
     }
 
-    override fun handleClicks() {
-        binding.btnCheckout.setOnClickListener {
-
-        }
-    }
 }

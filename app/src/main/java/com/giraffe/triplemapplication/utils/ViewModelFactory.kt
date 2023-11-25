@@ -10,6 +10,7 @@ import com.giraffe.triplemapplication.features.details.viewmodel.ProductInfoVM
 import com.giraffe.triplemapplication.features.fav.viewmodel.FavVM
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.features.login.viewmodel.LoginVM
+import com.giraffe.triplemapplication.features.orders.viewmodel.OrdersViewModel
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
 import com.giraffe.triplemapplication.features.register.viewmodel.RegisterVM
 import com.giraffe.triplemapplication.features.search.viewmodel.SearchVM
@@ -46,7 +47,9 @@ class ViewModelFactory(private val repo: RepoInterface) : ViewModelProvider.Fact
             ProductInfoVM(repo) as T
         } else if(modelClass.isAssignableFrom(FavVM::class.java)) {
             FavVM(repo) as T
-        }else{
+        } else if (modelClass.isAssignableFrom(OrdersViewModel::class.java)) {
+            OrdersViewModel(repo) as T
+        } else {
             throw IllegalArgumentException("can't create ${modelClass.simpleName}")
         }
     }

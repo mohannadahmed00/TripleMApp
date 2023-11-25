@@ -73,6 +73,11 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
             val action = ProfileFragmentDirections.actionProfileFragmentToCurrencyFragment()
             findNavController().navigate(action)
         }
+
+        binding.ivEnterAllOrders.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToOrdersFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun observeGetLanguage() {
