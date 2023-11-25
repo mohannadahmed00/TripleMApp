@@ -65,7 +65,7 @@ interface ApiServices {
     suspend fun createOrder(@Body orderCreate: OrderCreate): CreateOrderResponse
 
     @DELETE("orders/{orderId}/.json")
-    suspend fun delOrder(@Path("orderId") orderId: String)
+    suspend fun delOrder(@Path("orderId") orderId: Long)
 //    @GET
 //    suspend fun getCurrencies(): CurrencyResponse
 

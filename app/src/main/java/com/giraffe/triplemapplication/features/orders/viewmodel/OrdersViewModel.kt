@@ -6,6 +6,7 @@ import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeCall
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,6 +23,12 @@ class OrdersViewModel(private val repo: RepoInterface) : ViewModel() {
     private fun getOrders() {
         viewModelScope.launch {
             _ordersFlow.emit(safeCall { repo.getOrders() })
+        }
+    }
+
+    fun delOrder(orderId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.delOrder(orderId)
         }
     }
 }

@@ -83,7 +83,7 @@ object ApiClient : RemoteSource {
         emit(getApiServices().getOrders())
     }
 
-    override suspend fun delOrder(orderId: String) {
+    override suspend fun delOrder(orderId: Long) {
         getApiServices().delOrder(orderId)
     }
 

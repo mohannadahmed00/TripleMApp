@@ -72,4 +72,7 @@
     <string name="order_placed">Order Placed!</string>
     <string name="my_orders">My Orders</string>
     <string name="your_order_was_placed_successfully_nfor_more_details_check_all_my_orders_npage_under_profile_tab">Your order was placed successfully.\nFor more details, check All My Orders\npage under Profile tab</string>
+    <string name="dialog_del_ok">Remove</string>
+    <string name="dialog_del_cancel">Cancel</string>
+    <string name="dialog_del">Are you sure you want to remove this order?</string>
 </resources>

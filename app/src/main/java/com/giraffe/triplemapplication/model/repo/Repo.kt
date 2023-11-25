@@ -132,7 +132,7 @@ class Repo private constructor(
 
     override suspend fun getOrders() = remoteSource.getOrders()
 
-    override suspend fun delOrder(orderId: String) = remoteSource.delOrder(orderId)
+    override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
 
 
 }

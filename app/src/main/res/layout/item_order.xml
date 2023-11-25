@@ -53,6 +53,16 @@
             app:layout_constraintTop_toTopOf="@id/order_created_at_label"
             tools:text="2023-11-15T08:47:45-05:00" />
 
+        <ImageView
+            android:id="@+id/del_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:src="@drawable/delete_ic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/red"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

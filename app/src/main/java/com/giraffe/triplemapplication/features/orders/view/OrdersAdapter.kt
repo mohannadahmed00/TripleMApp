@@ -12,6 +12,7 @@ import com.giraffe.triplemapplication.databinding.ItemOrderBinding
 import com.giraffe.triplemapplication.model.orders.Order
 
 class OrdersAdapter(
+    private val onDelAction: (Long) -> Unit
 ) : ListAdapter<Order, OrdersAdapter.ViewHolder>(OrdersDataDiffUtil()) {
 
     private lateinit var binding: ItemOrderBinding
@@ -28,6 +29,7 @@ class OrdersAdapter(
         val current = getItem(position)
         holder.binding.orderPrice.text = current.total_price
         holder.binding.orderCreatedAt.text = current.created_at
+        holder.binding.delOrder.setOnClickListener { onDelAction(current.id) }
     }
 
     inner class ViewHolder(var binding: ItemOrderBinding) : RecyclerView.ViewHolder(binding.root)
