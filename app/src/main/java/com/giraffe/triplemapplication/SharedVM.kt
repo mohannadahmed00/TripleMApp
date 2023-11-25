@@ -21,8 +21,8 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     private val _languageFlow: MutableStateFlow<Resource<String>> =
         MutableStateFlow(Resource.Loading)
     val languageFlow: StateFlow<Resource<String>> = _languageFlow.asStateFlow()
-    private val _currentProduct : MutableStateFlow<Resource<Product>> = MutableStateFlow(Resource.Loading)
-    val currentProduct : StateFlow<Resource<Product>> = _currentProduct.asStateFlow()
+    private val _currentProduct : MutableStateFlow<Product?> = MutableStateFlow(null)
+    val currentProduct : StateFlow<Product?> = _currentProduct.asStateFlow()
 
     private val _cartIdFlow : MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
     val cartIdFlow : StateFlow<Resource<Long>> = _cartIdFlow.asStateFlow()

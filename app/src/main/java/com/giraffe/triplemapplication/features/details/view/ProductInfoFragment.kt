@@ -45,19 +45,9 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         lifecycleScope.launch {
             sharedViewModel.currentProduct.collectLatest { it ->
                 when (it) {
-                    is Resource.Failure -> {
-                        dismissLoading()
-                        showFailure(it)
-                    }
-
-                    Resource.Loading -> {
-                        showLoading()
-                    }
-
-                    is Resource.Success -> {
-                        dismissLoading()
-                        product = it.value
-                        showSuccess(it)
+                    is Product -> {
+                        product = it
+                        showData(it)
                     }
                 }
             }
@@ -88,8 +78,8 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     private fun showData(product: Product) {
         binding.imageSlider.adapter = ImagePagerAdapter(requireContext(), product.images)
         binding.productName.text = product.title
-        binding.productPrice.text = product.variants?.first()?.price?.toDouble()?.convert(sharedViewModel.exchangeRateFlow.value).toString()
-        binding.productPrice.text = product.variants?.first()?.price.toString()
+        binding.productPrice.text = product.variants?.first()?.price?.toDouble()
+            ?.convert(sharedViewModel.exchangeRateFlow.value).toString()
         showDetailsData(product)
         showProductData(product)
         showReviewsData()
@@ -161,7 +151,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
         binding.addToCartButton.setOnClickListener {
             val cartItem = CartItem(
-                variantId = product.variants?.get(0)?.id?:40152908693579,//?????
+                variantId = product.variants?.get(0)?.id ?: 40152908693579,//?????
                 product = product,
                 quantity = 1,
                 false
@@ -207,7 +197,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
             mViewModel.variantsFlow.collect {
                 if (it.isNotEmpty()) {
                     Log.d(TAG, "observeGetListOfVariants: (Success) $it")
-                }else{
+                } else {
                     Log.e(TAG, "observeGetListOfVariants: (Fail) $it")
                 }
             }
@@ -231,7 +221,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
                     is Resource.Success -> {
                         Log.d(TAG, "observeUpdateCartDraft: (Success)")
-                        if (it.value.draft_order.line_items.size==1){
+                        if (it.value.draft_order.line_items.size == 1) {
                             mViewModel.uploadCartId(it.value.draft_order.id)
                         }
                     }

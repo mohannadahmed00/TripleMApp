@@ -51,6 +51,7 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
             observeGetFirstTimeFlag()
 
 
+
         }, 4000)
     }
 
@@ -152,16 +153,19 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
         lifecycleScope.launch {
             mViewModel.firstFlagFlow.collect {
                 when (it) {
-                    is Resource.Failure -> {}
-                    Resource.Loading -> {}
+                    is Resource.Failure -> {
+                        Log.e(TAG, "observeGetFirstTimeFlag: ", )
+                    }
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeGetFirstTimeFlag: ")
+                    }
                     is Resource.Success -> {
+                        Log.d(TAG, "observeGetFirstTimeFlag: ${it.value}")
                         if (it.value) {
-                            mViewModel.setFirstTimeFlag(false)
-
                             mViewModel.getCurrencies()
                             observeGetCurrencies()
+                            mViewModel.setFirstTimeFlag(false)
                             runExchangeRatesWorker()
-
                             //start currency worker here
 
                             //must go to onboard graph

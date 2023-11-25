@@ -43,24 +43,26 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         }
     }
 
-    override suspend fun getExchangeRateOf(currencyCode:Constants.Currencies) = flow {
-        exchangeRatesDao.getExchangeRateOf().collect{
-            val exchangeRates = it[0]
-            when (currencyCode.value) {
-                Constants.Currencies.EGP.value -> {
-                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.EGP))
-                }
+    override suspend fun getExchangeRateOf(currencyCode: Constants.Currencies) = flow {
+        exchangeRatesDao.getExchangeRateOf().collect {
+            if (it.isNotEmpty()) {
+                val exchangeRates = it[0]
+                when (currencyCode.value) {
+                    Constants.Currencies.EGP.value -> {
+                        emit(Pair(exchangeRates.rates.EGP, exchangeRates.rates.EGP))
+                    }
 
-                Constants.Currencies.USD.value -> {
-                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.USD))
-                }
+                    Constants.Currencies.USD.value -> {
+                        emit(Pair(exchangeRates.rates.EGP, exchangeRates.rates.USD))
+                    }
 
-                Constants.Currencies.EUR.value -> {
-                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.EUR))
-                }
+                    Constants.Currencies.EUR.value -> {
+                        emit(Pair(exchangeRates.rates.EGP, exchangeRates.rates.EUR))
+                    }
 
-                Constants.Currencies.GBP.value -> {
-                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.GBP))
+                    Constants.Currencies.GBP.value -> {
+                        emit(Pair(exchangeRates.rates.EGP, exchangeRates.rates.GBP))
+                    }
                 }
             }
         }
@@ -76,9 +78,11 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     override suspend fun setCurrency(currency: Constants.Currencies) {
         shared.store(Constants.CURRENCY, currency.value)
     }
+
     override suspend fun setCartID(id: Long) {
         shared.store(Constants.CART_ID, id.toString())
     }
+
     override suspend fun getCartID(): Long? {
         return shared.read(Constants.CART_ID)?.toLong()
     }
@@ -109,11 +113,13 @@ class ConcreteLocalSource(context: Context) : LocalSource {
 
     override fun getAllFavorites(): Flow<List<Product>> = favoritesDao.getAllFavorites()
 
-    override suspend fun insertFavorite(product: Product): Long = favoritesDao.insertFavorite(product)
-    
-    override suspend fun deleteFavorite(product: Product): Int =favoritesDao.deleteFavorite(product)
+    override suspend fun insertFavorite(product: Product): Long =
+        favoritesDao.insertFavorite(product)
 
-    override suspend fun deleteAllFavorites() =favoritesDao.deleteAllFavorites()
+    override suspend fun deleteFavorite(product: Product): Int =
+        favoritesDao.deleteFavorite(product)
+
+    override suspend fun deleteAllFavorites() = favoritesDao.deleteAllFavorites()
 
     override suspend fun updateFavorite(product: Product) = favoritesDao.updateFavorite(product)
 }
