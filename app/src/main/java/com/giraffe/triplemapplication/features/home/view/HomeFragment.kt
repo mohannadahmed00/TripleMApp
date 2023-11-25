@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.R
@@ -133,7 +134,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
     private fun navigateToProductInfoScreen(product: Product) {
         sharedViewModel.setCurrentProduct(product)
-        val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment(product)
-        findNavController(requireView()).navigate(action)
+        val action  = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment()
+        findNavController().navigate(action)
     }
 }

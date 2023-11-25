@@ -7,11 +7,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.giraffe.triplemapplication.model.products.Product
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoritesDao {
     @Query("SELECT * FROM products_table")
-    fun getAllFavorites(): List<Product>
+    fun getAllFavorites(): Flow<List<Product>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavorite(product: Product): Long

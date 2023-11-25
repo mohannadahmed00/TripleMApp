@@ -3,6 +3,7 @@ package com.giraffe.triplemapplication.database
 import android.content.Context
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
+import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -75,11 +76,9 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     override suspend fun setCurrency(currency: Constants.Currencies) {
         shared.store(Constants.CURRENCY, currency.value)
     }
-
     override suspend fun setCartID(id: Long) {
         shared.store(Constants.CART_ID, id.toString())
     }
-
     override suspend fun getCartID(): Long? {
         return shared.read(Constants.CART_ID)?.toLong()
     }
@@ -108,4 +107,13 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         cartDao.updateCartItem(cartItem)
     }
 
+    override fun getAllFavorites(): Flow<List<Product>> = favoritesDao.getAllFavorites()
+
+    override suspend fun insertFavorite(product: Product): Long = favoritesDao.insertFavorite(product)
+    
+    override suspend fun deleteFavorite(product: Product): Int =favoritesDao.deleteFavorite(product)
+
+    override suspend fun deleteAllFavorites() =favoritesDao.deleteAllFavorites()
+
+    override suspend fun updateFavorite(product: Product) = favoritesDao.updateFavorite(product)
 }

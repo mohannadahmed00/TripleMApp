@@ -9,4 +9,6 @@
     <color name="light_gray">#D8D8D8</color>
     <color name="dark_gary">#515C6F</color>
     <color name="red">#FF6969</color>
+    <color name="deleteColor">#DD3124</color>
+    <color name="cartColor">#3AE015</color>
 </resources>

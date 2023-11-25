@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentProductInfoBinding
@@ -58,21 +59,37 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
                         product = it.value
                         showSuccess(it)
                     }
-
                 }
             }
         }
 
     }
 
-    private fun showSuccess(it: Resource.Success<Product>) {
-        showData(it.value)
+    private fun showSuccess(product: Product) {
+        showData(product)
+        binding.addToFav.setOnClickListener {
+            sharedViewModel.insertFavorite(product)
+            navigateToFav()
+        }
+        binding.addToCartButton.setOnClickListener {
+            navigateToCart()
+        }
+    }
+
+    private fun navigateToFav() {
+        findNavController().navigate(R.id.favFragment)
+    }
+
+    private fun navigateToCart() {
+        val action = ProductInfoFragmentDirections.actionProductInfoFragmentToCartFragment()
+        findNavController().navigate(action)
     }
 
     private fun showData(product: Product) {
         binding.imageSlider.adapter = ImagePagerAdapter(requireContext(), product.images)
         binding.productName.text = product.title
         binding.productPrice.text = product.variants?.first()?.price?.toDouble()?.convert(sharedViewModel.exchangeRateFlow.value).toString()
+        binding.productPrice.text = product.variants?.first()?.price.toString()
         showDetailsData(product)
         showProductData(product)
         showReviewsData()
@@ -221,6 +238,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
                 }
             }
         }
+
     }
 
     private fun showSelectedLayout(selectedLayoutId: Int) {
