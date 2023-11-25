@@ -1,7 +1,11 @@
 package com.giraffe.triplemapplication.model.repo
 
 
-
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
@@ -14,6 +18,7 @@ import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
+import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Constants
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -79,5 +84,19 @@ interface RepoInterface {
 
     suspend fun getExchangeRateOf(currencyCode:Constants.Currencies):Flow<Pair<Double,Double>>
 
+
+    fun getAllFavorites(): Flow<List<Product>>
+
+
+    suspend fun insertFavorite(product: Product): Long
+
+
+    suspend fun deleteFavorite(product: Product): Int
+
+
+    suspend fun deleteAllFavorites()
+
+
+    suspend fun updateFavorite(product: Product)
 
 }

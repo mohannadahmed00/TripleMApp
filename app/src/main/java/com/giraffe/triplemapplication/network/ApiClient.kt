@@ -68,8 +68,16 @@ object ApiClient : RemoteSource {
     }
 
     override suspend fun getProductsFromCategoryId(categoryId: String) = flow {
-        emit(getApiServices().getProductsFromCategoryId(categoryId))
-
+        var productsIds = ""
+        val products = getApiServices().getProductsFromCategoryId(categoryId).products
+        products.forEachIndexed { index, product ->
+            productsIds += if (index == products.size - 1) {
+                product.id
+            } else {
+                "${product.id}, "
+            }
+        }
+        emit(getApiServices().getAllProductsFromIds(productsIds))
     }
 
     override suspend fun createNewCartDraft(cartItems: List<LineItem>): Flow<Response<DraftResponse>> {

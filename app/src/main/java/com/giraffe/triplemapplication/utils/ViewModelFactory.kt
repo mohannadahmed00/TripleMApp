@@ -7,6 +7,7 @@ import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCatego
 import com.giraffe.triplemapplication.features.cart.viewmodel.CartVM
 import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
 import com.giraffe.triplemapplication.features.details.viewmodel.ProductInfoVM
+import com.giraffe.triplemapplication.features.fav.viewmodel.FavVM
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.features.login.viewmodel.LoginVM
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
@@ -43,7 +44,9 @@ class ViewModelFactory(private val repo: RepoInterface) : ViewModelProvider.Fact
             AllCategoriesVM(repo) as T
         } else if (modelClass.isAssignableFrom(ProductInfoVM::class.java)) {
             ProductInfoVM(repo) as T
-        } else {
+        } else if(modelClass.isAssignableFrom(FavVM::class.java)) {
+            FavVM(repo) as T
+        }else{
             throw IllegalArgumentException("can't create ${modelClass.simpleName}")
         }
     }

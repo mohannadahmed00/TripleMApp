@@ -39,7 +39,13 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     }
     fun setCurrentProduct(product: Product){
         viewModelScope.launch {
-            _currentProduct.emit(Resource.Success(product))
+            _currentProduct.emit(product)
+        }
+    }
+
+    fun insertFavorite(product: Product){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.insertFavorite(product)
         }
     }
 
