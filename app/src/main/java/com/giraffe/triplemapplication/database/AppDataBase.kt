@@ -5,14 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.Product
 
-@Database(entities = [Product::class, ExchangeRatesResponse::class], version = 1)
+@Database(entities = [Product::class, ExchangeRatesResponse::class, CartItem::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun getFavoritesDao(): FavoritesDao
     abstract fun getExchangeRatesDao(): ExchangeRatesDao
+    abstract fun getCartDao(): CartDao
     companion object {
         @Volatile
         private var INSTANCE: AppDataBase? = null

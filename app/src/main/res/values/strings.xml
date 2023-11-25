@@ -8,9 +8,28 @@
     <string name="favourite">Favourite</string>
     <string name="add_to_cart">Add To Cart</string>
     <string name="add_to_fav_btn">Add To Fav</string>
+    <string name="filter_title">Filter</string>
+
     <string name="me">Me</string>
+    <string name="sale">On Sale</string>
+    <string name="price_range">Price Range</string>
 
+    <string name="adidas">Adidas</string>
+    <string name="ascis">Ascis-Tiger</string>
+    <string name="converse">Converse</string>
+    <string name="dr">Dr-Martens</string>
+    <string name="flex">Flex-Fit</string>
+    <string name="herschel">Herschel</string>
+    <string name="nike">Nike</string>
+    <string name="puma">Puma</string>
+    <string name="palladuim">Palladuim</string>
+    <string name="supra">Supra</string>
+    <string name="timberland">Timberland</string>
+    <string name="vans">VANS</string>
 
+    <string name="kid">Kid</string>
+    <string name="men">Men</string>
+    <string name="women">Women</string>
     <string name="product">Product</string>
     <string name="details">Details</string>
     <string name="reviews">Reviews</string>

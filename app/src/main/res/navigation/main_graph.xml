@@ -18,7 +18,7 @@
             app:destination="@id/productInfoFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/searchResultFragment"
         android:name="com.giraffe.triplemapplication.features.search.view.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search_result" />
@@ -76,10 +76,14 @@
         tools:layout="@layout/fragment_currency"/>
 
     <fragment
-        android:id="@+id/filterFragment"
+        android:id="@+id/searchFragment"
         android:name="com.giraffe.triplemapplication.features.search.view.SearchResultFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_filterFragment_to_productInfoFragment"
+            app:destination="@id/productInfoFragment" />
+    </fragment>
    <fragment
         android:id="@+id/productInfoFragment"
         android:name="com.giraffe.triplemapplication.features.details.view.ProductInfoFragment"

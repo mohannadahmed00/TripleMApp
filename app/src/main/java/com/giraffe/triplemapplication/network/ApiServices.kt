@@ -4,6 +4,8 @@ import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
+import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
@@ -17,6 +19,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -68,8 +71,26 @@ interface ApiServices {
     suspend fun delOrder(@Path("orderId") orderId: Long)
 //    @GET
 //    suspend fun getCurrencies(): CurrencyResponse
+    /*@POST("orders.json")
+    suspend fun createOrder(@Query("") orderCreation: OrderCreation)*/
+
+    @DELETE("orders/{orderId}/.json")
+    suspend fun delOrder(@Path("orderId") orderId: String)
 
     @POST("customers.json")
     suspend fun createCustomer(@Body customer : Request) : CustomerResponse
 
+    //===================draft work area===================
+    @GET("draft_orders.json")
+    suspend fun createNewDraftOrder(@Body draftRequest: DraftRequest):Response<DraftResponse>
+
+    @PUT("draft_orders/{draft_order_id}.json")
+    suspend fun modifyDraftOrder(
+        @Path("draft_order_id") draftOrderId:Long,
+        @Body draftRequest: DraftRequest):Response<DraftResponse>
+
+    @DELETE("draft_orders/{draft_order_id}.json")
+    suspend fun removeDraftOrder(
+        @Path("draft_order_id") draftOrderId:Long
+    ):Response<Void>
 }
