@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.database
 
 import android.content.Context
+import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Constants
@@ -12,6 +13,7 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     private val favoritesDao: FavoritesDao = AppDataBase.getInstance(context).getFavoritesDao()
     private val exchangeRatesDao: ExchangeRatesDao =
         AppDataBase.getInstance(context).getExchangeRatesDao()
+    private val cartDao: CartDao = AppDataBase.getInstance(context).getCartDao()
 
     override suspend fun getLanguage(): Flow<String> {
         return flow {
@@ -41,6 +43,29 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         }
     }
 
+    override suspend fun getExchangeRateOf(currencyCode:Constants.Currencies) = flow {
+        exchangeRatesDao.getExchangeRateOf().collect{
+            val exchangeRates = it[0]
+            when (currencyCode.value) {
+                Constants.Currencies.EGP.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.EGP))
+                }
+
+                Constants.Currencies.USD.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.USD))
+                }
+
+                Constants.Currencies.EUR.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.EUR))
+                }
+
+                Constants.Currencies.GBP.value -> {
+                    emit(Pair(exchangeRates.rates.EGP,exchangeRates.rates.GBP))
+                }
+            }
+        }
+    }
+
     override suspend fun getCurrency(): Flow<String> {
         return flow {
             val currency = shared.read(Constants.CURRENCY) ?: Constants.Currencies.EGP.value
@@ -51,12 +76,41 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     override suspend fun setCurrency(currency: Constants.Currencies) {
         shared.store(Constants.CURRENCY, currency.value)
     }
+    override suspend fun setCartID(id: Long) {
+        shared.store(Constants.CART_ID, id.toString())
+    }
+    override suspend fun getCartID(): Long? {
+        return shared.read(Constants.CART_ID)?.toLong()
+    }
 
-    override fun getAllFavorites(): Flow<List<Product>> =
-        favoritesDao.getAllFavorites()
+    override suspend fun getCartItems(): Flow<List<CartItem>> {
+        return cartDao.getCartItems()
+    }
 
+    override suspend fun insertCartItem(cartItem: CartItem): Flow<Long> {
+        return flow {
+            emit(cartDao.insertCartItem(cartItem))
+        }
+    }
+
+    override suspend fun deleteCartItem(cartItem: CartItem): Flow<Int> {
+        return flow {
+            emit(cartDao.deleteCartItem(cartItem))
+        }
+    }
+
+    override suspend fun deleteAllCartItems() {
+        cartDao.deleteAllCartItems()
+    }
+
+    override suspend fun updateCartItem(cartItem: CartItem) {
+        cartDao.updateCartItem(cartItem)
+    }
+
+    override fun getAllFavorites(): Flow<List<Product>> = favoritesDao.getAllFavorites()
 
     override suspend fun insertFavorite(product: Product): Long = favoritesDao.insertFavorite(product)
+    
     override suspend fun deleteFavorite(product: Product): Int =favoritesDao.deleteFavorite(product)
 
     override suspend fun deleteAllFavorites() =favoritesDao.deleteAllFavorites()

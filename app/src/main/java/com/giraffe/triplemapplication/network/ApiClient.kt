@@ -1,11 +1,14 @@
 package com.giraffe.triplemapplication.network
 
+
+import android.util.Log
 import com.giraffe.triplemapplication.model.address.AddressRequest
-
-
+import com.giraffe.triplemapplication.model.cart.request.DraftOrder
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
+import com.giraffe.triplemapplication.model.cart.request.LineItem
+import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
-
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
@@ -14,13 +17,16 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient : RemoteSource {
+    private const val TAG = "ApiClient"
 
     private fun provideOkHttpClient(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
@@ -74,6 +80,34 @@ object ApiClient : RemoteSource {
         emit(getApiServices().getAllProductsFromIds(productsIds))
     }
 
+    override suspend fun createNewCartDraft(cartItems: List<LineItem>): Flow<Response<DraftResponse>> {
+        return flow {
+            emit(getApiServices().createNewDraftOrder(DraftRequest(DraftOrder(line_items = cartItems))))
+        }
+    }
+
+    override suspend fun modifyCartDraft(
+        draftOrderId: Long,
+        cartItems: List<LineItem>
+    ): Flow<Response<DraftResponse>> {
+        return flow {
+            emit(
+                getApiServices().modifyDraftOrder(
+                    draftOrderId,
+                    DraftRequest(DraftOrder(draftOrderId, cartItems))
+                )
+            )
+        }
+    }
+
+    override suspend fun removeCartDraft(
+        draftOrderId: Long
+    ): Flow<Response<Void>> {
+        return flow {
+            emit(getApiServices().removeDraftOrder(draftOrderId))
+        }
+    }
+
     override suspend fun addNewAddress(
         customerId: String,
         address: AddressRequest
@@ -106,7 +140,7 @@ object ApiClient : RemoteSource {
     override fun signInFirebase(
         email: String,
         password: String,
-    ): Flow<AuthResult> = flow{
+    ): Flow<AuthResult> = flow {
         val result = createFirebaseAuth().signInWithEmailAndPassword(email, password).await()
         emit(result)
     }
@@ -125,12 +159,54 @@ object ApiClient : RemoteSource {
         FirebaseAuth.getInstance().signOut()
     }
 
-    override fun createCustomer(customerResponse: Request) : Flow<CustomerResponse>  = flow{
+    override fun createCustomer(customerResponse: Request): Flow<CustomerResponse> = flow {
         emit(getApiServices().createCustomer(customerResponse))
     }
 
-
-
     private fun createFirebaseAuth(): FirebaseAuth = Firebase.auth
+
+    override suspend fun uploadCartId(cartId: Long): Task<Void?>? {
+        var mTask: Task<Void?>? = null
+        FirebaseFirestore.getInstance().collection("users")
+            .document("mohannad-01101105574-ahmed")
+            .set(
+                hashMapOf(
+                    "cartId" to cartId
+                )
+            )
+            .addOnCompleteListener { task: Task<Void?> ->
+                if (task.isSuccessful) {
+                    Log.i(TAG, "cart id have been uploaded")
+                } else {
+                    Log.e(
+                        TAG,
+                        "cart id have not been uploaded => ${task.exception?.message} => ${task.result}"
+                    )
+                }
+                mTask = task
+            }
+        return mTask
+    }
+
+    override suspend fun getCartId(): Flow<Long> {
+        return flow {
+            val cartId:Long = -2
+            val result = FirebaseFirestore.getInstance().collection("users")
+                .document("mohannad-01101105574-ahmed")
+                .get().await().getLong("cartId")
+            if (result!=null) {
+                emit(result)
+                Log.i(
+                    TAG,
+                    "getting cart id successfully $result"
+                )
+            } else {
+                Log.e(
+                    TAG,
+                    "getting cart id fail"
+                )
+            }
+        }
+    }
 
 }

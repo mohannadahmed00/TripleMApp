@@ -39,37 +39,38 @@
         android:id="@+id/line1"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        app:layout_constraintBottom_toTopOf="@id/tv_total_title"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintVertical_chainStyle="packed"
         android:background="@color/light_gary"
+        app:layout_constraintBottom_toTopOf="@id/tv_total_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rv_products" />
+        app:layout_constraintTop_toBottomOf="@id/rv_products"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tv_total_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total"
-
-        app:layout_constraintBottom_toTopOf="@id/tv_total"
         android:layout_marginTop="14dp"
+
+        android:text="@string/total"
         android:textColor="@color/light_gary"
         android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_total"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/line1" />
+
     <TextView
         android:id="@+id/tv_total"
         android:layout_width="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/tv_free_ship"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintEnd_toStartOf="@id/btn_checkout"
         android:text="$81.57"
         android:textColor="@color/dark_gary"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_free_ship"
+        app:layout_constraintEnd_toStartOf="@id/btn_checkout"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/tv_total_title"
         app:layout_constraintTop_toBottomOf="@id/tv_total_title" />
 
@@ -77,24 +78,24 @@
         android:id="@+id/tv_free_ship"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:text="@string/free_domestic_shipping"
         android:textColor="@color/gary"
         android:textSize="12sp"
-        android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/tv_total"
         app:layout_constraintTop_toBottomOf="@id/tv_total" />
 
     <Button
-        app:layout_constraintTop_toTopOf="@id/tv_total_title"
         android:id="@+id/btn_checkout"
-        app:layout_constraintBottom_toBottomOf="@id/tv_free_ship"
         android:layout_width="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/tv_total"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/red"
-        android:text="@string/checkout"/>
+        android:text="@string/checkout"
+        app:layout_constraintBottom_toBottomOf="@id/tv_free_ship"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_total"
+        app:layout_constraintTop_toTopOf="@id/tv_total_title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

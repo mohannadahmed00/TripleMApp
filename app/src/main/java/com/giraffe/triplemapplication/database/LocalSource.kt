@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.database
 
+import com.giraffe.triplemapplication.model.cart.CartItem
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -24,12 +25,26 @@ interface LocalSource {
 
     suspend fun setCurrency(currency:Constants.Currencies)
 
+    suspend fun setCartID(id:Long)
+    suspend fun getCartID():Long?
+
+    suspend fun getCartItems(): Flow<List<CartItem>>
+
+    suspend fun insertCartItem(cartItem: CartItem): Flow<Long>
+
+    suspend fun deleteCartItem(cartItem: CartItem): Flow<Int>
+
+    suspend fun deleteAllCartItems()
+
+    suspend fun updateCartItem(cartItem: CartItem)
+
+    suspend fun getExchangeRateOf(currencyCode:Constants.Currencies):Flow<Pair<Double,Double>>
+
 
     fun getAllFavorites(): Flow<List<Product>>
     suspend fun insertFavorite(product: Product): Long
     suspend fun deleteFavorite(product: Product): Int
     suspend fun deleteAllFavorites()
     suspend fun updateFavorite(product: Product)
-
 
 }

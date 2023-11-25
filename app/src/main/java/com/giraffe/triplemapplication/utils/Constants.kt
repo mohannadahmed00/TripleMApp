@@ -14,8 +14,7 @@ object Constants {
     const val SHOPIFY_HEADER = "X-Shopify-Access-Token"
     const val CURRENCY_HEADER = "access_key"
     const val CURRENCY_KEY = "4ee6d3381b90ee1d4e7a0c551205269f"
-
-
+    const val CART_ID = "CART_ID"
 
     enum class Languages(val value:String) {
         ARABIC("ar"),
