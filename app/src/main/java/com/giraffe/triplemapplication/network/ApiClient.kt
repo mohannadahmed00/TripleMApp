@@ -168,10 +168,10 @@ object ApiClient : RemoteSource {
     override suspend fun uploadCartId(cartId: Long): Task<Void?>? {
         var mTask: Task<Void?>? = null
         FirebaseFirestore.getInstance().collection("users")
-            .document("mohannad-01101105574-ahmed")
+            .document("sdfsdf105574-ahmed")//firebase id??????????????
             .set(
                 hashMapOf(
-                    "cartId" to cartId
+                    "cartId" to cartId,//cart id from shopify
                 )
             )
             .addOnCompleteListener { task: Task<Void?> ->
@@ -190,9 +190,8 @@ object ApiClient : RemoteSource {
 
     override suspend fun getCartId(): Flow<Long> {
         return flow {
-            val cartId:Long = -2
             val result = FirebaseFirestore.getInstance().collection("users")
-                .document("mohannad-01101105574-ahmed")
+                .document("mohannad-01101105574-ahmed")//?????????
                 .get().await().getLong("cartId")
             if (result!=null) {
                 emit(result)

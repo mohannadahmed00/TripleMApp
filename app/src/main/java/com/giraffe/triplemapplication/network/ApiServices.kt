@@ -68,15 +68,6 @@ interface ApiServices {
     @DELETE("orders/{orderId}/.json")
     suspend fun delOrder(@Path("orderId") orderId: String)
 
-    /*@GET
-    suspend fun getCurrencies(): CurrencyResponse*/
-//    @POST("orders.json")
-//    suspend fun createOrder(@Query("") orderCreation: OrderCreation)
-
-    @DELETE("orders/{orderId}/.json")
-    suspend fun delOrder(@Path("orderId") orderId: String)
-//    @GET
-//    suspend fun getCurrencies(): CurrencyResponse
 
     @POST("customers.json")
     suspend fun createCustomer(@Body customer : Request) : CustomerResponse

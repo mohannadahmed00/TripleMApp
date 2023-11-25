@@ -57,26 +57,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
 
     override fun handleClicks() {
         binding.btnCheckout.setOnClickListener {
-            /*mViewModel.uploadCartId(123)
-            observeUploadCartId()*/
-        }
-    }
 
-    private fun observeUploadCartId() {
-        lifecycleScope.launch {
-            mViewModel.cartIdFlow.collect{
-                when(it){
-                    is Resource.Failure -> {
-                        Log.e(TAG, "observeUploadCartId: (Failure) ${it.errorBody}", )
-                    }
-                    Resource.Loading -> {
-                        Log.i(TAG, "observeUploadCartId: (Loading)")
-                    }
-                    is Resource.Success -> {
-                        Log.d(TAG, "observeUploadCartId: (Success)")
-                    }
-                }
-            }
         }
     }
 }

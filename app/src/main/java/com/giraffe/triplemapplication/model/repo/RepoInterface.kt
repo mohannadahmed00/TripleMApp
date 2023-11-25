@@ -77,6 +77,7 @@ interface RepoInterface {
     suspend fun insertCartItem(cartItem: CartItem): Flow<Long>
 
     suspend fun modifyCartDraft(variants :List<LineItem>):Flow<Response<DraftResponse>>
+    suspend fun createCartDraft(variants :List<LineItem>):Flow<Response<DraftResponse>>
 
     suspend fun getCartItems(): Flow<List<CartItem>>
 
