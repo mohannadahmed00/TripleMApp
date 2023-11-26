@@ -11,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -18,6 +20,7 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     companion object{
         private const val TAG = "SharedVM"
     }
+
     private val _languageFlow: MutableStateFlow<Resource<String>> =
         MutableStateFlow(Resource.Loading)
     val languageFlow: StateFlow<Resource<String>> = _languageFlow.asStateFlow()
@@ -48,7 +51,7 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
 
     fun insertFavorite(product: Product){
         viewModelScope.launch(Dispatchers.IO){
-            repo.insertFavorite(product)
+            repo.insertWishListItem(product)
         }
     }
 
@@ -82,4 +85,6 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
             }*/
         }
     }
+
+
 }

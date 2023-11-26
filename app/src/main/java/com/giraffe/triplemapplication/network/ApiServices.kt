@@ -93,4 +93,7 @@ interface ApiServices {
     suspend fun removeDraftOrder(
         @Path("draft_order_id") draftOrderId:Long
     ):Response<Void>
+
+    @GET("customers/search.json")
+    suspend fun getCustomerByEmail(@Query("email") email:String): CustomerResponse
 }

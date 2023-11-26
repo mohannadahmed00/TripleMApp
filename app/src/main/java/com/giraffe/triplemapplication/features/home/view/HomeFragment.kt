@@ -3,6 +3,7 @@ package com.giraffe.triplemapplication.features.home.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
@@ -18,7 +19,9 @@ import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.home.adapters.SliderAdapter
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
@@ -72,7 +75,10 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         observeGetAllProducts()
         observeGetAllCategories()
         observeGetAllBrands()
+
     }
+
+
 
     private fun observeGetAllBrands() {
         lifecycleScope.launch {

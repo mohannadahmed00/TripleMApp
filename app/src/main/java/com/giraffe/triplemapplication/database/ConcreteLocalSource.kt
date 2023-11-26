@@ -79,8 +79,12 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         shared.store(Constants.CURRENCY, currency.value)
     }
 
-    override suspend fun setCartID(id: Long) {
+    override suspend fun setCartID(id: Long?) {
         shared.store(Constants.CART_ID, id.toString())
+    }
+
+    override suspend fun setCustomerID(id: Long) {
+        shared.store(Constants.CUSTOMER_ID, id.toString())
     }
 
     override suspend fun getCartID(): Long? {
@@ -111,15 +115,33 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         cartDao.updateCartItem(cartItem)
     }
 
-    override fun getAllFavorites(): Flow<List<Product>> = favoritesDao.getAllFavorites()
+    override suspend fun setWishListID(id: Long?) {
+        shared.store(Constants.WISH_LIST_ID, id.toString())
+    }
 
-    override suspend fun insertFavorite(product: Product): Long =
-        favoritesDao.insertFavorite(product)
+    override suspend fun getWishListID(): Long? {
+        return shared.read(Constants.WISH_LIST_ID)?.toLong()
+    }
 
-    override suspend fun deleteFavorite(product: Product): Int =
-        favoritesDao.deleteFavorite(product)
+    override suspend fun getWishListItems(): Flow<List<Product>> {
+        return favoritesDao.getAllFavorites()
 
-    override suspend fun deleteAllFavorites() = favoritesDao.deleteAllFavorites()
+    }
 
-    override suspend fun updateFavorite(product: Product) = favoritesDao.updateFavorite(product)
+    override fun insertWishListItem(product: Product): Flow<Long> =flow {
+        emit(favoritesDao.insertFavorite(product))
+    }
+
+    override fun deleteWishListItem(product: Product): Flow<Int> =flow {
+        emit(favoritesDao.deleteFavorite(product))
+    }
+
+    override suspend fun deleteAllWishListItems() {
+        favoritesDao.deleteAllFavorites()
+    }
+
+    override suspend fun updateWishListItem(product: Product) {
+        favoritesDao.updateFavorite(product)
+    }
+
 }

@@ -46,28 +46,12 @@ class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
 
         if(mViewModel.isDataValid(email, password, confirmPassword)){
 
-            mViewModel.signUp(email, password, confirmPassword)
-            lifecycleScope.launch {
 
-                mViewModel.currentUser.collectLatest { it ->
-                    when (it) {
-                        is Resource.Failure -> {
-                            showFailure(it)
-                            dismissLoading()
-                        }
+            val bundle= Bundle()
+            bundle.putString("email" , binding.emailEditText.text.toString())
+            bundle.putString("password" , binding.passwordEditText.text.toString())
+            findNavController().navigate(R.id.userInfoFragment , bundle)
 
-                        Resource.Loading -> {
-                            showLoading()
-                        }
-
-                        is Resource.Success -> {
-                            showSuccess()
-                            dismissLoading()
-                        }
-
-                    }
-                }
-            }
 
 
         }else{
@@ -127,17 +111,9 @@ class SignUpFragment : BaseFragment<RegisterVM, FragmentSignUpBinding>() {
 
     }
 
-    private fun showSuccess() {
-        val bundle= Bundle()
-        bundle.putString("email" , binding.emailEditText.text.toString())
-        bundle.putString("password" , binding.passwordEditText.text.toString())
-        findNavController().navigate(R.id.userInfoFragment , bundle)
 
-    }
 
-    private fun showFailure(it: Resource.Failure) {
-       Snackbar.make(requireView() , it.errorBody.toString() , Snackbar.LENGTH_SHORT).show()
-    }
+
 
 
 

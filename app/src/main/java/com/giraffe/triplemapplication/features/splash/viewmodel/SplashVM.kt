@@ -44,4 +44,5 @@ class SplashVM(private val repo:RepoInterface):ViewModel() {
             _exchangeRatesFlow.emit(safeCall { repo.setExchangeRates(value) })
         }
     }
+
 }

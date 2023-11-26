@@ -25,7 +25,7 @@ class FavVM(private val repo: RepoInterface) : ViewModel() {
     private fun getAllFavorites(){
         viewModelScope.launch(Dispatchers.IO) {
 
-            (repo.getAllFavorites().collect{
+            (repo.getWishListItems().collect{
                 _allFavProducts.emit(it)
             })
         }
@@ -33,22 +33,18 @@ class FavVM(private val repo: RepoInterface) : ViewModel() {
     fun deleteFavourite(product: Product){
         viewModelScope.launch(Dispatchers.IO) {
             _lastDeleted.emit(product)
-            repo.deleteFavorite(product)
+            repo.deleteWishListItem(product)
         }
     }
     fun deleteAllFavorites(){
         viewModelScope.launch(Dispatchers.IO){
-            repo.deleteAllFavorites()
+            repo.deleteAllWishListItem()
         }
     }
-    fun updateFavourite(product: Product){
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.updateFavorite(product)
-        }
-    }
+
     fun returnLastDeleted(){
         viewModelScope.launch(Dispatchers.IO) {
-            _lastDeleted.value?.let { repo.insertFavorite(it) }
+            _lastDeleted.value?.let { repo.insertWishListItem(it) }
         }
     }
 }

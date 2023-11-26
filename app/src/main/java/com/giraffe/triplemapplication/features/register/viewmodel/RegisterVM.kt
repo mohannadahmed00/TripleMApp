@@ -18,15 +18,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 
 class RegisterVM(private val repo: RepoInterface) : ViewModel() {
-    private val _firebaseUser: MutableStateFlow<Resource<AuthResult>> =
-        MutableStateFlow(Resource.Loading)
-    val currentUser: StateFlow<Resource<AuthResult>> = _firebaseUser.asStateFlow()
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
@@ -57,23 +56,6 @@ class RegisterVM(private val repo: RepoInterface) : ViewModel() {
         doPasswordsMatch.value = repo.doPasswordsMatch(passwordValue, confirmPasswordValue)
     }
 
-    fun signUp(email: String, password: String, confirmPassword: String) {
-
-
-        viewModelScope.launch(Dispatchers.IO) {
-
-            _firebaseUser.emit(safeCall {
-                repo.signUpFirebase(
-                    email,
-                    password,
-                    confirmPassword
-                )
-            })
-
-
-        }
-
-    }
 
     fun isDataValid(email: String, password: String, confirmPassword: String): Boolean =
         repo.isDataValid(email, password, confirmPassword)

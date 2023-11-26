@@ -174,8 +174,9 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
 
                             //should check here if authorized (go to main graph) or not (go to auth graph)
                         }
-                        //val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
-                        val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
+
+                        val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
+//                        val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
                         findNavController().navigate(action)
                     }
                 }
