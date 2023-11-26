@@ -9,7 +9,9 @@ import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
@@ -25,6 +27,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Query
 
 object ApiClient : RemoteSource {
     private const val TAG = "ApiClient"
@@ -82,7 +85,12 @@ object ApiClient : RemoteSource {
                 "${product.id}, "
             }
         }
+        Log.i("hahahahahaha", "getProductsFromCategoryId: $productsIds")
         emit(getApiServices().getAllProductsFromIds(productsIds))
+    }
+
+    override suspend fun getAllProductsFromIds(ids: String) = flow {
+        emit(getApiServices().getAllProductsFromIds(ids))
     }
 
     override suspend fun createOrder(orderCreate: OrderCreate) = flow {
@@ -91,6 +99,10 @@ object ApiClient : RemoteSource {
 
     override suspend fun getOrders() = flow {
         emit(getApiServices().getOrders())
+    }
+
+    override suspend fun getOrder(orderId: Long): Flow<OrderResponse> = flow {
+        emit(getApiServices().getOrder(orderId))
     }
 
     override suspend fun delOrder(orderId: Long) {

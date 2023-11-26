@@ -21,6 +21,7 @@ import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
+import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
@@ -37,6 +38,7 @@ interface RepoInterface {
     suspend fun getAllCategories(): Flow<AllCategoriesResponse>
     suspend fun getAllBrands(): Flow<AllBrandsResponse>
     suspend fun getProductsFromCategoryId(categoryId: String): Flow<AllProductsResponse>
+    suspend fun getAllProductsFromIds(ids: String): Flow<AllProductsResponse>
     suspend fun getLanguage(): Flow<String>
     suspend fun setLanguage(code: Constants.Languages)
 
@@ -112,6 +114,7 @@ interface RepoInterface {
 
     suspend fun createOrder(orderCreate: OrderCreate): Flow<CreateOrderResponse>
     suspend fun getOrders(): Flow<AllOrdersResponse>
+    suspend fun getOrder(orderId: Long): Flow<OrderResponse>
     suspend fun delOrder(orderId: Long)
     suspend fun completeOrder(orderId: Long): Flow<DraftOrder>
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>

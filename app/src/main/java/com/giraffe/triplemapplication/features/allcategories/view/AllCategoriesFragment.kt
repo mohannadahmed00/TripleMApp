@@ -206,6 +206,5 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         val action =
             AllCategoriesFragmentDirections.actionAllCategoriesFragmentToProductInfoFragment()
         findNavController().navigate(action)
-
     }
 }

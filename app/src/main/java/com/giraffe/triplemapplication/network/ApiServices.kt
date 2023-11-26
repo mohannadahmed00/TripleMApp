@@ -13,6 +13,7 @@ import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
+import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
@@ -65,6 +66,9 @@ interface ApiServices {
 
     @GET("orders.json")
     suspend fun getOrders(@Query("status") status: String = "any"): AllOrdersResponse
+
+    @GET("orders/{orderId}.json")
+    suspend fun getOrder(@Path("orderId") orderId: Long): OrderResponse
 
     @POST("orders.json")
     suspend fun createOrder(@Body orderCreate: OrderCreate): CreateOrderResponse

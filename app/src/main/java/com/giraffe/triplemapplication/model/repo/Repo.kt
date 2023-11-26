@@ -9,7 +9,9 @@ import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
@@ -45,6 +47,8 @@ class Repo private constructor(
     override suspend fun getAllBrands() = remoteSource.getAllBrands()
     override suspend fun getProductsFromCategoryId(categoryId: String) =
         remoteSource.getProductsFromCategoryId(categoryId)
+
+    override suspend fun getAllProductsFromIds(ids: String) = remoteSource.getAllProductsFromIds(ids)
 
     override suspend fun getLanguage() = localSource.getLanguage()
 
@@ -211,6 +215,7 @@ class Repo private constructor(
         remoteSource.createOrder(orderCreate)
 
     override suspend fun getOrders() = remoteSource.getOrders()
+    override suspend fun getOrder(orderId: Long) = remoteSource.getOrder(orderId)
 
     override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
     override suspend fun completeOrder(orderId: Long) = remoteSource.completeOrder(orderId)
