@@ -11,11 +11,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.databinding.ItemProductBinding
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.convert
 
 class ProductAdapter(
     private val context: Context,
     private val exchangeRate: Pair<Double,Double>?,
+    private val currency: String,
     private val onItemClick: (Product) -> Unit
 ): ListAdapter<Product, ProductAdapter.ViewHolder>(ProductDataDiffUtil()) {
 
@@ -39,7 +41,7 @@ class ProductAdapter(
             )
             .into(holder.binding.productImage)
         holder.binding.productName.text = current.handle
-        holder.binding.productPrice.text = current.variants?.get(0)?.price?.toDouble()?.convert(exchangeRate).toString()
+        holder.binding.productPrice.text = "${ current.variants?.get(0)?.price?.toDouble()?.convert(exchangeRate).toString()} $currency"
         holder.binding.row.setOnClickListener { onItemClick(current) }
     }
 
