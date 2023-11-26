@@ -1,68 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background">
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/brand_image_card"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintEnd_toStartOf="@id/price"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/brand_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/profile"
+            app:layout_constraintEnd_toStartOf="@id/text"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/dark_gary"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/brand_image"
+            app:layout_constraintTop_toTopOf="@id/brand_image"
+            tools:text="Red Cotton ScarfScarfScarfScarfScarfScarfScarfScarfScarfScarfScarfScarfScarf" />
+
+        <TextView
+            android:id="@+id/price"
+            style="@style/subtitle_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:scaleType="fitXY"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/RoundedSquare"
-            tools:src="@drawable/profile" />
-    </androidx.cardview.widget.CardView>
+            android:layout_marginTop="11dp"
+            app:layout_constraintStart_toStartOf="@id/text"
+            app:layout_constraintTop_toBottomOf="@id/text"
+            tools:text="$11.00" />
 
-    <TextView
-        android:id="@+id/price"
-        android:padding="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/brand_image_card"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Price"
-        app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:padding="12dp"
-        android:textAlignment="center"
-        android:textColor="@color/gary"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/enter"
-        app:layout_constraintTop_toBottomOf="@+id/brand_image_card"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="T-Shirts - T-Shirts - T-Shirts - T-Shirts - T-Shirts - T-Shirts - T-Shirts - T-Shirts - T-Shirts - T-Shirts" />
 
-    <ImageView
-        android:id="@+id/enter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/enter_ic"
-        app:layout_constraintBottom_toBottomOf="@id/text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/text"
-        app:layout_constraintTop_toTopOf="@id/text" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
