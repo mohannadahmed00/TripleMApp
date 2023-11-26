@@ -11,4 +11,6 @@
     <color name="red">#FF6969</color>
     <color name="deleteColor">#DD3124</color>
     <color name="cartColor">#3AE015</color>
+    <color name="blue">#00ded9</color>
+    <color name="yellow">#ffcf00</color>
 </resources>

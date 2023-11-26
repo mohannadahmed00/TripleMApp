@@ -8,7 +8,7 @@ import com.giraffe.triplemapplication.databinding.AddressItemBinding
 import com.giraffe.triplemapplication.model.address.Address
 
 class AddressesAdapter(
-    private val addresses: MutableList<Address>,
+    val addresses: MutableList<Address>,
     private val onAddressClick: OnAddressClick,
 ) : Adapter<AddressesAdapter.AddressVH>() {
 

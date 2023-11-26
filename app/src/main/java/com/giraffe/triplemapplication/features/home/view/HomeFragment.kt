@@ -22,9 +22,7 @@ import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.home.adapters.SliderAdapter
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.model.products.Product
-import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.OnCodeClick {
@@ -99,7 +97,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
                         val coupons = it.value.price_rules.map {priceRule ->
                             priceRule.title
                         }
-                        sliderAdapter = SliderAdapter(requireContext(), coupons,this@HomeFragment)
+                        sliderAdapter = SliderAdapter(requireContext(), it.value.price_rules,this@HomeFragment)
                         binding.sliderViewPager.adapter = sliderAdapter
                     }
                 }

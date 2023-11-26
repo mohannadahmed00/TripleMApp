@@ -178,7 +178,6 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
                 countryCode = address[0].countryCode
                 var mAddress = "${address[0].postalCode}, ${address[0].thoroughfare}, ${address[0].subAdminArea}, ${address[0].adminArea}, ${address[0].countryName}"
                 mAddress = mAddress.replace("null, ","")
-                binding.tvAddress.text= mAddress
                 Log.i(TAG, mAddress)
             }
         }catch (e:Exception){

@@ -94,4 +94,7 @@
     <string name="dialog_del_ok">Remove</string>
     <string name="dialog_del_cancel">Cancel</string>
     <string name="dialog_del">Are you sure you want to remove this order?</string>
+    <string name="for_orders_that_is_greater_than_or_equal">for orders that is greater than or equal %1$s</string>
+    <string name="enter_apartment_number">Enter Apartment number</string>
+    <string name="enter_phone_number">Enter phone number</string>
 </resources>

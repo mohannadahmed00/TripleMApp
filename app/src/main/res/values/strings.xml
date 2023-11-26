@@ -85,7 +85,7 @@
     <string name="gbp">GBP</string>
     <string name="log_out">LOG OUT</string>
     <string name="choose_your_preferred_address">Choose your preferred address</string>
-    <string name="enter_address_tag">Enter address tag</string>
+    <string name="enter_address_tag">Address tag</string>
     <string name="products">Products</string>
     <string name="categories">Categories</string>
     <string name="price">Price:</string>
@@ -97,4 +97,7 @@
     <string name="dialog_del_ok">Remove</string>
     <string name="dialog_del_cancel">Cancel</string>
     <string name="dialog_del">Are you sure you want to remove this order?</string>
+    <string name="for_orders_that_is_greater_than_or_equal">for orders that is greater than or equal %1$s</string>
+    <string name="enter_apartment_number">Apartment number</string>
+    <string name="enter_phone_number">Phone number</string>
 </resources>
