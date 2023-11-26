@@ -70,15 +70,20 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                         when (it.value) {
                             Constants.Currencies.EGP.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.EGP)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.EGP.symbolRes)
+
                             }
                             Constants.Currencies.USD.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.USD)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.USD.symbolRes)
                             }
                             Constants.Currencies.EUR.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.EUR)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.EUR.symbolRes)
                             }
                             Constants.Currencies.GBP.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.GBP)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.GBP.symbolRes)
                             }
                         }
                     }
@@ -160,10 +165,10 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                         Log.i(TAG, "observeGetFirstTimeFlag: ")
                     }
                     is Resource.Success -> {
+                        mViewModel.getCurrencies()
+                        observeGetCurrencies()
                         Log.d(TAG, "observeGetFirstTimeFlag: ${it.value}")
                         if (it.value) {
-                            mViewModel.getCurrencies()
-                            observeGetCurrencies()
                             mViewModel.setFirstTimeFlag(false)
                             runExchangeRatesWorker()
                             //start currency worker here
@@ -175,8 +180,8 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                             //should check here if authorized (go to main graph) or not (go to auth graph)
                         }
 
-                        //val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
-                        val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
+                        val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
+                        //val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
                         findNavController().navigate(action)
                     }
                 }

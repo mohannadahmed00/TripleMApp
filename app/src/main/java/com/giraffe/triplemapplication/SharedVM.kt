@@ -11,8 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -37,6 +35,9 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
 
     private val _exchangeRateFlow : MutableStateFlow<Pair<Double,Double>?> = MutableStateFlow(null)
     val exchangeRateFlow : StateFlow<Pair<Double,Double>?> = _exchangeRateFlow.asStateFlow()
+
+    private val _currencySymFlow : MutableStateFlow<Int> = MutableStateFlow(R.string.egp_sym)
+    val currencySymFlow : StateFlow<Int> = _currencySymFlow.asStateFlow()
 
     fun getLanguage() {
         viewModelScope.launch {
@@ -83,6 +84,12 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
 
                 }
             }*/
+        }
+    }
+
+    fun setCurrencySymbol(currencySymRes:Int){
+        viewModelScope.launch {
+            _currencySymFlow.emit(currencySymRes)
         }
     }
 

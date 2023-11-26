@@ -3,14 +3,15 @@ package com.giraffe.triplemapplication.features.cart.view
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
-import androidx.lifecycle.lifecycleScope
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCartBinding
 import com.giraffe.triplemapplication.features.cart.view.adapters.CartAdapter
 import com.giraffe.triplemapplication.features.cart.viewmodel.CartVM
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.convert
 import kotlinx.coroutines.launch
 
 class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
@@ -35,7 +36,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
         Navigation.findNavController(requireView()).navigate(action)
     }
     override fun handleView() {
-        adapter = CartAdapter(mutableListOf())
+        adapter = CartAdapter(mutableListOf(),sharedViewModel.exchangeRateFlow.value,sharedViewModel.currencySymFlow.value)
         binding.rvProducts.adapter = adapter
         mViewModel.getCartItems()
         observeGetCartItems()
@@ -51,14 +52,17 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>() {
                             "observeGetCartItems: (Failure ${it.errorCode}) ${it.errorBody}"
                         )
                     }
-
                     Resource.Loading -> {
                         Log.i(TAG, "observeGetCartItems: (Loading)")
                     }
-
                     is Resource.Success -> {
                         Log.d(TAG, "observeGetCartItems: (Success)")
                         adapter.updateList(it.value)
+                        val total = it.value.sumOf { cartItem ->
+                            cartItem.product.variants?.get(0)?.price?.toDouble() ?: 0.0
+                        }
+                        binding.tvTotal.text = total.convert(sharedViewModel.exchangeRateFlow.value).toString()
+                            .plus(" ${requireContext().getString(sharedViewModel.currencySymFlow.value)}")
                     }
                 }
             }

@@ -19,9 +19,10 @@
         android:id="@+id/tv_product_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Red Cotton Scarf"
+        android:text="Red Cotton Scarfsfkkf"
         android:textSize="15sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_variants"
         app:layout_constraintEnd_toEndOf="parent"
         android:textColor="@color/dark_gary"
         app:layout_constraintTop_toTopOf="@id/iv_product"
@@ -32,6 +33,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/dark_gary"
         android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_price"
         android:text="2ft, Dark Red"
         app:layout_constraintTop_toBottomOf="@id/tv_product_title"
         app:layout_constraintStart_toStartOf="@id/tv_product_title"/>
@@ -42,6 +44,7 @@
         android:textColor="@color/red"
         android:textSize="15sp"
         android:text="$11.00"
+        app:layout_constraintBottom_toTopOf="@id/tv_count"
         android:layout_marginTop="11dp"
         app:layout_constraintTop_toBottomOf="@id/tv_variants"
         app:layout_constraintStart_toStartOf="@id/tv_variants"/>

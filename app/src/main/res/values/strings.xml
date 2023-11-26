@@ -105,4 +105,9 @@
     <string name="empty_apartment_number">empty apartment number</string>
     <string name="empty_tag">empty tag</string>
     <string name="invalid_phone_number">invalid phone number</string>
+
+    <string name="egp_sym">LE</string>
+    <string name="usd_sym">$</string>
+    <string name="gbp_sym">£</string>
+    <string name="eur_sym">€</string>
 </resources>

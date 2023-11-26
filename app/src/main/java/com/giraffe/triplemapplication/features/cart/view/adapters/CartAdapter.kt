@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.giraffe.triplemapplication.databinding.CartItemBinding
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.utils.convert
 import com.giraffe.triplemapplication.utils.load
 
-class CartAdapter(private val cartItems:MutableList<CartItem>) :Adapter<CartAdapter.CartItemVH>() {
+class CartAdapter(private val cartItems:MutableList<CartItem>,private val exchangeRate:Pair<Double,Double>?,private val currencySymbol:Int) :Adapter<CartAdapter.CartItemVH>() {
 
     class CartItemVH(val binding: CartItemBinding):ViewHolder(binding.root)
 
@@ -38,7 +39,8 @@ class CartAdapter(private val cartItems:MutableList<CartItem>) :Adapter<CartAdap
         val variantDetails = item.product.variants?.firstOrNull {
             it.id == item.variantId
         }
-        holder.binding.tvPrice.text = variantDetails?.price?:"0.0"
+        holder.binding.tvPrice.text = variantDetails?.price?.toDouble()?.convert(exchangeRate).toString()
+            .plus(" ${holder.binding.root.context.getString(currencySymbol)}")
         holder.binding.tvVariants.text = variantDetails?.title?:""
         holder.binding.tvCount.text = item.quantity.toString()
     }
