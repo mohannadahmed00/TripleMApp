@@ -92,6 +92,7 @@ class OrderDetailsFragment : BaseFragment<OrderDetailsVM, FragmentOrderDetailsBi
     }
 
     override fun handleClicks() {
+        binding.closeButton.setOnClickListener { findNavController().navigateUp() }
     }
 
 }
