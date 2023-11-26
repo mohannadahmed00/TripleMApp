@@ -10,6 +10,7 @@ import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
@@ -81,7 +82,7 @@ interface ApiServices {
     suspend fun createCustomer(@Body customer : Request) : CustomerResponse
 
     //===================draft work area===================
-    @GET("draft_orders.json")
+    @POST("draft_orders.json")
     suspend fun createNewDraftOrder(@Body draftRequest: DraftRequest):Response<DraftResponse>
 
     @PUT("draft_orders/{draft_order_id}.json")
@@ -94,6 +95,8 @@ interface ApiServices {
         @Path("draft_order_id") draftOrderId:Long
     ):Response<Void>
 
+    @GET("price_rules.json")
+    suspend fun getCoupons():Response<CouponsResponse>
     @GET("customers/search.json")
     suspend fun getCustomerByEmail(@Query("email") email:String): CustomerResponse
 }
