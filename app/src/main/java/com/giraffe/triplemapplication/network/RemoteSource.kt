@@ -5,6 +5,7 @@ import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
@@ -74,11 +75,11 @@ interface RemoteSource {
     suspend fun delOrder(orderId: Long)
     suspend fun completeOrder(orderId: Long): Flow<DraftOrder>
 
-    suspend fun createNewCartDraft(cartItems: List<LineItem>): Flow<Response<DraftResponse>>
+    suspend fun createNewCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
 
     suspend fun modifyCartDraft(
         draftOrderId: Long,
-        cartItems: List<LineItem>,
+        draftRequest: DraftRequest,
     ): Flow<Response<DraftResponse>>
 
     suspend fun removeCartDraft(
@@ -92,11 +93,11 @@ interface RemoteSource {
 
     suspend fun uploadCustomerId(cartId: Long): Task<Void?>?
     suspend fun getCustomerId(): Flow<Long>
-    suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>>
+    suspend fun createNewWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
 
     suspend fun modifyWishListDraft(
         draftOrderId: Long,
-        products: List<LineItem>,
+        draftRequest: DraftRequest,
     ): Flow<Response<DraftResponse>>
 
     suspend fun removeWishListDraft(

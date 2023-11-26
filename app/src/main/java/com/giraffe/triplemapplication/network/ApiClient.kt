@@ -113,21 +113,21 @@ object ApiClient : RemoteSource {
         emit(getApiServices().completeOrder(orderId))
     }
 
-    override suspend fun createNewCartDraft(cartItems: List<LineItem>): Flow<Response<DraftResponse>> {
+    override suspend fun createNewCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
         return flow {
-            emit(getApiServices().createNewDraftOrder(DraftRequest(DraftOrder(line_items = cartItems))))
+            emit(getApiServices().createNewDraftOrder(draftRequest))
         }
     }
 
     override suspend fun modifyCartDraft(
         draftOrderId: Long,
-        cartItems: List<LineItem>,
+        draftRequest: DraftRequest,
     ): Flow<Response<DraftResponse>> {
         return flow {
             emit(
                 getApiServices().modifyDraftOrder(
                     draftOrderId,
-                    DraftRequest(DraftOrder(draftOrderId, cartItems))
+                    draftRequest
                 )
             )
         }
@@ -285,21 +285,21 @@ object ApiClient : RemoteSource {
         }
     }
 
-    override suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>> {
+    override suspend fun createNewWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
         return flow {
-            emit(getApiServices().createNewDraftOrder(DraftRequest(DraftOrder(line_items = productsItem))))
+            emit(getApiServices().createNewDraftOrder(draftRequest))
         }
     }
 
     override suspend fun modifyWishListDraft(
         draftOrderId: Long,
-        products: List<LineItem>,
+        draftRequest: DraftRequest,
     ): Flow<Response<DraftResponse>> {
         return flow {
             emit(
                 getApiServices().modifyDraftOrder(
                     draftOrderId,
-                    DraftRequest(DraftOrder(draftOrderId, products))
+                    draftRequest
                 )
             )
         }

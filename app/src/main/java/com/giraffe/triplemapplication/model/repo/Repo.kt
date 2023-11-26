@@ -3,6 +3,7 @@ package com.giraffe.triplemapplication.model.repo
 import com.giraffe.triplemapplication.database.LocalSource
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
@@ -148,16 +149,20 @@ class Repo private constructor(
         return localSource.insertCartItem(cartItem)
     }
 
-    override suspend fun modifyCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, variants)
+    override suspend fun modifyCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, draftRequest)
     }
 
-    override suspend fun createCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.createNewCartDraft(variants)
+    override suspend fun createCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.createNewCartDraft(draftRequest)
     }
 
     override suspend fun getCartItems(): Flow<List<CartItem>> {
         return localSource.getCartItems()
+    }
+
+    override suspend fun deleteAllCartItems() {
+        localSource.deleteAllCartItems()
     }
 
     override suspend fun getCartId(): Flow<Long> {
@@ -187,12 +192,12 @@ class Repo private constructor(
         localSource.deleteAllWishListItems()
     }
 
-    override suspend fun modifyWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.modifyWishListDraft(localSource.getWishListID() ?: 0, variants)
+    override suspend fun modifyWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.modifyWishListDraft(localSource.getWishListID() ?: 0, draftRequest)
     }
 
-    override suspend fun createWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.createNewCartDraft(variants)
+    override suspend fun createWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.createNewCartDraft(draftRequest)
     }
 
     override suspend fun getWishListItems(): Flow<List<Product>> {

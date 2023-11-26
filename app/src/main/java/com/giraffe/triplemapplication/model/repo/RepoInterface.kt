@@ -12,6 +12,7 @@ import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
@@ -85,10 +86,11 @@ interface RepoInterface {
 
     suspend fun insertCartItem(cartItem: CartItem): Flow<Long>
 
-    suspend fun modifyCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>>
-    suspend fun createCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>>
+    suspend fun modifyCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
+    suspend fun createCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
 
     suspend fun getCartItems(): Flow<List<CartItem>>
+    suspend fun deleteAllCartItems()
 
     suspend fun getCartId(): Flow<Long>
     suspend fun removeCartDraft(draftOrderId: Long, ): Flow<Response<Void>>
@@ -100,8 +102,8 @@ interface RepoInterface {
     suspend fun deleteWishListItem(product: Product): Flow<Int>
     suspend fun deleteAllWishListItem()
 
-    suspend fun modifyWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>>
-    suspend fun createWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>>
+    suspend fun modifyWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
+    suspend fun createWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
 
     suspend fun getWishListItems(): Flow<List<Product>>
     fun getCustomerByEmail(email: String): Flow<CustomerResponse>
