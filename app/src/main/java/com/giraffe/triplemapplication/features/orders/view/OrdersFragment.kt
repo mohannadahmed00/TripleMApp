@@ -7,13 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentOrdersBinding
+import com.giraffe.triplemapplication.features.checkout.view.CheckoutFragmentDirections
+import com.giraffe.triplemapplication.features.checkout.view.OrderPlacedFragmentDirections
 import com.giraffe.triplemapplication.features.orders.viewmodel.OrdersViewModel
+import com.giraffe.triplemapplication.model.orders.Order
 import com.giraffe.triplemapplication.network.ApiClient.delOrder
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -48,7 +53,7 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
 
     override fun handleView() {
         // Recycler View
-        ordersAdapter = OrdersAdapter(::showDelDialog)
+        ordersAdapter = OrdersAdapter(::showDelDialog) { navigateToOrderDetailsFragment(it) }
         binding.ordersRecyclerView.apply {
             adapter = ordersAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -89,5 +94,10 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
 
     private fun delOrder(orderId: Long) {
         mViewModel.delOrder(orderId)
+    }
+
+    private fun navigateToOrderDetailsFragment(order: Order) {
+        val action: NavDirections = OrdersFragmentDirections.actionOrdersFragmentToOrderDetailsFragment()
+        Navigation.findNavController(requireView()).navigate(action)
     }
 }

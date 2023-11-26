@@ -39,11 +39,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         getNavArguments()
 
         // Recycler View
-        lifecycleScope.launch {
-            sharedViewModel.exchangeRateFlow.collect { rate ->
-                productsAdapter = ProductsAdapter(requireContext(), rate) { navigateToProductInfoScreen(it) }
-            }
-        }
+        productsAdapter = ProductsAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value) { navigateToProductInfoScreen(it) }
         binding.categoryRecyclerView.apply {
             adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {
