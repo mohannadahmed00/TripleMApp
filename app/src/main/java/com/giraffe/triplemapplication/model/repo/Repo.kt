@@ -4,6 +4,7 @@ import com.giraffe.triplemapplication.database.LocalSource
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.LineItem
+import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
@@ -159,6 +160,8 @@ class Repo private constructor(
         return remoteSource.getCartId()
     }
 
+    override suspend fun removeCartDraft(draftOrderId: Long) = remoteSource.removeCartDraft(draftOrderId)
+
     override suspend fun getCustomer(): Flow<Long> {
         return remoteSource.getCustomerId()
     }
@@ -210,6 +213,8 @@ class Repo private constructor(
     override suspend fun getOrders() = remoteSource.getOrders()
 
     override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
+    override suspend fun completeOrder(orderId: Long) = remoteSource.completeOrder(orderId)
+
     override suspend fun getCoupons()=remoteSource.getCoupons()
     override suspend fun setCartIdLocally(cartId: Long?) {
         localSource.setCartID(cartId)

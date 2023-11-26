@@ -97,6 +97,10 @@ object ApiClient : RemoteSource {
         getApiServices().delOrder(orderId)
     }
 
+    override suspend fun completeOrder(orderId: Long) = flow {
+        emit(getApiServices().completeOrder(orderId))
+    }
+
     override suspend fun createNewCartDraft(cartItems: List<LineItem>): Flow<Response<DraftResponse>> {
         return flow {
             emit(getApiServices().createNewDraftOrder(DraftRequest(DraftOrder(line_items = cartItems))))

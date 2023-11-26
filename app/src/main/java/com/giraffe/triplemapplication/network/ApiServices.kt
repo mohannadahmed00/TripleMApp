@@ -5,6 +5,7 @@ import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
+import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
@@ -70,6 +71,9 @@ interface ApiServices {
 
     @DELETE("orders/{orderId}/.json")
     suspend fun delOrder(@Path("orderId") orderId: Long)
+
+    @PUT("draft_orders/{orderId}/complete.json")
+    suspend fun completeOrder(@Path("orderId") orderId: Long): DraftOrder
 //    @GET
 //    suspend fun getCurrencies(): CurrencyResponse
     /*@POST("orders.json")

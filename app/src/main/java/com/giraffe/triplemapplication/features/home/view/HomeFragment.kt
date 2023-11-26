@@ -47,7 +47,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
 
     override fun handleView() {
         // Recycler View
-        productsAdapter = ProductAdapter(requireContext()) { navigateToProductInfoScreen(it) }
+        productsAdapter = ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value) { navigateToProductInfoScreen(it) }
         binding.productsRecyclerView.apply {
             adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {

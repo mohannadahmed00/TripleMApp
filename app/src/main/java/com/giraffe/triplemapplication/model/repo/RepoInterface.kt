@@ -13,6 +13,7 @@ import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.LineItem
+import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
@@ -88,6 +89,8 @@ interface RepoInterface {
     suspend fun getCartItems(): Flow<List<CartItem>>
 
     suspend fun getCartId(): Flow<Long>
+    suspend fun removeCartDraft(draftOrderId: Long, ): Flow<Response<Void>>
+
     suspend fun getCustomer(): Flow<Long>
     suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
 
@@ -110,6 +113,7 @@ interface RepoInterface {
     suspend fun createOrder(orderCreate: OrderCreate): Flow<CreateOrderResponse>
     suspend fun getOrders(): Flow<AllOrdersResponse>
     suspend fun delOrder(orderId: Long)
+    suspend fun completeOrder(orderId: Long): Flow<DraftOrder>
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>
 
     suspend fun setCartIdLocally(cartId: Long?)

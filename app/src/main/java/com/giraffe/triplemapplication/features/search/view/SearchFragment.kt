@@ -55,7 +55,7 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
     }
 
     private fun showSuccess(products: List<Product>) {
-        val adapter = ProductAdapter(requireContext()){navigateToProductInfo(it)}
+        val adapter = ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value) {navigateToProductInfo(it)}
         binding.searchRv.adapter = adapter
         adapter.submitList(products)
 

@@ -21,6 +21,10 @@ import kotlinx.coroutines.launch
 class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     override fun getViewModel(): Class<CheckoutVM> = CheckoutVM::class.java
 
+    companion object {
+        private const val TAG = "CheckoutFragment"
+    }
+
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,8 +69,10 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                 )
             )
         )
-        mViewModel.checkout(orderCreate)
-        observeCreateOrder()
+//        mViewModel.checkout(orderCreate)
+        mViewModel.completeOrder()
+//        observeCreateOrder()
+        observeDraftOrderOrder()
     }
 
     private fun observeCreateOrder() {
@@ -80,6 +86,26 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                     is Resource.Success -> {
                         dismissLoading()
                         navigateToOrderPlacedFragment()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeDraftOrderOrder() {
+        lifecycleScope.launch {
+            mViewModel.draftOrderFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        dismissLoading()
+                        Log.i("hahahahaha", "observeDraftOrderOrder: ${it.errorBody}")
+                    }
+                    Resource.Loading -> { showLoading() }
+                    is Resource.Success -> {
+                        dismissLoading()
+                        navigateToOrderPlacedFragment()
+                        mViewModel.removeCart()
+                        Log.i("hahahahaha", "observeDraftOrderOrder: ${it.value}")
                     }
                 }
             }
