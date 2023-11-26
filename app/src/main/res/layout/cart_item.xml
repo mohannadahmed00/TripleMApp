@@ -39,6 +39,7 @@
         app:layout_constraintStart_toStartOf="@id/tv_product_title"/>
     <TextView
         android:id="@+id/tv_price"
+        android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/red"
@@ -50,8 +51,8 @@
         app:layout_constraintStart_toStartOf="@id/tv_variants"/>
     <ImageView
         android:id="@+id/iv_minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
         android:src="@drawable/minus_ic"
@@ -63,10 +64,11 @@
 
     <TextView
         android:id="@+id/tv_count"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/dark_gary"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:text="1"
         android:layout_marginHorizontal="12dp"
         app:layout_constraintEnd_toStartOf="@id/iv_plus"
@@ -75,8 +77,8 @@
         app:layout_constraintBottom_toBottomOf="@id/iv_minus"/>
     <ImageView
         android:id="@+id/iv_plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/plus_ic"
         app:layout_constraintTop_toTopOf="@id/iv_minus"

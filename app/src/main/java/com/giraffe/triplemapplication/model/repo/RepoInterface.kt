@@ -113,4 +113,6 @@ interface RepoInterface {
 
     suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
 
+    suspend fun deleteCartItem(cartItem: CartItem): Flow<Int>
+
 }

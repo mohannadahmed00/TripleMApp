@@ -9,6 +9,6 @@ import com.giraffe.triplemapplication.model.products.Product
 data class CartItem(
     @PrimaryKey val variantId: Long,
     val product: Product,
-    val quantity: Int,
+    var quantity: Int,
     val isUploaded:Boolean
 )

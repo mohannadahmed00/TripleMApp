@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentAddressesBinding
 import com.giraffe.triplemapplication.features.profile.view.adapters.AddressesAdapter
@@ -187,9 +188,9 @@ class AddressesFragment : BaseFragment<ProfileVM, FragmentAddressesBinding>(),
         observeDeleteAddress()
         Snackbar.make(
             requireView(),
-            "Do you want to perform this action?",
+            getString(R.string.do_you_want_to_perform_this_action),
             Snackbar.LENGTH_LONG
-        ).setAction("Undo") {
+        ).setAction(getString(R.string.undo)) {
             // Perform the negative action (Undo)
             address.let {
                 val addressRequest = AddressRequest(

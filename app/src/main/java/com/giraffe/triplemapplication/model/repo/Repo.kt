@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.model.repo
 
+import android.util.Log
 import com.giraffe.triplemapplication.database.LocalSource
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.cart.CartItem
@@ -143,6 +144,7 @@ class Repo private constructor(
     }
 
     override suspend fun modifyCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
+        Log.i(TAG, "modifyCartDraft: ${localSource.getCartID() ?: 0}")
         return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, variants)
     }
 
@@ -226,6 +228,8 @@ class Repo private constructor(
         customerId: Long,
         addressId: Long
     )= remoteSource.setDefaultAddress(customerId, addressId)
+
+    override suspend fun deleteCartItem(cartItem: CartItem) = localSource.deleteCartItem(cartItem)
 
 
 }

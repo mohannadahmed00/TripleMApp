@@ -1,5 +1,4 @@
 package com.giraffe.triplemapplication
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.products.Product
@@ -24,8 +23,6 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     val languageFlow: StateFlow<Resource<String>> = _languageFlow.asStateFlow()
     private val _currentProduct : MutableStateFlow<Product?> = MutableStateFlow(null)
     val currentProduct : StateFlow<Product?> = _currentProduct.asStateFlow()
-    
-    //val allProducts : MutableStateFlow<List<Product?>> = MutableStateFlow(listOf(null))
 
     private val _cartIdFlow : MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
     val cartIdFlow : StateFlow<Resource<Long>> = _cartIdFlow.asStateFlow()
@@ -71,19 +68,7 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     fun getExchangeRateOf(currencyCode: Constants.Currencies){
         viewModelScope.launch {
             val pair = repo.getExchangeRateOf(currencyCode)
-            Log.d(TAG, "getExchangeRateOf: (Success) ${pair.first()}")
             _exchangeRateFlow.emit(pair.first())
-            /*when(val res = safeCall {  }){
-                is Resource.Failure -> {
-                    Log.e(TAG, "getExchangeRateOf: (Failure)")
-                }
-                Resource.Loading -> {
-                    Log.i(TAG, "getExchangeRateOf: (Loading)")
-                }
-                is Resource.Success -> {
-
-                }
-            }*/
         }
     }
 
