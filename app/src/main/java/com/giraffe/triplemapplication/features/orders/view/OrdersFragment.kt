@@ -97,7 +97,12 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
     }
 
     private fun navigateToOrderDetailsFragment(order: Order) {
-        val action: NavDirections = OrdersFragmentDirections.actionOrdersFragmentToOrderDetailsFragment()
-        Navigation.findNavController(requireView()).navigate(action)
+        val action: NavDirections = OrdersFragmentDirections.actionOrdersFragmentToOrderDetailsFragment(order.id)
+        findNavController().navigate(action)
+//        Navigation
+//            .findNavController(
+//                requireView())
+//            .navigate(
+//                action)
     }
 }

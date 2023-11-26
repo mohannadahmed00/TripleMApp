@@ -153,5 +153,9 @@
         android:id="@+id/orderDetailsFragment"
         android:name="com.giraffe.triplemapplication.features.orderdetails.view.OrderDetailsFragment"
         android:label="fragment_order_details"
-        tools:layout="@layout/fragment_order_details" />
+        tools:layout="@layout/fragment_order_details" >
+        <argument
+            android:name="orderId"
+            app:argType="long" />
+    </fragment>
 </navigation>
