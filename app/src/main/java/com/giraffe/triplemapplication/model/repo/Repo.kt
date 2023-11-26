@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class Repo private constructor(
@@ -24,6 +25,7 @@ class Repo private constructor(
 ) : RepoInterface {
     companion object {
         private const val TAG = "Repository"
+
         @Volatile
         private var INSTANCE: Repo? = null
         fun getInstance(remoteSource: RemoteSource, localSource: LocalSource): Repo {
@@ -117,13 +119,13 @@ class Repo private constructor(
 
     override suspend fun addNewAddress(
         customerId: String,
-        address: AddressRequest
+        address: AddressRequest,
     ) = remoteSource.addNewAddress(customerId, address)
 
     override suspend fun getAddresses(customerId: String) = remoteSource.getAddresses(customerId)
     override suspend fun deleteAddress(
         customerId: String,
-        addressId: String
+        addressId: String,
     ) = remoteSource.deleteAddress(customerId, addressId)
 
     override suspend fun uploadCartId(cartId: Long): Task<Void?>? {
@@ -131,19 +133,25 @@ class Repo private constructor(
         return remoteSource.uploadCartId(cartId)
     }
 
-    override suspend fun insertCartItem(cartItem: CartItem):Flow<Long> {
+    override suspend fun uploadCustomerId(customerId: Long): Task<Void?>? {
+        localSource.setCustomerID(customerId)//create fun here
+        return remoteSource.uploadCustomerId(customerId)
+    }
+
+    override suspend fun insertCartItem(cartItem: CartItem): Flow<Long> {
         //localSource.deleteAllCartItems()
         return localSource.insertCartItem(cartItem)
     }
-    override suspend fun modifyCartDraft(variants :List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.modifyCartDraft(localSource.getCartID()?:0, variants)
+
+    override suspend fun modifyCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
+        return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, variants)
     }
 
     override suspend fun createCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
         return remoteSource.createNewCartDraft(variants)
     }
 
-    override suspend fun getCartItems(): Flow<List<CartItem>>{
+    override suspend fun getCartItems(): Flow<List<CartItem>> {
         return localSource.getCartItems()
     }
 
@@ -151,26 +159,69 @@ class Repo private constructor(
         return remoteSource.getCartId()
     }
 
-    override suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double,Double>> {
+    override suspend fun getCustomer(): Flow<Long> {
+        return remoteSource.getCustomerId()
+    }
+
+    override suspend fun uploadWishListId(wishListId: Long): Task<Void?>? {
+        localSource.setWishListID(wishListId)
+        return remoteSource.uploadWishListId(wishListId)
+    }
+
+    override suspend fun insertWishListItem(product: Product): Flow<Long> {
+        return localSource.insertWishListItem(product)
+    }
+
+    override suspend fun deleteWishListItem(product: Product): Flow<Int> {
+        return localSource.deleteWishListItem(product)
+    }
+
+    override suspend fun deleteAllWishListItem() {
+        localSource.deleteAllWishListItems()
+    }
+
+    override suspend fun modifyWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
+        return remoteSource.modifyWishListDraft(localSource.getWishListID() ?: 0, variants)
+    }
+
+    override suspend fun createWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
+        return remoteSource.createNewCartDraft(variants)
+    }
+
+    override suspend fun getWishListItems(): Flow<List<Product>> {
+        return localSource.getWishListItems()
+    }
+
+    override fun getCustomerByEmail(email: String): Flow<CustomerResponse> =
+        remoteSource.getCustomerByEmail(email)
+
+    override suspend fun getWishListId(): Flow<Long> {
+        return remoteSource.getWishListId()
+    }
+
+
+    override suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double, Double>> {
         return localSource.getExchangeRateOf(currencyCode)
     }
-    override fun getAllFavorites(): Flow<List<Product>>  = localSource.getAllFavorites()
 
-
-    override suspend fun insertFavorite(product: Product): Long = localSource.insertFavorite(product)
-
-    override suspend fun deleteFavorite(product: Product): Int = localSource.deleteFavorite(product)
-
-    override suspend fun deleteAllFavorites() = localSource.deleteAllFavorites()
-
-    override suspend fun updateFavorite(product: Product) = localSource.updateFavorite(product)
-
-    override suspend fun createOrder(orderCreate: OrderCreate) = remoteSource.createOrder(orderCreate)
+    override suspend fun createOrder(orderCreate: OrderCreate) =
+        remoteSource.createOrder(orderCreate)
 
     override suspend fun getOrders() = remoteSource.getOrders()
 
     override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
     override suspend fun getCoupons()=remoteSource.getCoupons()
+    override suspend fun setCartIdLocally(cartId: Long?) {
+        localSource.setCartID(cartId)
+    }
+
+    override suspend fun setWishListIdLocally(wishListId: Long?) {
+        localSource.setWishListID(wishListId)
+    }
+
+    override suspend fun setCustomerIdLocally(customerId: Long) {
+        localSource.setCustomerID(customerId)
+    }
 
 
 }

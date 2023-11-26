@@ -82,7 +82,7 @@ interface ApiServices {
     suspend fun createCustomer(@Body customer : Request) : CustomerResponse
 
     //===================draft work area===================
-    @GET("draft_orders.json")
+    @POST("draft_orders.json")
     suspend fun createNewDraftOrder(@Body draftRequest: DraftRequest):Response<DraftResponse>
 
     @PUT("draft_orders/{draft_order_id}.json")
@@ -97,4 +97,6 @@ interface ApiServices {
 
     @GET("price_rules.json")
     suspend fun getCoupons():Response<CouponsResponse>
+    @GET("customers/search.json")
+    suspend fun getCustomerByEmail(@Query("email") email:String): CustomerResponse
 }

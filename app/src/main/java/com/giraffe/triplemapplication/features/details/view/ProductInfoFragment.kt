@@ -21,12 +21,12 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>(),
-    OnColorClickListener {
+class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>() , OnColorClickListener , OnSizeClickListener {
     companion object {
         private const val TAG = "ProductInfoFragment"
     }
-
+    private var selectedColor:String? = null
+    private var selectedSize:String? = null
     private lateinit var product: Product
     override fun getViewModel(): Class<ProductInfoVM> = ProductInfoVM::class.java
 
@@ -121,11 +121,9 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     }
 
     private fun showProductData(product: Product) {
-        val colorsAdapter = ColorsAdapter(this)
+        val colorsAdapter = ColorsAdapter(this , product.options!![1].values!!)
         binding.colorRv.adapter = colorsAdapter
-        colorsAdapter.submitList(product.options?.get(1)?.values)
-        val sizeAdapter = SizeAdapter()
-        sizeAdapter.submitList(product.options?.get(0)?.values)
+        val sizeAdapter = SizeAdapter(requireContext() ,this , product.options[0].values!!)
         binding.sizeRv.adapter = sizeAdapter
     }
 
@@ -257,12 +255,13 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
     }
 
-    override fun onClick(imageView: ImageView) {
-        if (imageView.visibility == View.GONE) {
-            imageView.visibility = View.VISIBLE
-        } else {
-            imageView.visibility = View.GONE
-        }
+    override fun onColorClickListener(color: String ) {
+        selectedColor = color
+
+    }
+
+    override fun onSizeClickListener(size: String) {
+        selectedSize = size
     }
 
 }

@@ -96,7 +96,8 @@ class UserInfoFragment : BaseFragment<UserInfoVM, FragmentUserInfoBinding>() {
     }
 
     private fun showSuccess() {
-        findNavController().setGraph(R.navigation.main_graph)
+
+        findNavController().navigate(R.id.loginFragment)
     }
 
     private fun showFailure(it: Resource.Failure) {

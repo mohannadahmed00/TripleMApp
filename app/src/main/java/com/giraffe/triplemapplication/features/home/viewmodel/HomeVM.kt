@@ -14,9 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeVM(private val repo:RepoInterface):ViewModel() {
+
+
 
     private val _allBrandsFlow: MutableStateFlow<Resource<AllBrandsResponse>> = MutableStateFlow(Resource.Loading)
     val allBrandsFlow: StateFlow<Resource<AllBrandsResponse>> = _allBrandsFlow.asStateFlow()
@@ -36,6 +39,9 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
         getAllProducts()
         getCoupons()
     }
+
+
+
 
     private fun getAllBrands() {
         viewModelScope.launch {

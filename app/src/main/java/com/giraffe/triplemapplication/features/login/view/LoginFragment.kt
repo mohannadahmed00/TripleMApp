@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
@@ -56,6 +57,7 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
     }
 
     private fun showSuccess() {
+        mViewModel.setData(binding.emailEditText.text.toString())
         findNavController().setGraph(R.navigation.main_graph)
     }
 

@@ -25,7 +25,8 @@ interface LocalSource {
 
     suspend fun setCurrency(currency:Constants.Currencies)
 
-    suspend fun setCartID(id:Long)
+    suspend fun setCartID(id:Long?)
+    suspend fun setCustomerID(id:Long)
     suspend fun getCartID():Long?
 
     suspend fun getCartItems(): Flow<List<CartItem>>
@@ -38,13 +39,19 @@ interface LocalSource {
 
     suspend fun updateCartItem(cartItem: CartItem)
 
+    suspend fun setWishListID(id:Long?)
+    suspend fun getWishListID():Long?
+
+    suspend fun getWishListItems(): Flow<List<Product>>
+
+    fun insertWishListItem(product: Product): Flow<Long>
+
+    fun deleteWishListItem(product: Product): Flow<Int>
+
+    suspend fun deleteAllWishListItems()
+
+    suspend fun updateWishListItem(product: Product)
+
     suspend fun getExchangeRateOf(currencyCode:Constants.Currencies):Flow<Pair<Double,Double>>
-
-
-    fun getAllFavorites(): Flow<List<Product>>
-    suspend fun insertFavorite(product: Product): Long
-    suspend fun deleteFavorite(product: Product): Int
-    suspend fun deleteAllFavorites()
-    suspend fun updateFavorite(product: Product)
 
 }

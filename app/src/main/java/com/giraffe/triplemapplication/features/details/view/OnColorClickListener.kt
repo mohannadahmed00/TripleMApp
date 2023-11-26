@@ -1,7 +1,5 @@
 package com.giraffe.triplemapplication.features.details.view
 
-import android.widget.ImageView
-
 interface OnColorClickListener {
-    fun onClick(imageView:ImageView)
+    fun onColorClickListener(color:String)
 }
