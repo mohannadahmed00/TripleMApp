@@ -33,6 +33,10 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
         Resource.Loading)
     val delAddressFlow: StateFlow<Resource<Void>> = _delAddressFlow.asStateFlow()
 
+    private val _defAddressFlow: MutableStateFlow<Resource<AddressResponse>> = MutableStateFlow(
+        Resource.Loading)
+    val defAddressFlow: StateFlow<Resource<AddressResponse>> = _defAddressFlow.asStateFlow()
+
     fun setLanguage(code: Constants.Languages) {
         viewModelScope.launch {
             repo.setLanguage(code)
@@ -75,4 +79,11 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
             _delAddressFlow.emit(safeApiCall{ repo.deleteAddress(customerId, addressId) })
         }
     }
+
+    fun setDefaultAddress(customerId:Long, addressId:Long){
+        viewModelScope.launch(Dispatchers.IO) {
+            _defAddressFlow.emit(safeApiCall{ repo.setDefaultAddress(customerId, addressId) })
+        }
+    }
+
 }

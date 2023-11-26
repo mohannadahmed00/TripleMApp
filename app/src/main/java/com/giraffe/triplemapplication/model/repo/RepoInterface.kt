@@ -2,11 +2,6 @@ package com.giraffe.triplemapplication.model.repo
 
 
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
@@ -115,4 +110,7 @@ interface RepoInterface {
     suspend fun setCartIdLocally(cartId: Long?)
     suspend fun setWishListIdLocally(cartId: Long?)
     suspend fun setCustomerIdLocally(cartId: Long)
+
+    suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
+
 }

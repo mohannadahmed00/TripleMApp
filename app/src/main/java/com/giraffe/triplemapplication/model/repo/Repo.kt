@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class Repo private constructor(
@@ -222,6 +221,11 @@ class Repo private constructor(
     override suspend fun setCustomerIdLocally(customerId: Long) {
         localSource.setCustomerID(customerId)
     }
+
+    override suspend fun setDefaultAddress(
+        customerId: Long,
+        addressId: Long
+    )= remoteSource.setDefaultAddress(customerId, addressId)
 
 
 }

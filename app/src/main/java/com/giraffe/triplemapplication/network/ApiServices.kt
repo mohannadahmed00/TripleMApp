@@ -99,4 +99,9 @@ interface ApiServices {
     suspend fun getCoupons():Response<CouponsResponse>
     @GET("customers/search.json")
     suspend fun getCustomerByEmail(@Query("email") email:String): CustomerResponse
+
+    @PUT("customers/{customer_id}/addresses/{address_id}/default.json")
+    suspend fun setDefaultAddress(
+        @Path("customer_id") customerId:Long,
+        @Path("address_id") addressId:Long):Response<AddressResponse>
 }

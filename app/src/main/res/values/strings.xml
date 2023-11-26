@@ -100,4 +100,9 @@
     <string name="for_orders_that_is_greater_than_or_equal">for orders that is greater than or equal %1$s</string>
     <string name="enter_apartment_number">Apartment number</string>
     <string name="enter_phone_number">Phone number</string>
+    <string name="empty_phone_number">empty phone number</string>
+    <string name="empty_building_number">empty building number</string>
+    <string name="empty_apartment_number">empty apartment number</string>
+    <string name="empty_tag">empty tag</string>
+    <string name="invalid_phone_number">invalid phone number</string>
 </resources>

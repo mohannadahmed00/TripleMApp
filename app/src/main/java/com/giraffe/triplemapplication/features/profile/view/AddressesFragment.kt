@@ -8,7 +8,6 @@ import android.location.LocationManager
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
@@ -202,8 +201,28 @@ class AddressesFragment : BaseFragment<ProfileVM, FragmentAddressesBinding>(),
         }.show()
     }
 
-    private fun showConfirmationSnackBar(view: View) {
+    override fun onAddressLongPress(addressId: Long, position: Int,oldDefaultPosition:Int) {
+        mViewModel.setDefaultAddress(6666401546315, addressId)
+        observeSetDefaultAddress(position,oldDefaultPosition)
+    }
 
+    private fun observeSetDefaultAddress(position: Int,oldDefaultPosition:Int) {
+        lifecycleScope.launch {
+            mViewModel.defAddressFlow.collect{
+                when(it){
+                    is Resource.Failure -> {
+                        Log.e(TAG, "observeSetDefaultAddress: (Failure ${it.errorCode}) ${it.errorBody}")
+                    }
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeSetDefaultAddress: (Loading)")
+                    }
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeSetDefaultAddress: (Success)")
+                        adapter.selectNewDefault(position,oldDefaultPosition)
+                    }
+                }
+            }
+        }
     }
 
     private fun observeAddNewAddress() {

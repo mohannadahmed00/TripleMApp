@@ -3,6 +3,7 @@ package com.giraffe.triplemapplication.network
 
 import android.util.Log
 import com.giraffe.triplemapplication.model.address.AddressRequest
+import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
@@ -13,11 +14,9 @@ import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
-import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -335,6 +334,15 @@ object ApiClient : RemoteSource {
                     "getting wish list id fail"
                 )
             }
+        }
+    }
+
+    override suspend fun setDefaultAddress(
+        customerId: Long,
+        addressId: Long
+    ): Flow<Response<AddressResponse>> {
+        return flow {
+            emit(getApiServices().setDefaultAddress(customerId, addressId))
         }
     }
 
