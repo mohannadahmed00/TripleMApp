@@ -68,9 +68,9 @@ class Repo private constructor(
         return remoteSource.getCurrentUser()
     }
 
-    override fun isLoggedIn(): Boolean {
-        return remoteSource.isLoggedIn()
-    }
+    override fun isLoggedIn(): Flow<Boolean>  =
+       remoteSource.isLoggedIn()
+
 
     override fun logout(): Flow<Unit> = remoteSource.logout()
 

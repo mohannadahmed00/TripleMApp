@@ -47,7 +47,7 @@ interface RepoInterface {
     fun doPasswordsMatch(password: String, confirmPassword: String): Boolean
     fun isDataValid(email: String, password: String, confirmPassword: String): Boolean
     fun getCurrentUser(): FirebaseUser
-    fun isLoggedIn(): Boolean
+    fun isLoggedIn(): Flow<Boolean>
     fun logout() : Flow<Unit>
 
     fun createCustomer(customer: Request): Flow<CustomerResponse>

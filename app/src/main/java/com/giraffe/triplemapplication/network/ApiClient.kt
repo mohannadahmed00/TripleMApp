@@ -168,8 +168,12 @@ object ApiClient : RemoteSource {
         return FirebaseAuth.getInstance().currentUser!!
     }
 
-    override fun isLoggedIn(): Boolean {
-        return FirebaseAuth.getInstance().currentUser != null
+    override fun isLoggedIn(): Flow<Boolean> = flow {
+        if(FirebaseAuth.getInstance().currentUser != null){
+            emit(true)
+        }else{
+            emit(false)
+        }
     }
 
     override fun logout() :Flow<Unit> = flow{

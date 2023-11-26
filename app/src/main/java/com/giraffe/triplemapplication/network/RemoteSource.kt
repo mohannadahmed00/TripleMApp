@@ -43,7 +43,7 @@ interface RemoteSource {
     fun signInFirebase(email: String, password: String): Flow<AuthResult>
 
     fun getCurrentUser(): FirebaseUser
-    fun isLoggedIn(): Boolean
+    fun isLoggedIn(): Flow<Boolean>
     fun logout():Flow<Unit>
     fun createCustomer(customer: Request): Flow<CustomerResponse>
     suspend fun getAllCategories(): Flow<AllCategoriesResponse>
