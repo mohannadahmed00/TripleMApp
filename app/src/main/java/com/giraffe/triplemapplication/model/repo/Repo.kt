@@ -210,6 +210,7 @@ class Repo private constructor(
     override suspend fun getOrders() = remoteSource.getOrders()
 
     override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
+    override suspend fun getCoupons()=remoteSource.getCoupons()
     override suspend fun setCartIdLocally(cartId: Long?) {
         localSource.setCartID(cartId)
     }
