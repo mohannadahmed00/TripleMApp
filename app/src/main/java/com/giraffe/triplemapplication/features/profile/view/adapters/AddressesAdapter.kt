@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.giraffe.triplemapplication.databinding.AddressItemBinding
 import com.giraffe.triplemapplication.model.address.Address
 
-class AddressesAdapter(private val addresses: MutableList<Address>,private val onAddressClick: OnAddressClick): Adapter<AddressesAdapter.AddressVH>() {
+class AddressesAdapter(
+    private val addresses: MutableList<Address>,
+    private val onAddressClick: OnAddressClick,
+) : Adapter<AddressesAdapter.AddressVH>() {
 
     //private var selectedItemPosition: Int = -1
 
-    class AddressVH(val binding: AddressItemBinding) :ViewHolder(binding.root)
+    class AddressVH(val binding: AddressItemBinding) : ViewHolder(binding.root)
 
     fun updateList(list: List<Address>) {
         this.addresses.clear()
@@ -21,8 +24,12 @@ class AddressesAdapter(private val addresses: MutableList<Address>,private val o
 
     fun deleteItem(position: Int) {
         addresses.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, addresses.size)
+        if (position == addresses.size - 1) {
+            notifyDataSetChanged()
+        } else {
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, addresses.size)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressVH {
@@ -30,7 +37,7 @@ class AddressesAdapter(private val addresses: MutableList<Address>,private val o
         return AddressVH(binding)
     }
 
-    override fun getItemCount()= addresses.size
+    override fun getItemCount() = addresses.size
 
     override fun onBindViewHolder(holder: AddressVH, position: Int) {
         val item = addresses[position]
@@ -40,7 +47,7 @@ class AddressesAdapter(private val addresses: MutableList<Address>,private val o
         holder.binding.tvAddressTitle.text = item.name
         holder.binding.tvAddress.text = item.address1
         holder.binding.ivDelete.setOnClickListener {
-            onAddressClick.onAddressClick(item,position)
+            onAddressClick.onAddressClick(item, position)
         }
 
 
@@ -60,7 +67,7 @@ class AddressesAdapter(private val addresses: MutableList<Address>,private val o
         }*/
     }
 
-    interface OnAddressClick{
-        fun onAddressClick(address: Address,position:Int)
+    interface OnAddressClick {
+        fun onAddressClick(address: Address, position: Int)
     }
 }

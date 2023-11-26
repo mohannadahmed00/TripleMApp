@@ -85,7 +85,7 @@ interface RemoteSource {
     suspend fun getCartId():Flow<Long>
 
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>
-    suspend fun getCartId(): Flow<Long>
+
     suspend fun uploadCustomerId(cartId: Long): Task<Void?>?
     suspend fun getCustomerId(): Flow<Long>
     suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>>
