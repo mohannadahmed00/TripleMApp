@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.databinding.ItemOrderBinding
 import com.giraffe.triplemapplication.model.orders.Order
+import com.giraffe.triplemapplication.utils.convert
 
 class OrdersAdapter(
     private val onDelAction: (Long) -> Unit,
+    private val exchangeRate: Pair<Double,Double>?,
+    private val currency: String,
     private val onItemClick: (Order) -> Unit
 ) : ListAdapter<Order, OrdersAdapter.ViewHolder>(OrdersDataDiffUtil()) {
 
@@ -29,6 +32,7 @@ class OrdersAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val current = getItem(position)
         holder.binding.orderPrice.text = current.total_price
+        holder.binding.orderPrice.text = "${ current.total_price.toDouble()?.convert(exchangeRate).toString()} $currency"
         holder.binding.orderCreatedAt.text = current.created_at
         holder.binding.delOrder.setOnClickListener { onDelAction(current.id) }
         holder.binding.item.setOnClickListener { onItemClick(current) }

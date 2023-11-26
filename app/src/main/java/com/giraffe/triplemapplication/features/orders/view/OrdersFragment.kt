@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentOrdersBinding
+import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
 import com.giraffe.triplemapplication.features.checkout.view.CheckoutFragmentDirections
 import com.giraffe.triplemapplication.features.checkout.view.OrderPlacedFragmentDirections
 import com.giraffe.triplemapplication.features.orders.viewmodel.OrdersViewModel
@@ -53,7 +54,15 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
 
     override fun handleView() {
         // Recycler View
-        ordersAdapter = OrdersAdapter(::showDelDialog) { navigateToOrderDetailsFragment(it) }
+        lifecycleScope.launch {
+            sharedViewModel.currencyFlow.collect {
+                ordersAdapter = if (it is Resource.Success) {
+                    OrdersAdapter(::showDelDialog, sharedViewModel.exchangeRateFlow.value, it.value) { product -> navigateToOrderDetailsFragment(product) }
+                } else {
+                    OrdersAdapter(::showDelDialog, sharedViewModel.exchangeRateFlow.value, "") { product -> navigateToOrderDetailsFragment(product) }
+                }
+            }
+        }
         binding.ordersRecyclerView.apply {
             adapter = ordersAdapter
             layoutManager = LinearLayoutManager(context).apply {
