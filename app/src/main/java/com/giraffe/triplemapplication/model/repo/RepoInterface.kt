@@ -48,7 +48,7 @@ interface RepoInterface {
     fun isDataValid(email: String, password: String, confirmPassword: String): Boolean
     fun getCurrentUser(): FirebaseUser
     fun isLoggedIn(): Boolean
-    fun logout()
+    fun logout() : Flow<Unit>
 
     fun createCustomer(customer: Request): Flow<CustomerResponse>
 
@@ -112,7 +112,9 @@ interface RepoInterface {
     suspend fun delOrder(orderId: Long)
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>
 
-    suspend fun setCartIdLocally(cartId: Long?)
-    suspend fun setWishListIdLocally(cartId: Long?)
-    suspend fun setCustomerIdLocally(cartId: Long)
+    suspend fun setCartIdLocally(cartId: Long?) :Flow<Unit>
+    suspend fun setWishListIdLocally(cartId: Long?) : Flow<Unit>
+    suspend fun setCustomerIdLocally(cartId: Long) : Flow<Unit>
+
+    suspend fun clearData() : Flow<Unit>
 }

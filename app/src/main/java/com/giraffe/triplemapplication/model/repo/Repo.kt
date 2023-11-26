@@ -72,9 +72,8 @@ class Repo private constructor(
         return remoteSource.isLoggedIn()
     }
 
-    override fun logout() {
-        remoteSource.logout()
-    }
+    override fun logout(): Flow<Unit> = remoteSource.logout()
+
 
     override fun createCustomer(customer: Request): Flow<CustomerResponse> =
         remoteSource.createCustomer(customer)
@@ -210,18 +209,20 @@ class Repo private constructor(
     override suspend fun getOrders() = remoteSource.getOrders()
 
     override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
-    override suspend fun getCoupons()=remoteSource.getCoupons()
-    override suspend fun setCartIdLocally(cartId: Long?) {
-        localSource.setCartID(cartId)
-    }
+    override suspend fun getCoupons() = remoteSource.getCoupons()
+    override suspend fun setCartIdLocally(cartId: Long?): Flow<Unit> = localSource.setCartID(cartId)
 
-    override suspend fun setWishListIdLocally(wishListId: Long?) {
+
+    override suspend fun setWishListIdLocally(wishListId: Long?): Flow<Unit> =
         localSource.setWishListID(wishListId)
-    }
 
-    override suspend fun setCustomerIdLocally(customerId: Long) {
+
+    override suspend fun setCustomerIdLocally(customerId: Long): Flow<Unit> =
         localSource.setCustomerID(customerId)
-    }
+
+
+    override suspend fun clearData(): Flow<Unit> =
+        localSource.clearData()
 
 
 }

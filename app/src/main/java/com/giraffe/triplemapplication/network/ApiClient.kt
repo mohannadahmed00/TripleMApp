@@ -172,8 +172,8 @@ object ApiClient : RemoteSource {
         return FirebaseAuth.getInstance().currentUser != null
     }
 
-    override fun logout() {
-        FirebaseAuth.getInstance().signOut()
+    override fun logout() :Flow<Unit> = flow{
+        emit(FirebaseAuth.getInstance().signOut())
     }
 
     override fun createCustomer(customerResponse: Request): Flow<CustomerResponse> = flow {

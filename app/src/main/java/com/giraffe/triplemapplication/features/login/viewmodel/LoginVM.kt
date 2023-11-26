@@ -14,7 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 
 class LoginVM(private val repo: RepoInterface) : ViewModel() {
@@ -24,18 +26,21 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
     val currentUser: StateFlow<Resource<AuthResult>> = _firebaseUser.asStateFlow()
 
 
-    fun login(email : String , password : String ){
+
+    fun login(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _firebaseUser.emit(safeCall { repo.signInFirebase(email, password)})
+            _firebaseUser.emit(safeCall { repo.signInFirebase(email, password) })
 //            repo.uploadCustomerId()
 
         }
     }
-    fun setData(email:String){
+
+    fun setData(email: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            repo.setWishListIdLocally(repo.getWishListId().first())
-            repo.setCartIdLocally(repo.getCartId().first())
+
+            repo.setWishListIdLocally(repo.getWishListId().first() )
+            repo.setCartIdLocally( repo.getCartId().first() )
             repo.setCustomerIdLocally(repo.getCustomerByEmail(email).first().customer.id)
             Log.i("TAG", "setData: ${repo.getCustomer()}")
 
