@@ -21,12 +21,14 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>() , OnColorClickListener , OnSizeClickListener {
+class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBinding>(),
+    OnColorClickListener, OnSizeClickListener {
     companion object {
         private const val TAG = "ProductInfoFragment"
     }
-    private var selectedColor:String? = null
-    private var selectedSize:String? = null
+
+    private var selectedColor: String? = null
+    private var selectedSize: String? = null
     private lateinit var product: Product
     override fun getViewModel(): Class<ProductInfoVM> = ProductInfoVM::class.java
 
@@ -121,9 +123,9 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     }
 
     private fun showProductData(product: Product) {
-        val colorsAdapter = ColorsAdapter(this , product.options!![1].values!!)
+        val colorsAdapter = ColorsAdapter(this, product.options!![1].values!!)
         binding.colorRv.adapter = colorsAdapter
-        val sizeAdapter = SizeAdapter(requireContext() ,this , product.options[0].values!!)
+        val sizeAdapter = SizeAdapter(requireContext(), this, product.options[0].values!!)
         binding.sizeRv.adapter = sizeAdapter
     }
 
@@ -137,9 +139,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
     }
 
-    private fun showFailure(it: Resource.Failure) {
-        Snackbar.make(requireView(), it.errorBody.toString(), Snackbar.LENGTH_SHORT).show()
-    }
+
 
 
     override fun handleClicks() {
@@ -148,14 +148,39 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         }
 
         binding.addToCartButton.setOnClickListener {
-            val cartItem = CartItem(
-                variantId = product.variants?.get(0)?.id ?: 40152908693579,//?????
-                product = product,
-                quantity = 1,
-                false
-            )
-            mViewModel.insertCartItem(cartItem)
-            observeInsertCartItem()
+            if (selectedColor != null && selectedSize != null) {
+                val cartItem = CartItem(
+                    variantId = product.variants?.first { it.option1 == selectedSize && it.option2 == selectedColor }!!.id!!.toLong(),//?????
+                    product = product,
+                    quantity = 1,
+                    false
+                )
+                mViewModel.insertCartItem(cartItem)
+                observeInsertCartItem()
+                showSnackbar(true)
+            } else {
+                showSnackbar(false)
+            }
+        }
+    }
+
+    private fun showSnackbar(isSuccess: Boolean) {
+        if (isSuccess) {
+
+            Snackbar.make(
+                requireView(),
+                "Added to cart Successfully",
+                Snackbar.LENGTH_SHORT
+            ).show()
+
+        } else {
+
+            Snackbar.make(
+                requireView(),
+                "You cannot add to cart without choosing neither color nor size",
+                Snackbar.LENGTH_SHORT
+            ).show()
+
         }
     }
 
@@ -255,7 +280,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
     }
 
-    override fun onColorClickListener(color: String ) {
+    override fun onColorClickListener(color: String) {
         selectedColor = color
 
     }

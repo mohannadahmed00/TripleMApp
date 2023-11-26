@@ -81,7 +81,7 @@ interface ApiServices {
     suspend fun createCustomer(@Body customer : Request) : CustomerResponse
 
     //===================draft work area===================
-    @GET("draft_orders.json")
+    @POST("draft_orders.json")
     suspend fun createNewDraftOrder(@Body draftRequest: DraftRequest):Response<DraftResponse>
 
     @PUT("draft_orders/{draft_order_id}.json")
