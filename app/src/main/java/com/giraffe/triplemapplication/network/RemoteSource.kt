@@ -12,6 +12,7 @@ import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.discount.CouponsResponse
 
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
@@ -81,4 +82,6 @@ interface RemoteSource {
 
     suspend fun uploadCartId(cartId: Long): Task<Void?>?
     suspend fun getCartId():Flow<Long>
+
+    suspend fun getCoupons(): Flow<Response<CouponsResponse>>
 }

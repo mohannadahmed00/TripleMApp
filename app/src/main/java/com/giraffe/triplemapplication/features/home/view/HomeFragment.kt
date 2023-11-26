@@ -1,15 +1,19 @@
 package com.giraffe.triplemapplication.features.home.view
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
 import com.giraffe.triplemapplication.features.home.adapters.BrandsAdapter
@@ -21,7 +25,10 @@ import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
 import kotlinx.coroutines.launch
 
-class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
+class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.OnCodeClick {
+    companion object{
+        private const val TAG = "HomeFragment"
+    }
     override fun getViewModel(): Class<HomeVM> = HomeVM::class.java
 
     private lateinit var productsAdapter: ProductAdapter
@@ -62,16 +69,40 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
 
         handleClicks()
 
-        images = arrayListOf()
+        /*images = arrayListOf()
         images.add(R.drawable.banner)
         images.add(R.drawable.banner)
-        images.add(R.drawable.banner)
-        sliderAdapter = SliderAdapter(requireContext(), images)
-        binding.sliderViewPager.adapter = sliderAdapter
+        images.add(R.drawable.banner)*/
+
 
         observeGetAllProducts()
         observeGetAllCategories()
         observeGetAllBrands()
+        observeGetCoupons()
+    }
+
+    private fun observeGetCoupons() {
+        lifecycleScope.launch {
+            mViewModel.couponsFlow.collect{
+                when(it){
+                    is Resource.Failure -> {
+                        Log.e(TAG, "observeGetCoupons: (Failure  ${it.errorCode}) ${it.errorBody}")
+                    }
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeGetCoupons: (Loading)")
+                    }
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeGetCoupons: ${it.value}")
+
+                        val coupons = it.value.price_rules.map {priceRule ->
+                            priceRule.title
+                        }
+                        sliderAdapter = SliderAdapter(requireContext(), coupons,this@HomeFragment)
+                        binding.sliderViewPager.adapter = sliderAdapter
+                    }
+                }
+            }
+        }
     }
 
     private fun observeGetAllBrands() {
@@ -137,5 +168,15 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>() {
         sharedViewModel.setCurrentProduct(product)
         val action  = HomeFragmentDirections.actionHomeFragmentToProductInfoFragment()
         findNavController().navigate(action)
+    }
+    private fun copyToClipboard(text: String) {
+        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("label", text)
+        clipboardManager.setPrimaryClip(clipData)
+    }
+
+    override fun onClick(code: String) {
+        copyToClipboard(code)
+        Toast.makeText(requireContext(), "copied: $code", Toast.LENGTH_SHORT).show()
     }
 }

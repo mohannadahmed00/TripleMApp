@@ -3,14 +3,13 @@ package com.giraffe.triplemapplication.network
 
 import android.util.Log
 import com.giraffe.triplemapplication.model.address.AddressRequest
-import com.giraffe.triplemapplication.model.customers.CustomerResponse
-import com.giraffe.triplemapplication.model.customers.Request
-import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
-import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
+import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
@@ -21,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
 import retrofit2.Response
@@ -221,5 +219,7 @@ object ApiClient : RemoteSource {
             }
         }
     }
+
+    override suspend fun getCoupons() = flow {emit(getApiServices().getCoupons())}
 
 }

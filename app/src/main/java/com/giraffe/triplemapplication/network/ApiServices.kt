@@ -10,6 +10,7 @@ import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
@@ -93,4 +94,7 @@ interface ApiServices {
     suspend fun removeDraftOrder(
         @Path("draft_order_id") draftOrderId:Long
     ):Response<Void>
+
+    @GET("price_rules.json")
+    suspend fun getCoupons():Response<CouponsResponse>
 }
