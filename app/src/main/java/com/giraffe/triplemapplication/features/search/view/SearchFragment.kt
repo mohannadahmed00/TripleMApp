@@ -36,19 +36,10 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
 
     private fun observeData() {
         lifecycleScope.launch {
-            mViewModel.allProductsFlow.collectLatest {it ->
-                when(it){
-                    is Resource.Failure -> {
-                        showFailure(it)
-                        dismissLoading()
-                    }
-                    Resource.Loading -> {
-                        showLoading()
-                    }
-                    is Resource.Success -> {
-                        showSuccess(it.value.products)
-                        dismissLoading()
-                    }
+            sharedViewModel.allProducts.collectLatest {
+                    if(!it.isNullOrEmpty()){
+                        showSuccess(it)
+
                 }
             }
         }
@@ -90,13 +81,14 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
 
     private fun navigateToProductInfo(product: Product) {
         sharedViewModel.setCurrentProduct(product)
-
         findNavController().navigate(R.id.productInfoFragment)
     }
 
-    private fun showFailure(it: Resource.Failure) {
-        Snackbar.make(requireView() ,it.errorBody.toString() , Snackbar.LENGTH_SHORT).show()
-    }
 
-    override fun handleClicks() {}
+
+    override fun handleClicks() {
+        binding.filterBtn.setOnClickListener {
+            findNavController().navigate(R.id.filterFragment)
+        }
+    }
 }

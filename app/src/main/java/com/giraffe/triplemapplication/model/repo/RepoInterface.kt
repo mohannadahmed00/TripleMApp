@@ -99,7 +99,7 @@ interface RepoInterface {
   
     fun getCartId(): Flow<Long>
     fun getCustomerIdFromFirebase(): Flow<Long>
-    fun getCustomerIdLocally(): Long?
+    suspend fun getCustomerIdLocally(): Long?
 
   suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
 
@@ -126,9 +126,9 @@ interface RepoInterface {
     suspend fun completeOrder(orderId: Long): Flow<DraftOrder>
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>
 
-    fun setCartIdLocally(cartId: Long?) :Flow<Unit>
-    fun setWishListIdLocally(cartId: Long?) : Flow<Unit>
-    fun setCustomerIdLocally(cartId: Long) : Flow<Unit>
+    suspend fun setCartIdLocally(cartId: Long?)
+    suspend fun setWishListIdLocally(cartId: Long?)
+    suspend fun setCustomerIdLocally(cartId: Long)
 
     suspend fun clearData() : Flow<Unit>
 }

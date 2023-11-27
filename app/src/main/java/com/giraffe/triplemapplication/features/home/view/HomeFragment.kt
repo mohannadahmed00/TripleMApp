@@ -158,7 +158,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
                     is Resource.Failure -> { dismissLoading() }
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
-                        //sharedViewModel.allProducts.emit(it.value.products)
+                        sharedViewModel.setAllProduct(it.value.products)
                         productsAdapter.submitList(it.value.products)
                         dismissLoading()
                         binding.homeScreen.visibility = View.VISIBLE

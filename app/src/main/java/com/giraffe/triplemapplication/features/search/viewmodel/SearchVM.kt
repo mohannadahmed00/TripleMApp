@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.features.search.viewmodel
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
@@ -14,16 +15,17 @@ import kotlinx.coroutines.launch
 
 class SearchVM(private val repo: RepoInterface): ViewModel() {
 
-    private val _allProductsFlow: MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(
-        Resource.Loading)
-    val allProductsFlow: StateFlow<Resource<AllProductsResponse>> = _allProductsFlow.asStateFlow()
-    init {
-        getAllProducts()
-    }
-    private fun getAllProducts() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _allProductsFlow.emit(safeCall { repo.getAllProducts() })
-        }
-    }
 
+    fun setCategory(category:String){
+        FilterOptions.currentCategory = category
+    }
+    fun setOnSale(onSale:Boolean){
+        FilterOptions.onSale = onSale
+    }
+    fun setBrands(brands : List<String>){
+        FilterOptions.selectedBrands = brands
+    }
+    fun setColor(selectedColor: String){
+        FilterOptions.selectedColor = selectedColor
+    }
 }

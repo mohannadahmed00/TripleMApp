@@ -161,4 +161,9 @@
             android:id="@+id/action_orderDetailsFragment_to_productInfoFragment"
             app:destination="@id/productInfoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.giraffe.triplemapplication.features.search.view.FilterFragment"
+        android:label="fragment_filter"
+        tools:layout="@layout/fragment_filter" />
 </navigation>

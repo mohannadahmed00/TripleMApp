@@ -94,7 +94,7 @@ interface RemoteSource {
   suspend fun createNewWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
 
     fun getCustomerIdFromFirebase(): Flow<Long>
-    suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>>
+
   suspend fun modifyWishListDraft(
         draftOrderId: Long,
         draftRequest: DraftRequest,

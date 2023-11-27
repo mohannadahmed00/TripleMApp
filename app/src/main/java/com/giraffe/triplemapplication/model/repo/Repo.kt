@@ -175,7 +175,7 @@ class Repo private constructor(
         return remoteSource.getCustomerIdFromFirebase()
     }
 
-    override fun getCustomerIdLocally(): Long? {
+    override suspend fun getCustomerIdLocally(): Long? {
         return localSource.getCustomerID()
     }
 
@@ -235,16 +235,22 @@ class Repo private constructor(
 
 
 
-    override fun setCartIdLocally(cartId: Long?): Flow<Unit> = localSource.setCartID(cartId)
-
+    override suspend fun setCartIdLocally(cartId: Long?) {
+         localSource.setCartID(cartId)
+        }
     
 
-    override fun setWishListIdLocally(wishListId: Long?): Flow<Unit> =
+    override suspend fun setWishListIdLocally(wishListId: Long?) {
         localSource.setWishListID(wishListId)
 
+    }
 
-    override fun setCustomerIdLocally(customerId: Long): Flow<Unit> =
+
+    override suspend fun setCustomerIdLocally(customerId: Long) {
+
         localSource.setCustomerID(customerId)
+
+    }
 
 
     override suspend fun clearData(): Flow<Unit> =

@@ -292,9 +292,6 @@ object ApiClient : RemoteSource {
         }
     }
 
-    override suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>> {
-        TODO()
-    }
 
     override suspend fun modifyWishListDraft(
         draftOrderId: Long,

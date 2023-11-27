@@ -25,9 +25,9 @@ interface LocalSource {
 
     suspend fun setCurrency(currency:Constants.Currencies)
 
-    fun setCartID(id:Long?) : Flow<Unit>
-    fun setCustomerID(id:Long) : Flow<Unit>
-    fun getCustomerID() : Long?
+    suspend fun setCartID(id:Long?)
+    suspend fun setCustomerID(id:Long)
+    suspend fun getCustomerID() : Long?
     suspend fun getCartID():Long?
 
     suspend fun getCartItems(): Flow<List<CartItem>>
@@ -40,7 +40,7 @@ interface LocalSource {
 
     suspend fun updateCartItem(cartItem: CartItem)
 
-    fun setWishListID(id:Long?) : Flow<Unit>
+    suspend fun setWishListID(id:Long?)
     suspend fun getWishListID():Long?
 
     suspend fun getWishListItems(): Flow<List<Product>>
