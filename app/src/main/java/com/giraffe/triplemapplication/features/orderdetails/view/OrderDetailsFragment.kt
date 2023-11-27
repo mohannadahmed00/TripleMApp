@@ -58,8 +58,6 @@ class OrderDetailsFragment : BaseFragment<OrderDetailsVM, FragmentOrderDetailsBi
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         val order = it.value.order
-                        val fullName = "${order.customer.first_name} ${order.customer.last_name}".replace("null", "")
-                        binding.orderedBy.text = fullName
                         binding.price.text = "${order.current_total_price} ${order.currency}"
                         binding.discount.text = "${order.total_discounts} ${order.currency}"
 

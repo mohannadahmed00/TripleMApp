@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.features.orders.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,7 +74,8 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         dismissLoading()
-                        ordersAdapter.submitList(it.value.orders.filter { order -> order.customer?.id == mViewModel.customerId })
+                        Log.i("hehehehehehe", "observeGetOrders: ${mViewModel.customerId}")
+                        ordersAdapter.submitList(it.value.orders)//.filter { order -> order.customer?.id == mViewModel.customerId })
                     }
                 }
             }
