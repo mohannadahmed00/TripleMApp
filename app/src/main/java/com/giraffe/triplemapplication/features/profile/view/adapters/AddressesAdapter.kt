@@ -61,8 +61,10 @@ class AddressesAdapter(
         if (item.default == true){
             defaultPosition = position
             holder.binding.ivStar.show()
+            holder.binding.ivDelete.hide()
         }else{
             holder.binding.ivStar.hide()
+            holder.binding.ivDelete.show()
         }
 
         holder.binding.root.setOnLongClickListener {

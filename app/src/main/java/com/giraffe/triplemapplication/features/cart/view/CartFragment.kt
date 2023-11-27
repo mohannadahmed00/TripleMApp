@@ -176,7 +176,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
 
                     is Resource.Success -> {
                         Log.d(TAG, "observeUpdateCartDraft: (Success) ${Gson().toJson(it.value)}")
-                        //mViewModel.uploadCartId(it.value.draft_order.id)
+                        mViewModel.uploadCartId(it.value.draft_order.id)
                         mViewModel.insertCartIdLocally(it.value.draft_order.id)
                     }
                 }

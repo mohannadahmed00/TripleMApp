@@ -8,7 +8,6 @@ import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
-import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
@@ -109,7 +108,7 @@ interface RepoInterface {
     fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse>
 
 
-    fun getWishListId(): Flow<Long>
+    suspend fun getWishListId(): Flow<Long>
 
     suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double, Double>>
 

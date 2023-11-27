@@ -48,9 +48,7 @@ class CartAdapter(
         val variantDetails = item.product.variants?.firstOrNull {
             it.id == item.variantId
         }
-        holder.binding.tvPrice.text =
-            variantDetails?.price?.toDouble()?.convert(exchangeRate).toString()
-                .plus(" ${holder.binding.root.context.getString(currencySymbol)}")
+        holder.binding.tvPrice.text = variantDetails?.price?.toDouble()?.convert(exchangeRate).toString().plus(" ${holder.binding.root.context.getString(currencySymbol)}")
         holder.binding.tvVariants.text = variantDetails?.title ?: ""
         holder.binding.tvCount.text = item.quantity.toString()
         holder.binding.ivPlus.setOnClickListener {

@@ -21,7 +21,6 @@ import com.giraffe.triplemapplication.features.splash.viewmodel.SplashVM
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.ExchangeRatesWorker
 import com.giraffe.triplemapplication.utils.Resource
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -207,8 +206,8 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
 //                        findNavController().setGraph(R.navigation.auth_graph)
 
                         //val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
-                        val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
-                        findNavController().navigate(action)
+                        //val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
+                        //findNavController().navigate(action)
                     }
                 }
             }

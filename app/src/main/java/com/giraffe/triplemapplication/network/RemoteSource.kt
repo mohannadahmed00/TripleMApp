@@ -6,7 +6,6 @@ import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
-import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
@@ -105,5 +104,4 @@ interface RemoteSource {
     suspend fun getWishListId(): Flow<Long>
 
     suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
-    fun getWishListId(): Flow<Long>
 }

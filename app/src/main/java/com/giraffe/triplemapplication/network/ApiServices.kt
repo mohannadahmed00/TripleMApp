@@ -106,8 +106,6 @@ interface ApiServices {
 
     @GET("price_rules.json")
     suspend fun getCoupons():Response<CouponsResponse>
-    @GET("customers/search.json")
-    suspend fun getCustomerByEmail(@Query("email") email:String): CustomerResponse
 
     @PUT("customers/{customer_id}/addresses/{address_id}/default.json")
     suspend fun setDefaultAddress(

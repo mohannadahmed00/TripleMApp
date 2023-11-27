@@ -3,6 +3,8 @@ package com.giraffe.triplemapplication.features.cart.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.request.DraftOrder
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
@@ -57,13 +59,13 @@ class CartVM(private val repo: RepoInterface) : ViewModel() {
 
     fun updateCartDraft(lineItems: List<LineItem>) {
         viewModelScope.launch {
-            _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(lineItems) })
+            _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(DraftRequest(DraftOrder(line_items = lineItems))) })
         }
     }
 
     fun createCartDraft(lineItems: List<LineItem>) {
         viewModelScope.launch {
-            _creationCartFlow.emit(safeApiCall { repo.createCartDraft(lineItems) })
+            _creationCartFlow.emit(safeApiCall { repo.createCartDraft(DraftRequest(DraftOrder(line_items = lineItems))) })
         }
     }
 

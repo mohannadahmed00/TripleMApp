@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.cart.CartItem
-import com.giraffe.triplemapplication.model.cart.request.AppliedDiscount
-import com.giraffe.triplemapplication.model.cart.request.Customer
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
@@ -17,9 +15,7 @@ import com.giraffe.triplemapplication.utils.safeCall
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
     private val _cartFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
@@ -56,15 +52,15 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
 
     fun updateCartDraft(lineItems: List<LineItem>) {
         viewModelScope.launch {
-            _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(lineItems) })
+            _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(DraftRequest(DraftOrder(line_items = lineItems))) })
         }
     }
 
     fun createCartDraft(lineItems: List<LineItem>) {
         viewModelScope.launch {
-            _creationCartFlow.emit(safeApiCall { repo.createCartDraft(lineItems) })
+            _creationCartFlow.emit(safeApiCall { repo.createCartDraft(DraftRequest(DraftOrder(line_items = lineItems))) })
         }
-            repo.getCartItems().collect{
+            /*repo.getCartItems().collect{
                 val lineItems = it.map {cartItem ->
                     LineItem(cartItem.quantity,cartItem.variantId, "Custom Tee", 20.00)
                 }
@@ -78,7 +74,7 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
                     _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(draftRequest) })
                 }
             }
-        }
+        }*/
     }
 
     fun uploadCartId(cartId:Long){

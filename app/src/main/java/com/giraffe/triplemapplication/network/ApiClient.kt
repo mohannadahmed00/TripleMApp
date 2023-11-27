@@ -4,16 +4,13 @@ package com.giraffe.triplemapplication.network
 import android.util.Log
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
-import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
-import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
-import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
@@ -27,7 +24,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Query
 
 object ApiClient : RemoteSource {
     private const val TAG = "ApiClient"
@@ -335,7 +331,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override  fun getWishListId(): Flow<Long> {
+    override suspend fun getWishListId(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
