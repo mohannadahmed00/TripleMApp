@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.database
 
 import android.content.Context
+import android.util.Log
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.Product
@@ -68,6 +69,17 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         }
     }
 
+    override suspend fun clearData() :Flow<Unit> = flow{
+
+        shared.store(Constants.CUSTOMER_ID, null)
+        shared.store(Constants.CART_ID, null)
+        shared.store(Constants.WISH_LIST_ID, null)
+
+        emit(cartDao.deleteAllCartItems())
+        emit(favoritesDao.deleteAllFavorites())
+
+    }
+
     override suspend fun getCurrency(): Flow<String> {
         return flow {
             val currency = shared.read(Constants.CURRENCY) ?: Constants.Currencies.EGP.value
@@ -84,10 +96,19 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     }
 
     override suspend fun setCustomerID(id: Long) {
+
+
         shared.store(Constants.CUSTOMER_ID, id.toString())
+
+    }
+
+    override suspend fun getCustomerID(): Long? {
+
+       return  shared.read(Constants.CUSTOMER_ID)?.toLong()
     }
 
     override suspend fun getCartID(): Long? {
+
         return shared.read(Constants.CART_ID)?.toLong()
     }
 
@@ -115,7 +136,7 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         cartDao.updateCartItem(cartItem)
     }
 
-    override suspend fun setWishListID(id: Long?) {
+    override suspend fun setWishListID(id: Long?){
         shared.store(Constants.WISH_LIST_ID, id.toString())
     }
 

@@ -27,6 +27,7 @@ interface LocalSource {
 
     suspend fun setCartID(id:Long?)
     suspend fun setCustomerID(id:Long)
+    suspend fun getCustomerID() : Long?
     suspend fun getCartID():Long?
 
     suspend fun getCartItems(): Flow<List<CartItem>>
@@ -54,4 +55,5 @@ interface LocalSource {
 
     suspend fun getExchangeRateOf(currencyCode:Constants.Currencies):Flow<Pair<Double,Double>>
 
+    suspend fun clearData() : Flow<Unit>
 }

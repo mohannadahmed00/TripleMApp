@@ -21,6 +21,7 @@ import com.giraffe.triplemapplication.features.splash.viewmodel.SplashVM
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.ExchangeRatesWorker
 import com.giraffe.triplemapplication.utils.Resource
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -35,12 +36,13 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        b: Boolean
+        b: Boolean,
     ): FragmentSplashBinding = FragmentSplashBinding.inflate(inflater, container, false)
 
     override fun handleView() {
         val fadeIn: Animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
         binding.ivLogo.startAnimation(fadeIn)
+
         val handler = Handler()
         handler.postDelayed({
             sharedViewModel.getSelectedCurrency()
@@ -51,20 +53,24 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
             observeGetFirstTimeFlag()
 
 
-
         }, 4000)
     }
 
     private fun observeGetSelectedCurrency() {
         lifecycleScope.launch {
-            sharedViewModel.currencyFlow.collect{
-                when(it){
+            sharedViewModel.currencyFlow.collect {
+                when (it) {
                     is Resource.Failure -> {
-                        Log.e(TAG, "observeGetSelectedCurrency: (Failure ${it.errorCode}) ${it.errorBody}")
+                        Log.e(
+                            TAG,
+                            "observeGetSelectedCurrency: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
                     }
+
                     Resource.Loading -> {
                         Log.i(TAG, "observeGetSelectedCurrency: (Loading)")
                     }
+
                     is Resource.Success -> {
                         Log.d(TAG, "observeGetSelectedCurrency: (Success) ${it.value}")
                         when (it.value) {
@@ -73,14 +79,17 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                                 sharedViewModel.setCurrencySymbol(Constants.Currencies.EGP.symbolRes)
 
                             }
+
                             Constants.Currencies.USD.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.USD)
                                 sharedViewModel.setCurrencySymbol(Constants.Currencies.USD.symbolRes)
                             }
+
                             Constants.Currencies.EUR.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.EUR)
                                 sharedViewModel.setCurrencySymbol(Constants.Currencies.EUR.symbolRes)
                             }
+
                             Constants.Currencies.GBP.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.GBP)
                                 sharedViewModel.setCurrencySymbol(Constants.Currencies.GBP.symbolRes)
@@ -93,6 +102,7 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
     }
 
     private fun runExchangeRatesWorker() {
+
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -159,11 +169,13 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
             mViewModel.firstFlagFlow.collect {
                 when (it) {
                     is Resource.Failure -> {
-                        Log.e(TAG, "observeGetFirstTimeFlag: ", )
+                        Log.e(TAG, "observeGetFirstTimeFlag: ")
                     }
+
                     Resource.Loading -> {
                         Log.i(TAG, "observeGetFirstTimeFlag: ")
                     }
+
                     is Resource.Success -> {
                         mViewModel.getCurrencies()
                         observeGetCurrencies()
@@ -175,10 +187,24 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
 
                             //must go to onboard graph
                         } else {
-
-
                             //should check here if authorized (go to main graph) or not (go to auth graph)
+
+                            if (mViewModel.isLoggedIn()) {
+                                val action =
+                                    SplashFragmentDirections.actionSplashFragmentToMainGraph()
+                                findNavController().navigate(action)
+
+
+                            } else {
+                                val action =
+                                    SplashFragmentDirections.actionSplashFragmentToAuthGraph()
+                                findNavController().navigate(action)
+
+
+                            }
+
                         }
+//                        findNavController().setGraph(R.navigation.auth_graph)
 
                         //val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
                         val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
@@ -188,6 +214,7 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
             }
         }
     }
+
 
     override fun handleClicks() {}
 }

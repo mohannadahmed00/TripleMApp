@@ -23,25 +23,26 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/product_price"
-        app:layout_constraintEnd_toStartOf="@id/cart_iv"
+        app:layout_constraintBottom_toTopOf="@id/rating"
+        app:layout_constraintEnd_toStartOf="@id/add_to_fav"
         app:layout_constraintStart_toEndOf="@id/back_btn"
         app:layout_constraintTop_toTopOf="@id/back_btn"
+
         tools:text="Faux Sued Ankle Boots" />
 
     <TextView
         android:id="@+id/product_price"
-        style="@style/subtitle_text"
+        style="@style/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/back_btn"
-        app:layout_constraintEnd_toStartOf="@id/rating"
-        app:layout_constraintStart_toStartOf="@id/product_name"
-        app:layout_constraintTop_toBottomOf="@id/product_name"
-        tools:text="49.99" />
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_slider"
+        tools:text="49.99 EGP" />
 
     <ImageView
         android:id="@+id/rating"
@@ -50,18 +51,18 @@
         android:layout_height="16dp"
         android:layout_marginTop="15dp"
         android:src="@drawable/rating"
-        app:layout_constraintBottom_toBottomOf="@id/cart_iv"
+        app:layout_constraintBottom_toBottomOf="@id/back_btn"
+        app:layout_constraintStart_toStartOf="@id/product_name"
         app:layout_constraintEnd_toEndOf="@id/product_name"
-        app:layout_constraintStart_toEndOf="@id/product_price"
-        app:layout_constraintTop_toBottomOf="@id/product_name" />
+        app:layout_constraintTop_toBottomOf="@id/product_name"/>
 
     <ImageView
-        android:id="@+id/cart_iv"
+        android:id="@+id/add_to_fav"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/cart"
+        android:src="@drawable/baseline_favorite_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,7 +75,9 @@
         android:autoStart="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/product_price">
+        app:layout_constraintTop_toBottomOf="@id/rating"
+        app:layout_constraintBottom_toTopOf="@id/product_price"
+        >
 
     </androidx.viewpager.widget.ViewPager>
 
@@ -107,20 +110,6 @@
             android:textStyle="bold"
             tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
-        <RadioButton
-            android:id="@+id/details_radio"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:background="@drawable/tab_selector_background"
-            android:button="@null"
-            android:checked="false"
-            android:gravity="center"
-            android:text="@string/details"
-            android:textColor="@drawable/tab_selector_text"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/reviews_radio"
@@ -139,201 +128,196 @@
 
 
     </RadioGroup>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/product_layout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-
         app:layout_constraintBottom_toTopOf="@id/add_to_cart_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_changer_radio_group">
-
-        <TextView
-            android:id="@+id/select_color_title"
-            style="@style/subtitle_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="14dp"
-            android:text="@string/select_color"
-            app:layout_constraintBottom_toTopOf="@id/color_rv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/color_rv"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/product_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:layout_marginTop="14sp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/select_color_title"
-            tools:listitem="@layout/color_picker_item"
+            android:layout_height="0dp"
 
-            />
+            >
 
-        <TextView
-            android:id="@+id/select_size_title"
-            style="@style/subtitle_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
-            android:text="@string/select_size"
-            app:layout_constraintStart_toStartOf="@id/select_color_title"
-            app:layout_constraintTop_toBottomOf="@id/color_rv" />
+            <TextView
+                android:id="@+id/select_color_title"
+                style="@style/subtitle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="14dp"
+                android:text="@string/select_color"
+                app:layout_constraintBottom_toTopOf="@id/color_rv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/size_rv"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginHorizontal="25dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/select_size_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="100dp"
-            tools:listitem="@layout/chips_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/color_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginTop="14sp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/select_color_title"
+                tools:listitem="@layout/color_picker_item"
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/details_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/add_to_cart_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_changer_radio_group">
-        <TextView
-            android:id="@+id/brand_title"
-            style="@style/subtitle_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:text="@string/brand"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="14dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
+                />
 
-            android:id="@+id/brand_name"
-            app:layout_constraintStart_toStartOf="@id/brand_title"
-            app:layout_constraintTop_toBottomOf="@id/brand_title"
-            tools:text="Lily's Ankle Boots"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/status_title"
-            style="@style/subtitle_text"
-            android:text="@string/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
+            <TextView
+                android:id="@+id/select_size_title"
+                style="@style/subtitle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:text="@string/select_size"
+                app:layout_constraintStart_toStartOf="@id/select_color_title"
+                app:layout_constraintTop_toBottomOf="@id/color_rv" />
 
-            android:id="@+id/status_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/status_title"
-            app:layout_constraintTop_toBottomOf="@id/status_title"
-            tools:text="5646544564545151"/>
-        <TextView
-            android:id="@+id/publish_title"
-            style="@style/subtitle_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:text="@string/publish_title"
-            app:layout_constraintTop_toBottomOf="@id/brand_name"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="14dp"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-        <TextView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/size_rv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="25dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/select_size_title"
+                app:layout_constraintBottom_toTopOf="@id/brand_name"
+                android:layout_marginBottom="30dp"
+                tools:listitem="@layout/chips_item" />
+            <TextView
+                android:id="@+id/brand_title"
+                style="@style/subtitle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:text="@string/brand"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/size_rv" />
+            <TextView
 
-            android:id="@+id/publish_text"
-            app:layout_constraintStart_toStartOf="@id/publish_title"
-            app:layout_constraintTop_toBottomOf="@id/publish_title"
-            tools:text="Brand New With Box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/serial_title"
-            style="@style/subtitle_text"
-            android:text="@string/serial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/status_text"
-            />
-        <TextView
-            android:id="@+id/serial_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/serial_title"
-            app:layout_constraintTop_toBottomOf="@id/serial_title"
-            tools:text="Faux Sued , Velvet"/>
-        <TextView
-            android:id="@+id/category_title"
-            style="@style/subtitle_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:text="@string/category"
-            app:layout_constraintTop_toBottomOf="@id/publish_text"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="14dp"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-        <TextView
+                android:id="@+id/brand_name"
+                app:layout_constraintStart_toStartOf="@id/brand_title"
+                app:layout_constraintTop_toBottomOf="@id/brand_title"
+                tools:text="Lily's Ankle Boots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/status_title"
+                style="@style/subtitle_text"
+                android:text="@string/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/size_rv" />
+            <TextView
 
-            android:id="@+id/category_text"
-            app:layout_constraintStart_toStartOf="@id/category_title"
-            app:layout_constraintTop_toBottomOf="@id/category_title"
-            tools:text="Women Shoes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/fitting_title"
-            style="@style/subtitle_text"
-            android:text="@string/fitting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/serial_text"
-            />
-        <TextView
-            android:id="@+id/fitting_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/fitting_title"
-            app:layout_constraintTop_toBottomOf="@id/fitting_title"
-            tools:text="True to size"/>
+                android:id="@+id/status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/status_title"
+                app:layout_constraintTop_toBottomOf="@id/status_title"
+                tools:text="5646544564545151"/>
+            <TextView
+                android:id="@+id/publish_title"
+                style="@style/subtitle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:text="@string/publish_title"
+                app:layout_constraintTop_toBottomOf="@id/brand_name"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+            <TextView
+
+                android:id="@+id/publish_text"
+                app:layout_constraintStart_toStartOf="@id/publish_title"
+                app:layout_constraintTop_toBottomOf="@id/publish_title"
+                tools:text="Brand New With Box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/serial_title"
+                style="@style/subtitle_text"
+                android:text="@string/serial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/status_text"
+                />
+            <TextView
+                android:id="@+id/serial_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/serial_title"
+                app:layout_constraintTop_toBottomOf="@id/serial_title"
+                tools:text="Faux Sued , Velvet"/>
+            <TextView
+                android:id="@+id/category_title"
+                style="@style/subtitle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:text="@string/category"
+                app:layout_constraintTop_toBottomOf="@id/publish_text"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+            <TextView
+
+                android:id="@+id/category_text"
+                app:layout_constraintStart_toStartOf="@id/category_title"
+                app:layout_constraintTop_toBottomOf="@id/category_title"
+                tools:text="Women Shoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/fitting_title"
+                style="@style/subtitle_text"
+                android:text="@string/fitting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/serial_text"
+                />
+            <TextView
+                android:id="@+id/fitting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/fitting_title"
+                app:layout_constraintTop_toBottomOf="@id/fitting_title"
+                tools:text="True to size"/>
 
 
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/reviews_layout"
         android:layout_width="match_parent"
@@ -367,20 +351,8 @@
         android:text="@string/add_to_cart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/add_to_fav" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/add_to_fav"
-        style="@style/button_secondary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@drawable/secondary_button"
-        android:text="@string/add_to_fav_btn"
-        android:textColor="@color/gary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/add_to_cart_button"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

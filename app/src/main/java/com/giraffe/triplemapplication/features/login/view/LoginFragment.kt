@@ -10,11 +10,8 @@ import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentLoginBinding
 import com.giraffe.triplemapplication.features.login.viewmodel.LoginVM
 import com.giraffe.triplemapplication.utils.Resource
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
@@ -57,8 +54,32 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
     }
 
     private fun showSuccess() {
-        mViewModel.setData(binding.emailEditText.text.toString())
-        findNavController().setGraph(R.navigation.main_graph)
+        mViewModel.getCustomerByEmail(binding.emailEditText.text.toString())
+        lifecycleScope.launch {
+            mViewModel.customer.collectLatest {
+                when (it) {
+                    is Resource.Failure -> {
+                        Snackbar.make(requireView(), it.errorBody.toString(), Snackbar.LENGTH_SHORT)
+                            .show()
+                        dismissLoading()
+                    }
+
+                    Resource.Loading -> {
+                        showLoading()
+                    }
+
+                    is Resource.Success -> {
+//
+
+                        mViewModel.setData(it.value.customers.first().id)
+                        findNavController().setGraph(R.navigation.main_graph)
+                        dismissLoading()
+
+                    }
+                }
+            }
+        }
+
     }
 
     private fun showFailure(it: Resource.Failure) {

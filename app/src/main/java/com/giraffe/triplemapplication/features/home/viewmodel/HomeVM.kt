@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.features.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
@@ -33,11 +34,13 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
     private val _couponsFlow: MutableStateFlow<Resource<CouponsResponse>> = MutableStateFlow(Resource.Loading)
     val couponsFlow: StateFlow<Resource<CouponsResponse>> = _couponsFlow.asStateFlow()
 
+
     init {
         getAllBrands()
         getAllCategories()
         getAllProducts()
         getCoupons()
+        getCustomerId()
     }
 
 
@@ -64,6 +67,13 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
     private fun getCoupons() {
         viewModelScope.launch(Dispatchers.IO) {
             _couponsFlow.emit(safeApiCall {repo.getCoupons()})
+        }
+    }
+    private fun getCustomerId(){
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.i("TAG", "getCustomerId: ${repo.getCustomerIdLocally()}")
+            Log.i("TAG", "getCustomerId: ${repo.getCartId()}")
+
         }
     }
 }

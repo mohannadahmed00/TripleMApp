@@ -4,12 +4,17 @@ import android.util.Log
 import com.giraffe.triplemapplication.database.LocalSource
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
+import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
@@ -45,6 +50,8 @@ class Repo private constructor(
     override suspend fun getProductsFromCategoryId(categoryId: String) =
         remoteSource.getProductsFromCategoryId(categoryId)
 
+    override suspend fun getAllProductsFromIds(ids: String) = remoteSource.getAllProductsFromIds(ids)
+
     override suspend fun getLanguage() = localSource.getLanguage()
 
     override suspend fun setLanguage(code: Constants.Languages) = localSource.setLanguage(code)
@@ -68,13 +75,11 @@ class Repo private constructor(
         return remoteSource.getCurrentUser()
     }
 
-    override fun isLoggedIn(): Boolean {
-        return remoteSource.isLoggedIn()
-    }
+    override fun isLoggedIn(): Boolean  =remoteSource.isLoggedIn()
 
-    override fun logout() {
-        remoteSource.logout()
-    }
+
+    override fun logout(): Flow<Unit> = remoteSource.logout()
+
 
     override fun createCustomer(customer: Request): Flow<CustomerResponse> =
         remoteSource.createCustomer(customer)
@@ -134,7 +139,7 @@ class Repo private constructor(
     }
 
     override suspend fun uploadCustomerId(customerId: Long): Task<Void?>? {
-        localSource.setCustomerID(customerId)//create fun here
+        localSource.setCustomerID(getCustomerIdLocally()!!)//create fun here
         return remoteSource.uploadCustomerId(customerId)
     }
 
@@ -146,22 +151,35 @@ class Repo private constructor(
     override suspend fun modifyCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
         Log.i(TAG, "modifyCartDraft: ${localSource.getCartID() ?: 0}")
         return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, variants)
+    override suspend fun modifyCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, draftRequest)
     }
 
-    override suspend fun createCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.createNewCartDraft(variants)
+    override suspend fun createCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.createNewCartDraft(draftRequest)
     }
 
     override suspend fun getCartItems(): Flow<List<CartItem>> {
         return localSource.getCartItems()
     }
 
-    override suspend fun getCartId(): Flow<Long> {
+  override suspend fun deleteAllCartItems() {
+        localSource.deleteAllCartItems()
+    }
+
+
+    override suspend fun removeCartDraft(draftOrderId: Long) = remoteSource.removeCartDraft(draftOrderId)
+
+    override fun getCartId(): Flow<Long> {
         return remoteSource.getCartId()
     }
 
-    override suspend fun getCustomer(): Flow<Long> {
-        return remoteSource.getCustomerId()
+    override fun getCustomerIdFromFirebase(): Flow<Long> {
+        return remoteSource.getCustomerIdFromFirebase()
+    }
+
+    override suspend fun getCustomerIdLocally(): Long? {
+        return localSource.getCustomerID()
     }
 
     override suspend fun uploadWishListId(wishListId: Long): Task<Void?>? {
@@ -181,24 +199,25 @@ class Repo private constructor(
         localSource.deleteAllWishListItems()
     }
 
-    override suspend fun modifyWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.modifyWishListDraft(localSource.getWishListID() ?: 0, variants)
+    override suspend fun modifyWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.modifyWishListDraft(localSource.getWishListID() ?: 0, draftRequest)
     }
 
-    override suspend fun createWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
-        return remoteSource.createNewCartDraft(variants)
+    override suspend fun createWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
+        return remoteSource.createNewCartDraft(draftRequest)
     }
 
     override suspend fun getWishListItems(): Flow<List<Product>> {
         return localSource.getWishListItems()
     }
 
-    override fun getCustomerByEmail(email: String): Flow<CustomerResponse> =
+    override fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse> =
         remoteSource.getCustomerByEmail(email)
 
-    override suspend fun getWishListId(): Flow<Long> {
-        return remoteSource.getWishListId()
-    }
+    override fun getWishListId(): Flow<Long>  =
+        remoteSource.getWishListId()
+
+
 
 
     override suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double, Double>> {
@@ -209,19 +228,31 @@ class Repo private constructor(
         remoteSource.createOrder(orderCreate)
 
     override suspend fun getOrders() = remoteSource.getOrders()
+    override suspend fun getOrder(orderId: Long) = remoteSource.getOrder(orderId)
 
     override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
+    
+    override suspend fun completeOrder(orderId: Long) = remoteSource.completeOrder(orderId)
+
     override suspend fun getCoupons()=remoteSource.getCoupons()
+
+
+
     override suspend fun setCartIdLocally(cartId: Long?) {
-        localSource.setCartID(cartId)
-    }
+         localSource.setCartID(cartId)
+        }
+    
 
     override suspend fun setWishListIdLocally(wishListId: Long?) {
         localSource.setWishListID(wishListId)
+
     }
 
+
     override suspend fun setCustomerIdLocally(customerId: Long) {
+
         localSource.setCustomerID(customerId)
+
     }
 
     override suspend fun setDefaultAddress(
@@ -230,6 +261,10 @@ class Repo private constructor(
     )= remoteSource.setDefaultAddress(customerId, addressId)
 
     override suspend fun deleteCartItem(cartItem: CartItem) = localSource.deleteCartItem(cartItem)
+
+
+    override suspend fun clearData(): Flow<Unit> =
+        localSource.clearData()
 
 
 }

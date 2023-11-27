@@ -9,8 +9,11 @@ import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
+import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
@@ -24,6 +27,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Query
 
 object ApiClient : RemoteSource {
     private const val TAG = "ApiClient"
@@ -58,7 +62,7 @@ object ApiClient : RemoteSource {
         emit(getApiServices(Constants.CURRENCY_URL).getExchangeRates())
     }
 
-    override fun getCustomerByEmail(email: String): Flow<CustomerResponse> =flow{
+    override fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse> =flow{
         emit(getApiServices().getCustomerByEmail(email))
     }
 
@@ -81,7 +85,12 @@ object ApiClient : RemoteSource {
                 "${product.id}, "
             }
         }
+        Log.i("hahahahahaha", "getProductsFromCategoryId: $productsIds")
         emit(getApiServices().getAllProductsFromIds(productsIds))
+    }
+
+    override suspend fun getAllProductsFromIds(ids: String) = flow {
+        emit(getApiServices().getAllProductsFromIds(ids))
     }
 
     override suspend fun createOrder(orderCreate: OrderCreate) = flow {
@@ -92,25 +101,33 @@ object ApiClient : RemoteSource {
         emit(getApiServices().getOrders())
     }
 
+    override suspend fun getOrder(orderId: Long): Flow<OrderResponse> = flow {
+        emit(getApiServices().getOrder(orderId))
+    }
+
     override suspend fun delOrder(orderId: Long) {
         getApiServices().delOrder(orderId)
     }
 
-    override suspend fun createNewCartDraft(cartItems: List<LineItem>): Flow<Response<DraftResponse>> {
+    override suspend fun completeOrder(orderId: Long) = flow {
+        emit(getApiServices().completeOrder(orderId))
+    }
+
+    override suspend fun createNewCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
         return flow {
-            emit(getApiServices().createNewDraftOrder(DraftRequest(DraftOrder(line_items = cartItems))))
+            emit(getApiServices().createNewDraftOrder(draftRequest))
         }
     }
 
     override suspend fun modifyCartDraft(
         draftOrderId: Long,
-        cartItems: List<LineItem>,
+        draftRequest: DraftRequest,
     ): Flow<Response<DraftResponse>> {
         return flow {
             emit(
                 getApiServices().modifyDraftOrder(
                     draftOrderId,
-                    DraftRequest(DraftOrder(draftOrderId, cartItems))
+                    draftRequest
                 )
             )
         }
@@ -171,8 +188,8 @@ object ApiClient : RemoteSource {
         return FirebaseAuth.getInstance().currentUser != null
     }
 
-    override fun logout() {
-        FirebaseAuth.getInstance().signOut()
+    override fun logout() :Flow<Unit> = flow{
+        emit(FirebaseAuth.getInstance().signOut())
     }
 
     override fun createCustomer(customerResponse: Request): Flow<CustomerResponse> = flow {
@@ -204,7 +221,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override suspend fun getCartId(): Flow<Long> {
+    override  fun getCartId(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)//?????????
@@ -248,7 +265,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override suspend fun getCustomerId(): Flow<Long> {
+    override fun getCustomerIdFromFirebase(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -268,21 +285,22 @@ object ApiClient : RemoteSource {
         }
     }
 
-    override suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>> {
+    override suspend fun createNewWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
         return flow {
-            emit(getApiServices().createNewDraftOrder(DraftRequest(DraftOrder(line_items = productsItem))))
+            emit(getApiServices().createNewDraftOrder(draftRequest))
         }
     }
 
+
     override suspend fun modifyWishListDraft(
         draftOrderId: Long,
-        products: List<LineItem>,
+        draftRequest: DraftRequest,
     ): Flow<Response<DraftResponse>> {
         return flow {
             emit(
                 getApiServices().modifyDraftOrder(
                     draftOrderId,
-                    DraftRequest(DraftOrder(draftOrderId, products))
+                    draftRequest
                 )
             )
         }
@@ -317,7 +335,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override suspend fun getWishListId(): Flow<Long> {
+    override  fun getWishListId(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)

@@ -5,13 +5,16 @@ import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
+import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
+import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
@@ -65,11 +68,17 @@ interface ApiServices {
     @GET("orders.json")
     suspend fun getOrders(@Query("status") status: String = "any"): AllOrdersResponse
 
+    @GET("orders/{orderId}.json")
+    suspend fun getOrder(@Path("orderId") orderId: Long): OrderResponse
+
     @POST("orders.json")
     suspend fun createOrder(@Body orderCreate: OrderCreate): CreateOrderResponse
 
     @DELETE("orders/{orderId}/.json")
     suspend fun delOrder(@Path("orderId") orderId: Long)
+
+    @PUT("draft_orders/{orderId}/complete.json")
+    suspend fun completeOrder(@Path("orderId") orderId: Long): DraftOrder
 //    @GET
 //    suspend fun getCurrencies(): CurrencyResponse
     /*@POST("orders.json")
@@ -104,4 +113,6 @@ interface ApiServices {
     suspend fun setDefaultAddress(
         @Path("customer_id") customerId:Long,
         @Path("address_id") addressId:Long):Response<AddressResponse>
+    @GET("customers.json")
+    suspend fun getCustomerByEmail(@Query("email") email:String) :MultipleCustomerResponse
 }

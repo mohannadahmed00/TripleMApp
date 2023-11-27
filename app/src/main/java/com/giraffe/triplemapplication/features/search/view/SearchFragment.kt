@@ -9,10 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentSearchBinding
-import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
 import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.search.viewmodel.SearchVM
-import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.material.snackbar.Snackbar
@@ -22,6 +20,8 @@ import kotlinx.coroutines.launch
 
 class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
     override fun getViewModel(): Class<SearchVM> = SearchVM::class.java
+
+    private lateinit var productsAdapter: ProductAdapter
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -36,28 +36,28 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
 
     private fun observeData() {
         lifecycleScope.launch {
-            mViewModel.allProductsFlow.collectLatest {it ->
-                when(it){
-                    is Resource.Failure -> {
-                        showFailure(it)
-                        dismissLoading()
-                    }
-                    Resource.Loading -> {
-                        showLoading()
-                    }
-                    is Resource.Success -> {
-                        showSuccess(it.value.products)
-                        dismissLoading()
-                    }
+            sharedViewModel.allProducts.collectLatest {
+                    if(!it.isNullOrEmpty()){
+                        showSuccess(it)
+
                 }
             }
         }
     }
 
     private fun showSuccess(products: List<Product>) {
-        val adapter = ProductAdapter(requireContext()){navigateToProductInfo(it)}
-        binding.searchRv.adapter = adapter
-        adapter.submitList(products)
+        lifecycleScope.launch {
+            sharedViewModel.currencyFlow.collect {
+                productsAdapter = if (it is Resource.Success) {
+                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, it.value) { product -> navigateToProductInfo(product) }
+                } else {
+                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, "") { product -> navigateToProductInfo(product) }
+                }
+                binding.searchRv.adapter = productsAdapter
+                productsAdapter.submitList(products)
+            }
+        }
+
 
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -69,7 +69,7 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
                     product.title!!.contains(userInput ,ignoreCase = true)
 
                 }
-                adapter.submitList(filteredProducts)
+                productsAdapter.submitList(filteredProducts)
                 // Update RecyclerView or UI with filteredProducts
                 // For example, update RecyclerView adapter or UI list with the filtered data
             }
@@ -81,13 +81,14 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
 
     private fun navigateToProductInfo(product: Product) {
         sharedViewModel.setCurrentProduct(product)
-
         findNavController().navigate(R.id.productInfoFragment)
     }
 
-    private fun showFailure(it: Resource.Failure) {
-        Snackbar.make(requireView() ,it.errorBody.toString() , Snackbar.LENGTH_SHORT).show()
-    }
 
-    override fun handleClicks() {}
+
+    override fun handleClicks() {
+        binding.filterBtn.setOnClickListener {
+            findNavController().navigate(R.id.filterFragment)
+        }
+    }
 }
