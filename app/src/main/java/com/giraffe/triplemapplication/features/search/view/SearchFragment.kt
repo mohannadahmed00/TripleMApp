@@ -46,17 +46,13 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
     }
 
     private fun showSuccess(products: List<Product>) {
-        lifecycleScope.launch {
-            sharedViewModel.currencyFlow.collect {
-                productsAdapter = if (it is Resource.Success) {
-                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, it.value) { product -> navigateToProductInfo(product) }
-                } else {
-                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, "") { product -> navigateToProductInfo(product) }
-                }
-                binding.searchRv.adapter = productsAdapter
-                productsAdapter.submitList(products)
-            }
-        }
+        productsAdapter = ProductAdapter(
+            requireContext(),
+            sharedViewModel.exchangeRateFlow.value,
+            sharedViewModel.currencySymFlow.value
+        ) { product -> navigateToProductInfo(product) }
+        binding.searchRv.adapter = productsAdapter
+        productsAdapter.submitList(products)
 
 
         binding.searchBar.addTextChangedListener(object : TextWatcher {

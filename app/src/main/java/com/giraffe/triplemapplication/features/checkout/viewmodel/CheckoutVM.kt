@@ -42,7 +42,7 @@ class CheckoutVM(private val repo: RepoInterface): ViewModel() {
         viewModelScope.launch {
             repo.removeCartDraft(repo.getCartId().first())
             repo.setCartIdLocally(null)
-//            repo.uploadCartId(-1)
+            repo.uploadCartId(-1)
             repo.deleteAllCartItems()
         }
     }

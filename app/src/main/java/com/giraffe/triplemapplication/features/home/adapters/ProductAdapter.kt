@@ -17,7 +17,7 @@ import com.giraffe.triplemapplication.utils.convert
 class ProductAdapter(
     private val context: Context,
     private val exchangeRate: Pair<Double,Double>?,
-    private val currency: String,
+    private val currency: Int,
     private val onItemClick: (Product) -> Unit
 ): ListAdapter<Product, ProductAdapter.ViewHolder>(ProductDataDiffUtil()) {
 
@@ -41,7 +41,7 @@ class ProductAdapter(
             )
             .into(holder.binding.productImage)
         holder.binding.productName.text = current.handle
-        holder.binding.productPrice.text = "${ current.variants?.get(0)?.price?.toDouble()?.convert(exchangeRate).toString()} $currency"
+        holder.binding.productPrice.text = "${ current.variants?.get(0)?.price?.toDouble()?.convert(exchangeRate).toString()} ${holder.binding.root.context.getString(currency)}"
         holder.binding.row.setOnClickListener { onItemClick(current) }
     }
 

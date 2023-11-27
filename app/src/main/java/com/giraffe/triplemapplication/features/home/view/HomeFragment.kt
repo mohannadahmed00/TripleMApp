@@ -47,15 +47,11 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
 
     override fun handleView() {
         // Recycler View
-        lifecycleScope.launch {
-            sharedViewModel.currencyFlow.collect {
-                productsAdapter = if (it is Resource.Success) {
-                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, it.value) { product -> navigateToProductInfoScreen(product) }
-                } else {
-                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, "") { product -> navigateToProductInfoScreen(product) }
-                }
-            }
-        }
+        productsAdapter = ProductAdapter(
+            requireContext(),
+            sharedViewModel.exchangeRateFlow.value,
+            sharedViewModel.currencySymFlow.value
+        ) { product -> navigateToProductInfoScreen(product) }
         binding.productsRecyclerView.apply {
             adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {

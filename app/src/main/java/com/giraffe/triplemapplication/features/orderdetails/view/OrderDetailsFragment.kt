@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentOrderDetailsBinding
-import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
-import com.giraffe.triplemapplication.features.allcategories.view.AllCategoriesFragmentDirections
 import com.giraffe.triplemapplication.features.orderdetails.viewmodel.OrderDetailsVM
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource

@@ -1,29 +1,21 @@
 package com.giraffe.triplemapplication.features.orders.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentOrdersBinding
-import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
-import com.giraffe.triplemapplication.features.checkout.view.CheckoutFragmentDirections
-import com.giraffe.triplemapplication.features.checkout.view.OrderPlacedFragmentDirections
 import com.giraffe.triplemapplication.features.orders.viewmodel.OrdersViewModel
 import com.giraffe.triplemapplication.model.orders.Order
-import com.giraffe.triplemapplication.network.ApiClient.delOrder
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
