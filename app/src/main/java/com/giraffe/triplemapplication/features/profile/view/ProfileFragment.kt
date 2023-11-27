@@ -66,8 +66,9 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
             val action = ProfileFragmentDirections.actionProfileFragmentToAddressesFragment()
             findNavController().navigate(action)
         }
-        binding.btnPayment.setOnClickListener {
 
+        binding.btnPayment.setOnClickListener {
+            findNavController().navigate(R.id.favFragment)
         }
         binding.btnLanguage.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToLanguageFragment()

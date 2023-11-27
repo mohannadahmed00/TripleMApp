@@ -3,6 +3,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeCall
@@ -38,6 +39,19 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     private val _currencySymFlow : MutableStateFlow<Int> = MutableStateFlow(R.string.egp_sym)
     val currencySymFlow : StateFlow<Int> = _currencySymFlow.asStateFlow()
 
+    private val _wishListItemsFlow : MutableStateFlow<List<WishListItem>> = MutableStateFlow(listOf())
+    private val _isFav : MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isFav :StateFlow<Boolean> = _isFav
+
+    private val _delWishListItemFlow: MutableStateFlow<Resource<Int>> = MutableStateFlow(
+        Resource.Loading
+    )
+    val delWishListItemFlow: StateFlow<Resource<Int>> = _delWishListItemFlow.asStateFlow()
+    private val _lastDeleted : MutableStateFlow<WishListItem?> = MutableStateFlow(null)
+
+    init {
+        getLocallyWishListItems()
+    }
     fun setAllProduct(products:List<Product>){
         viewModelScope.launch(Dispatchers.IO) {
             _allProducts.emit(products)
@@ -54,7 +68,7 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         }
     }
 
-    fun insertFavorite(product: Product){
+    fun insertFavorite(product: WishListItem){
         viewModelScope.launch(Dispatchers.IO){
             repo.insertWishListItem(product)
         }
@@ -85,6 +99,35 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         }
     }
 
+    private fun getLocallyWishListItems() {
+        viewModelScope.launch {
+            repo.getWishListItems().collect{
+                _wishListItemsFlow.emit(it)
+            }
+        }
+    }
+    fun isFav(){
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val productToCheck = _currentProduct.value
+
+            _wishListItemsFlow.collect { wishListItems ->
+                val productExistsInWishlist = wishListItems.map { it.product }.any { it == productToCheck }
+
+                if (productExistsInWishlist) {
+                   _isFav.emit(true)
+                } else {
+                    _isFav.emit(false)
+                }
+            }
+        }
+    }
+    fun deleteWishListItemLocally(wishListItem: WishListItem) {
+        viewModelScope.launch {
+            _lastDeleted.emit(wishListItem)
+            _delWishListItemFlow.emit(safeCall { repo.deleteWishListItem(wishListItem) })
+        }
+    }
 
 
 }

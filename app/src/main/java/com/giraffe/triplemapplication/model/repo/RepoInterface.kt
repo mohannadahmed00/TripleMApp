@@ -1,7 +1,6 @@
 package com.giraffe.triplemapplication.model.repo
 
 
-
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
@@ -22,6 +21,7 @@ import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -47,7 +47,7 @@ interface RepoInterface {
     fun isDataValid(email: String, password: String, confirmPassword: String): Boolean
     fun getCurrentUser(): FirebaseUser
     fun isLoggedIn(): Boolean
-    fun logout() : Flow<Unit>
+    fun logout(): Flow<Unit>
 
     fun createCustomer(customer: Request): Flow<CustomerResponse>
 
@@ -87,24 +87,23 @@ interface RepoInterface {
     suspend fun getCartItems(): Flow<List<CartItem>>
     suspend fun deleteAllCartItems()
 
-    suspend fun removeCartDraft(draftOrderId: Long, ): Flow<Response<Void>>
+    suspend fun removeCartDraft(draftOrderId: Long): Flow<Response<Void>>
 
 
-  
     fun getCartId(): Flow<Long>
     fun getCustomerIdFromFirebase(): Flow<Long>
     suspend fun getCustomerIdLocally(): Long?
 
-  suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
+    suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
 
-    suspend fun insertWishListItem(product: Product): Flow<Long>
-    suspend fun deleteWishListItem(product: Product): Flow<Int>
+    fun insertWishListItem(product: WishListItem): Flow<Long>
+    suspend fun deleteWishListItem(product: WishListItem): Flow<Int>
     suspend fun deleteAllWishListItem()
 
     suspend fun modifyWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
     suspend fun createWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
 
-    suspend fun getWishListItems(): Flow<List<Product>>
+    fun getWishListItems(): Flow<List<WishListItem>>
     fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse>
 
 
@@ -124,9 +123,12 @@ interface RepoInterface {
     suspend fun setWishListIdLocally(cartId: Long?)
     suspend fun setCustomerIdLocally(cartId: Long)
 
-    suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
+    suspend fun setDefaultAddress(
+        customerId: Long,
+        addressId: Long,
+    ): Flow<Response<AddressResponse>>
 
     suspend fun deleteCartItem(cartItem: CartItem): Flow<Int>
 
-    suspend fun clearData() : Flow<Unit>
+    suspend fun clearData(): Flow<Unit>
 }

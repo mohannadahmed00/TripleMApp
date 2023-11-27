@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import kotlinx.coroutines.flow.Flow
 
@@ -43,15 +44,15 @@ interface LocalSource {
     suspend fun setWishListID(id:Long?)
     suspend fun getWishListID():Long?
 
-    suspend fun getWishListItems(): Flow<List<Product>>
+    fun getWishListItems(): Flow<List<WishListItem>>
 
-    fun insertWishListItem(product: Product): Flow<Long>
+    fun insertWishListItem(product: WishListItem): Flow<Long>
 
-    fun deleteWishListItem(product: Product): Flow<Int>
+    suspend fun deleteWishListItem(product: WishListItem): Flow<Int>
 
     suspend fun deleteAllWishListItems()
 
-    suspend fun updateWishListItem(product: Product)
+    suspend fun updateWishListItem(product: WishListItem)
 
     suspend fun getExchangeRateOf(currencyCode:Constants.Currencies):Flow<Pair<Double,Double>>
 

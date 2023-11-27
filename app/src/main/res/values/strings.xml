@@ -8,8 +8,10 @@
     <string name="favourite">Favourite</string>
     <string name="add_to_cart">Add To Cart</string>
     <string name="add_to_fav_btn">Add To Fav</string>
-    <string name="filter_title">Filter</string>
 
+
+    <string name="filter_title">Filter</string>
+    <string name="wishlist">Favourites</string>
     <string name="me">Me</string>
     <string name="sale">On Sale</string>
     <string name="price_range">Price Range</string>

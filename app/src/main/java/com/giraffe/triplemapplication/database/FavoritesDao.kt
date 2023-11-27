@@ -7,22 +7,23 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoritesDao {
-    @Query("SELECT * FROM products_table")
-    fun getAllFavorites(): Flow<List<Product>>
+    @Query("SELECT * FROM wish_list_table")
+    fun getAllFavorites(): Flow<List<WishListItem>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFavorite(product: Product): Long
+    fun insertFavorite(product: WishListItem): Long
 
     @Delete
-    suspend fun deleteFavorite(product: Product): Int
+    suspend fun deleteFavorite(product: WishListItem): Int
 
-    @Query("DELETE FROM products_table")
+    @Query("DELETE FROM wish_list_table")
     suspend fun deleteAllFavorites()
 
     @Update
-    suspend fun updateFavorite(product: Product)
+    suspend fun updateFavorite(product: WishListItem)
 }
