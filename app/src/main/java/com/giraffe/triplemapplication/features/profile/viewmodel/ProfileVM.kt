@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.features.profile.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.address.AddressRequest
@@ -14,9 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ProfileVM(private val repo: RepoInterface) : ViewModel() {
+
     private val _currencyFlow: MutableStateFlow<Resource<String>> = MutableStateFlow(
         Resource.Loading)
     val currencyFlow: StateFlow<Resource<String>> = _currencyFlow.asStateFlow()
@@ -33,6 +36,10 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
         Resource.Loading)
     val delAddressFlow: StateFlow<Resource<Void>> = _delAddressFlow.asStateFlow()
 
+    private val _dataCleared : MutableStateFlow<Resource<Unit>> = MutableStateFlow(Resource.Loading)
+    val dataCleared : StateFlow<Resource<Unit>> = _dataCleared
+    private val _signOut : MutableStateFlow<Resource<Unit>> = MutableStateFlow(Resource.Loading)
+    val signOut : StateFlow<Resource<Unit>> = _signOut
     fun setLanguage(code: Constants.Languages) {
         viewModelScope.launch {
             repo.setLanguage(code)
@@ -56,6 +63,7 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
     ){
         viewModelScope.launch(Dispatchers.IO) {
             _addressFlow.emit(safeApiCall{ repo.addNewAddress(customerId, address) })
+
         }
     }
 
@@ -73,6 +81,14 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             _delAddressFlow.emit(safeApiCall{ repo.deleteAddress(customerId, addressId) })
+
+        }
+    }
+    fun logout(){
+        viewModelScope.launch(Dispatchers.IO) {
+           _dataCleared.emit(safeCall { repo.clearData() })
+            _signOut.emit(safeCall { repo.logout() })
+
         }
     }
 }

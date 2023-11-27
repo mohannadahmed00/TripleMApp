@@ -10,6 +10,7 @@ import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
@@ -105,6 +106,6 @@ interface ApiServices {
 
     @GET("price_rules.json")
     suspend fun getCoupons():Response<CouponsResponse>
-    @GET("customers/search.json")
-    suspend fun getCustomerByEmail(@Query("email") email:String): CustomerResponse
+    @GET("customers.json")
+    suspend fun getCustomerByEmail(@Query("email") email:String) :MultipleCustomerResponse
 }

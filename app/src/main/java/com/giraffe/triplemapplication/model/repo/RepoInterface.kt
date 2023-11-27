@@ -19,6 +19,7 @@ import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
@@ -52,7 +53,7 @@ interface RepoInterface {
     fun isDataValid(email: String, password: String, confirmPassword: String): Boolean
     fun getCurrentUser(): FirebaseUser
     fun isLoggedIn(): Boolean
-    fun logout()
+    fun logout() : Flow<Unit>
 
     fun createCustomer(customer: Request): Flow<CustomerResponse>
 
@@ -92,11 +93,16 @@ interface RepoInterface {
     suspend fun getCartItems(): Flow<List<CartItem>>
     suspend fun deleteAllCartItems()
 
-    suspend fun getCartId(): Flow<Long>
+  suspend fun getCartId(): Flow<Long>
     suspend fun removeCartDraft(draftOrderId: Long, ): Flow<Response<Void>>
 
-    suspend fun getCustomer(): Flow<Long>
-    suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
+
+  
+  fun getCartId(): Flow<Long>
+    fun getCustomerIdFromFirebase(): Flow<Long>
+    fun getCustomerIdLocally(): Long?
+
+  suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
 
     suspend fun insertWishListItem(product: Product): Flow<Long>
     suspend fun deleteWishListItem(product: Product): Flow<Int>
@@ -106,10 +112,10 @@ interface RepoInterface {
     suspend fun createWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
 
     suspend fun getWishListItems(): Flow<List<Product>>
-    fun getCustomerByEmail(email: String): Flow<CustomerResponse>
+    fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse>
 
 
-    suspend fun getWishListId(): Flow<Long>
+    fun getWishListId(): Flow<Long>
 
     suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double, Double>>
 
@@ -121,7 +127,9 @@ interface RepoInterface {
     suspend fun completeOrder(orderId: Long): Flow<DraftOrder>
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>
 
-    suspend fun setCartIdLocally(cartId: Long?)
-    suspend fun setWishListIdLocally(cartId: Long?)
-    suspend fun setCustomerIdLocally(cartId: Long)
+    fun setCartIdLocally(cartId: Long?) :Flow<Unit>
+    fun setWishListIdLocally(cartId: Long?) : Flow<Unit>
+    fun setCustomerIdLocally(cartId: Long) : Flow<Unit>
+
+    suspend fun clearData() : Flow<Unit>
 }

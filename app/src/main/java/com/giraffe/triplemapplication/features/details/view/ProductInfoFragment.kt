@@ -260,19 +260,14 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         when (selectedLayoutId) {
             R.id.product_radio -> {
                 binding.productLayout.visibility = View.VISIBLE
-                binding.detailsLayout.visibility = View.GONE
+
                 binding.reviewsLayout.visibility = View.GONE
             }
 
-            R.id.details_radio -> {
-                binding.productLayout.visibility = View.GONE
-                binding.detailsLayout.visibility = View.VISIBLE
-                binding.reviewsLayout.visibility = View.GONE
-            }
 
             R.id.reviews_radio -> {
                 binding.productLayout.visibility = View.GONE
-                binding.detailsLayout.visibility = View.GONE
+
                 binding.reviewsLayout.visibility = View.VISIBLE
             }
         }
