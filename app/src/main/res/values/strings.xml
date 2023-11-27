@@ -97,4 +97,7 @@
     <string name="dialog_del_ok">Remove</string>
     <string name="dialog_del_cancel">Cancel</string>
     <string name="dialog_del">Are you sure you want to remove this order?</string>
+    <string name="ordered_by">Ordered by:</string>
+    <string name="discount">Discount:</string>
+    <string name="all_brands">All Brands</string>
 </resources>

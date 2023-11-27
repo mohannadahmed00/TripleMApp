@@ -58,8 +58,10 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
         if (isBrand) {
             observeGetAllBrands()
+            binding.allCategoriesLabel.text = getString(R.string.all_brands)
         } else {
             observeGetAllCategories()
+            binding.allCategoriesLabel.text = getString(R.string.all_categories)
         }
         observeGetAllProducts()
     }
