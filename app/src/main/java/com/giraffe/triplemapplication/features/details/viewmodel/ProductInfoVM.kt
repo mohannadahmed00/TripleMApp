@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.cart.CartItem
-import com.giraffe.triplemapplication.model.cart.request.AppliedDiscount
-import com.giraffe.triplemapplication.model.cart.request.Customer
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
@@ -17,9 +15,7 @@ import com.giraffe.triplemapplication.utils.safeCall
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
     private val _cartFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
@@ -28,6 +24,10 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
         MutableStateFlow(Resource.Loading)
     val updateCartFlow: StateFlow<Resource<DraftResponse>> = _updateCartFlow.asStateFlow()
 
+    private val _creationCartFlow: MutableStateFlow<Resource<DraftResponse>> =
+        MutableStateFlow(Resource.Loading)
+    val creationCartFlow: StateFlow<Resource<DraftResponse>> = _creationCartFlow.asStateFlow()
+
     private val _variantsFlow: MutableStateFlow<List<LineItem>> = MutableStateFlow(listOf())
     val variantsFlow: StateFlow<List<LineItem>> = _variantsFlow.asStateFlow()
 
@@ -35,15 +35,32 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
         Resource.Loading)
     val cartIdFlow: StateFlow<Resource<Boolean>> = _cartIdFlow.asStateFlow()
 
+    private val _cartItemsFlow: MutableStateFlow<Resource<List<CartItem>>> = MutableStateFlow(Resource.Loading)
+    val cartItemsFlow: StateFlow<Resource<List<CartItem>>> = _cartItemsFlow.asStateFlow()
+
     fun insertCartItem(cartItem: CartItem) {
         viewModelScope.launch {
             _cartFlow.emit(safeCall { repo.insertCartItem(cartItem) })
         }
     }
 
-    fun updateCartDraft() {
+    fun getLocallyCartItems(){
         viewModelScope.launch {
-            repo.getCartItems().collect{
+            _cartItemsFlow.emit(safeCall { repo.getCartItems() })
+        }
+    }
+
+    fun updateCartDraft(lineItems: List<LineItem>) {
+        viewModelScope.launch {
+            _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(DraftRequest(DraftOrder(line_items = lineItems))) })
+        }
+    }
+
+    fun createCartDraft(lineItems: List<LineItem>) {
+        viewModelScope.launch {
+            _creationCartFlow.emit(safeApiCall { repo.createCartDraft(DraftRequest(DraftOrder(line_items = lineItems))) })
+        }
+            /*repo.getCartItems().collect{
                 val lineItems = it.map {cartItem ->
                     LineItem(cartItem.quantity,cartItem.variantId, "Custom Tee", 20.00)
                 }
@@ -57,7 +74,7 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
                     _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(draftRequest) })
                 }
             }
-        }
+        }*/
     }
 
     fun uploadCartId(cartId:Long){
@@ -70,6 +87,12 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
                     _cartIdFlow.emit(Resource.Failure(false,0,it?.exception?.message))
                 }
             }
+        }
+    }
+
+    fun insertCartIdLocally(cartId:Long){
+        viewModelScope.launch {
+            repo.setCartIdLocally(cartId)
         }
     }
 }

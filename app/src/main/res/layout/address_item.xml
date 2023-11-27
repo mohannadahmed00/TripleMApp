@@ -6,6 +6,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingHorizontal="19dp">
+    <ImageView
+        android:id="@+id/iv_star"
+        android:layout_width="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_height="25dp"
+        android:src="@drawable/star_ic"
+        app:tint="@color/yellow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_address_title"
+        app:layout_constraintTop_toTopOf="@id/tv_address_title"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/tv_address"/>
 
     <TextView
         android:id="@+id/tv_address_title"
@@ -16,7 +28,7 @@
         android:textColor="@color/gary"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@id/iv_delete"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_star"
         app:layout_constraintTop_toBottomOf="@id/tv_address"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Home" />
@@ -28,7 +40,7 @@
         android:textColor="@color/gary"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@id/iv_delete"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_address_title"
         app:layout_constraintBottom_toTopOf="@id/line"
         app:layout_constraintTop_toBottomOf="@id/tv_address_title"
         tools:text="Cairo" />

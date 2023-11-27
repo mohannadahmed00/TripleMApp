@@ -17,7 +17,7 @@ data class Address(
     var province_code: String? = null,
     var country_code: String? = null,
     var country_name: String? = null,
-    val default: Boolean? = null
+    var default: Boolean? = null
 )
 /*val address1: String,
     val address2: String,

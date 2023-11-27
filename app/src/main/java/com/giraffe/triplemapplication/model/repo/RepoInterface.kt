@@ -2,18 +2,12 @@ package com.giraffe.triplemapplication.model.repo
 
 
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.address.AddressesResponse
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
-import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
@@ -114,7 +108,7 @@ interface RepoInterface {
     fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse>
 
 
-    fun getWishListId(): Flow<Long>
+    suspend fun getWishListId(): Flow<Long>
 
     suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double, Double>>
 
@@ -129,6 +123,10 @@ interface RepoInterface {
     suspend fun setCartIdLocally(cartId: Long?)
     suspend fun setWishListIdLocally(cartId: Long?)
     suspend fun setCustomerIdLocally(cartId: Long)
+
+    suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
+
+    suspend fun deleteCartItem(cartItem: CartItem): Flow<Int>
 
     suspend fun clearData() : Flow<Unit>
 }

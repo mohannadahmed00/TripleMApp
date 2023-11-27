@@ -7,12 +7,11 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.giraffe.triplemapplication.model.cart.CartItem
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CartDao {
     @Query("SELECT * FROM cart_table")
-    fun getCartItems(): Flow<List<CartItem>>
+    fun getCartItems(): List<CartItem>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCartItem(cartItem: CartItem): Long

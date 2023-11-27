@@ -36,6 +36,10 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
         Resource.Loading)
     val delAddressFlow: StateFlow<Resource<Void>> = _delAddressFlow.asStateFlow()
 
+    private val _defAddressFlow: MutableStateFlow<Resource<AddressResponse>> = MutableStateFlow(
+        Resource.Loading)
+    val defAddressFlow: StateFlow<Resource<AddressResponse>> = _defAddressFlow.asStateFlow()
+
     private val _dataCleared : MutableStateFlow<Resource<Unit>> = MutableStateFlow(Resource.Loading)
     val dataCleared : StateFlow<Resource<Unit>> = _dataCleared
     private val _signOut : MutableStateFlow<Resource<Unit>> = MutableStateFlow(Resource.Loading)
@@ -91,4 +95,11 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
 
         }
     }
+
+    fun setDefaultAddress(customerId:Long, addressId:Long){
+        viewModelScope.launch(Dispatchers.IO) {
+            _defAddressFlow.emit(safeApiCall{ repo.setDefaultAddress(customerId, addressId) })
+        }
+    }
+
 }

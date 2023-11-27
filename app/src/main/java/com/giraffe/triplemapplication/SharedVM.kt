@@ -1,5 +1,4 @@
 package com.giraffe.triplemapplication
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.products.Product
@@ -11,8 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -37,6 +34,10 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
 
     private val _exchangeRateFlow : MutableStateFlow<Pair<Double,Double>?> = MutableStateFlow(null)
     val exchangeRateFlow : StateFlow<Pair<Double,Double>?> = _exchangeRateFlow.asStateFlow()
+
+    private val _currencySymFlow : MutableStateFlow<Int> = MutableStateFlow(R.string.egp_sym)
+    val currencySymFlow : StateFlow<Int> = _currencySymFlow.asStateFlow()
+
     fun setAllProduct(products:List<Product>){
         viewModelScope.launch(Dispatchers.IO) {
             _allProducts.emit(products)
@@ -74,19 +75,13 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     fun getExchangeRateOf(currencyCode: Constants.Currencies){
         viewModelScope.launch {
             val pair = repo.getExchangeRateOf(currencyCode)
-            Log.d(TAG, "getExchangeRateOf: (Success) ${pair.first()}")
             _exchangeRateFlow.emit(pair.first())
-            /*when(val res = safeCall {  }){
-                is Resource.Failure -> {
-                    Log.e(TAG, "getExchangeRateOf: (Failure)")
-                }
-                Resource.Loading -> {
-                    Log.i(TAG, "getExchangeRateOf: (Loading)")
-                }
-                is Resource.Success -> {
+        }
+    }
 
-                }
-            }*/
+    fun setCurrencySymbol(currencySymRes:Int){
+        viewModelScope.launch {
+            _currencySymFlow.emit(currencySymRes)
         }
     }
 

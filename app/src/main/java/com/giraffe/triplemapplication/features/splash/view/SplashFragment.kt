@@ -21,7 +21,6 @@ import com.giraffe.triplemapplication.features.splash.viewmodel.SplashVM
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.ExchangeRatesWorker
 import com.giraffe.triplemapplication.utils.Resource
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -76,18 +75,23 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                         when (it.value) {
                             Constants.Currencies.EGP.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.EGP)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.EGP.symbolRes)
+
                             }
 
                             Constants.Currencies.USD.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.USD)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.USD.symbolRes)
                             }
 
                             Constants.Currencies.EUR.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.EUR)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.EUR.symbolRes)
                             }
 
                             Constants.Currencies.GBP.value -> {
                                 sharedViewModel.getExchangeRateOf(Constants.Currencies.GBP)
+                                sharedViewModel.setCurrencySymbol(Constants.Currencies.GBP.symbolRes)
                             }
                         }
                     }
@@ -172,10 +176,10 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                     }
 
                     is Resource.Success -> {
+                        mViewModel.getCurrencies()
+                        observeGetCurrencies()
                         Log.d(TAG, "observeGetFirstTimeFlag: ${it.value}")
                         if (it.value) {
-                            mViewModel.getCurrencies()
-                            observeGetCurrencies()
                             mViewModel.setFirstTimeFlag(false)
                             runExchangeRatesWorker()
                             //start currency worker here
@@ -201,6 +205,9 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                         }
 //                        findNavController().setGraph(R.navigation.auth_graph)
 
+                        //val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
+                        //val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
+                        //findNavController().navigate(action)
                     }
                 }
             }

@@ -4,16 +4,12 @@ import com.giraffe.triplemapplication.database.LocalSource
 import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
-import com.giraffe.triplemapplication.model.cart.request.LineItem
-import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
-import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
-import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
@@ -21,7 +17,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class Repo private constructor(
@@ -134,7 +129,7 @@ class Repo private constructor(
     ) = remoteSource.deleteAddress(customerId, addressId)
 
     override suspend fun uploadCartId(cartId: Long): Task<Void?>? {
-        localSource.setCartID(cartId)//create fun here
+        //localSource.setCartID(cartId)//create fun here
         return remoteSource.uploadCartId(cartId)
     }
 
@@ -148,6 +143,10 @@ class Repo private constructor(
         return localSource.insertCartItem(cartItem)
     }
 
+    /*override suspend fun modifyCartDraft(variants: List<LineItem>): Flow<Response<DraftResponse>> {
+        Log.i(TAG, "modifyCartDraft: ${localSource.getCartID() ?: 0}")
+        return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, variants)
+    }*/
     override suspend fun modifyCartDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>> {
         return remoteSource.modifyCartDraft(localSource.getCartID() ?: 0, draftRequest)
     }
@@ -211,7 +210,7 @@ class Repo private constructor(
     override fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse> =
         remoteSource.getCustomerByEmail(email)
 
-    override fun getWishListId(): Flow<Long>  =
+    override suspend fun getWishListId(): Flow<Long>  =
         remoteSource.getWishListId()
 
 
@@ -251,6 +250,13 @@ class Repo private constructor(
         localSource.setCustomerID(customerId)
 
     }
+
+    override suspend fun setDefaultAddress(
+        customerId: Long,
+        addressId: Long
+    )= remoteSource.setDefaultAddress(customerId, addressId)
+
+    override suspend fun deleteCartItem(cartItem: CartItem) = localSource.deleteCartItem(cartItem)
 
 
     override suspend fun clearData(): Flow<Unit> =

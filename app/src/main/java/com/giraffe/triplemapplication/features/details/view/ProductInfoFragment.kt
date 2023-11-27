@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.R
@@ -13,11 +12,13 @@ import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentProductInfoBinding
 import com.giraffe.triplemapplication.features.details.viewmodel.ProductInfoVM
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.products.Review
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.convert
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -140,8 +141,6 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     }
 
 
-
-
     override fun handleClicks() {
         binding.viewChangerRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             showSelectedLayout(checkedId)
@@ -200,32 +199,69 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
                     }
 
                     is Resource.Success -> {
-                        if (it.value > 0) {
-                            Log.d(TAG, "observeInsertCartItem: (ROOM) insertion is successful")
-                            /*mViewModel.getListOfVariants()
-                            observeGetListOfVariants()*/
-                            mViewModel.updateCartDraft()
-                            observeUpdateCartDraft()
-                        } else {
-                            Log.e(TAG, "observeInsertCartItem: (ROOM) insertion is failed")
-                        }
+                        Log.d(TAG, "observeInsertCartItem: (ROOM) insertion is successful")
+                        mViewModel.getLocallyCartItems()
+                        observeGetLocallyCartItems()
                     }
                 }
             }
         }
     }
 
-    private fun observeGetListOfVariants() {
+    private fun observeGetLocallyCartItems() {
         lifecycleScope.launch {
-            mViewModel.variantsFlow.collect {
-                if (it.isNotEmpty()) {
-                    Log.d(TAG, "observeGetListOfVariants: (Success) $it")
-                } else {
-                    Log.e(TAG, "observeGetListOfVariants: (Fail) $it")
+            mViewModel.cartItemsFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Log.e(TAG, "observeGetLocallyCartItems: (Failure ${it.errorCode}) ${it.errorBody}")
+                    }
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeGetLocallyCartItems: (Loading)")
+                    }
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeGetLocallyCartItems: (Success) ${it.value}")
+                        val lineItems = it.value.map { cartItem ->
+                            LineItem(cartItem.quantity, cartItem.variantId)
+                        }
+                        if (it.value.size==1){
+                            mViewModel.createCartDraft(lineItems)
+                            observeCreateCartDraft()
+                        }else{
+                            mViewModel.updateCartDraft(lineItems)
+                            observeUpdateCartDraft()
+                        }
+
+                    }
                 }
             }
         }
     }
+
+    private fun observeCreateCartDraft() {
+        lifecycleScope.launch {
+            mViewModel.creationCartFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeCreateCartDraft: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeCreateCartDraft: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeCreateCartDraft: (Success) ${Gson().toJson(it.value)}")
+                        mViewModel.uploadCartId(it.value.draft_order.id)
+                        mViewModel.insertCartIdLocally(it.value.draft_order.id)
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun observeUpdateCartDraft() {
         lifecycleScope.launch {
@@ -243,15 +279,14 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
                     }
 
                     is Resource.Success -> {
-                        Log.d(TAG, "observeUpdateCartDraft: (Success)")
-                        if (it.value.draft_order.line_items.size == 1) {
-                            mViewModel.uploadCartId(it.value.draft_order.id)
-                        }
+                        Log.d(TAG, "observeUpdateCartDraft: (Success) ${Gson().toJson(it.value)}")
+                        mViewModel.uploadCartId(it.value.draft_order.id)
+                        mViewModel.insertCartIdLocally(it.value.draft_order.id)
+
                     }
                 }
             }
         }
-
     }
 
     private fun showSelectedLayout(selectedLayoutId: Int) {

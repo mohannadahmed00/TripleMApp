@@ -1,5 +1,7 @@
 package com.giraffe.triplemapplication.utils
 
+import com.giraffe.triplemapplication.R
+
 object Constants {
     private const val HOST_NAME = "android-mns-1.myshopify.com/"
     const val ACCESS_TOKEN = "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"
@@ -22,10 +24,10 @@ object Constants {
         ARABIC("ar"),
         ENGLISH("en")
     }
-    enum class Currencies(val value:String) {
-        USD("USD"),
-        EUR("EUR"),
-        GBP("GBP"),
-        EGP("EGP")
+    enum class Currencies(val value:String,val symbolRes:Int) {
+        USD("USD", R.string.usd_sym),
+        EUR("EUR",R.string.eur_sym),
+        GBP("GBP",R.string.gbp_sym),
+        EGP("EGP",R.string.egp_sym)
     }
 }

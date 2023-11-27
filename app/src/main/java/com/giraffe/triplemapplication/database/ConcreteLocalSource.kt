@@ -113,7 +113,7 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     }
 
     override suspend fun getCartItems(): Flow<List<CartItem>> {
-        return cartDao.getCartItems()
+        return flow { emit(cartDao.getCartItems()) }
     }
 
     override suspend fun insertCartItem(cartItem: CartItem): Flow<Long> {
@@ -149,11 +149,11 @@ class ConcreteLocalSource(context: Context) : LocalSource {
 
     }
 
-    override fun insertWishListItem(product: Product): Flow<Long> =flow {
+    override fun insertWishListItem(product: Product): Flow<Long> = flow {
         emit(favoritesDao.insertFavorite(product))
     }
 
-    override fun deleteWishListItem(product: Product): Flow<Int> =flow {
+    override fun deleteWishListItem(product: Product): Flow<Int> = flow {
         emit(favoritesDao.deleteFavorite(product))
     }
 

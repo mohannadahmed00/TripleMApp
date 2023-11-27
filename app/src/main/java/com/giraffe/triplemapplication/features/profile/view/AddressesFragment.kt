@@ -12,32 +12,39 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentAddressesBinding
 import com.giraffe.triplemapplication.features.profile.view.adapters.AddressesAdapter
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
 import com.giraffe.triplemapplication.model.address.Address
+import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-class AddressesFragment : BaseFragment<ProfileVM,FragmentAddressesBinding>(),AddressesAdapter.OnAddressClick{
+class AddressesFragment : BaseFragment<ProfileVM, FragmentAddressesBinding>(),
+    AddressesAdapter.OnAddressClick {
 
-    companion object{
+    companion object {
         private const val TAG = "AddressesFragment"
         const val REQUEST_CODE = 7007
     }
 
+    private var address: Address? = null
+    private var position: Int = -1
 
 
     private lateinit var adapter: AddressesAdapter
-    private var deletedItemPosition:Int = -1
+    private var deletedItemPosition: Int = -1
     override fun getViewModel(): Class<ProfileVM> = ProfileVM::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         b: Boolean
-    ): FragmentAddressesBinding = FragmentAddressesBinding.inflate(inflater,container,false)
+    ): FragmentAddressesBinding = FragmentAddressesBinding.inflate(inflater, container, false)
+
     override fun onResume() {
         super.onResume()
         mViewModel.getAddresses("6666401546315")
@@ -45,7 +52,7 @@ class AddressesFragment : BaseFragment<ProfileVM,FragmentAddressesBinding>(),Add
 
 
     override fun handleView() {
-        adapter = AddressesAdapter(mutableListOf(),this)
+        adapter = AddressesAdapter(mutableListOf(), this)
         binding.rvAddresses.adapter = adapter
         mViewModel.getAddresses("6666401546315")
         observeGetAddresses()
@@ -53,14 +60,16 @@ class AddressesFragment : BaseFragment<ProfileVM,FragmentAddressesBinding>(),Add
 
     private fun observeGetAddresses() {
         lifecycleScope.launch {
-            mViewModel.addressesFlow.collect{
-                when(it){
+            mViewModel.addressesFlow.collect {
+                when (it) {
                     is Resource.Failure -> {
                         Log.e(TAG, "observeGetAddresses: ${it.errorCode}: ${it.errorBody}")
                     }
+
                     Resource.Loading -> {
                         Log.i(TAG, "observeGetAddresses: loading")
                     }
+
                     is Resource.Success -> {
                         adapter.updateList(it.value.addresses)
                     }
@@ -71,14 +80,14 @@ class AddressesFragment : BaseFragment<ProfileVM,FragmentAddressesBinding>(),Add
 
     override fun handleClicks() {
         binding.ivAddLocation.setOnClickListener {
-            if (checkPermissions()){
+            if (checkPermissions()) {
                 if (isLocationEnabled()) {
                     val action = AddressesFragmentDirections.actionAddressesFragmentToMapFragment()
                     findNavController().navigate(action)
                 } else {
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 }
-            }else{
+            } else {
                 requestPermissions()
             }
         }
@@ -170,25 +179,91 @@ class AddressesFragment : BaseFragment<ProfileVM,FragmentAddressesBinding>(),Add
     }
 
 
+    override fun onAddressClick(address: Address, position: Int) {
+        this.address = address
+        this.position = position
 
-    override fun onAddressClick(address: Address,position:Int) {
         deletedItemPosition = position
-        mViewModel.deleteAddress(address.customer_id!!,address.id!!)
+        mViewModel.deleteAddress(address.customer_id!!, address.id!!)
         observeDeleteAddress()
+        Snackbar.make(
+            requireView(),
+            getString(R.string.do_you_want_to_perform_this_action),
+            Snackbar.LENGTH_LONG
+        ).setAction(getString(R.string.undo)) {
+            // Perform the negative action (Undo)
+            address.let {
+                val addressRequest = AddressRequest(
+                    address = it
+                )
+                mViewModel.addNewAddress("6666401546315", addressRequest)
+                observeAddNewAddress()
+            }
+        }.show()
+    }
+
+    override fun onAddressLongPress(addressId: Long, position: Int,oldDefaultPosition:Int) {
+        mViewModel.setDefaultAddress(6666401546315, addressId)
+        observeSetDefaultAddress(position,oldDefaultPosition)
+    }
+
+    private fun observeSetDefaultAddress(position: Int,oldDefaultPosition:Int) {
+        lifecycleScope.launch {
+            mViewModel.defAddressFlow.collect{
+                when(it){
+                    is Resource.Failure -> {
+                        Log.e(TAG, "observeSetDefaultAddress: (Failure ${it.errorCode}) ${it.errorBody}")
+                    }
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeSetDefaultAddress: (Loading)")
+                    }
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeSetDefaultAddress: (Success)")
+                        adapter.selectNewDefault(position,oldDefaultPosition)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeAddNewAddress() {
+        lifecycleScope.launch {
+            mViewModel.addressFlow.collect{
+                when(it){
+                    is Resource.Failure -> {
+                        Log.e(MapFragment.TAG, "observeAddNewAddress: ${it.errorCode}: ${it.errorBody}")
+                    }
+                    Resource.Loading -> {
+                        Log.i(MapFragment.TAG, "observeAddNewAddress: ")
+                    }
+                    is Resource.Success -> {
+                        Log.d(MapFragment.TAG, "observeAddNewAddress: ${it.value}")
+                        val newList = mutableListOf<Address>()
+                        newList.addAll(adapter.addresses)
+                        newList.add(address!!)
+                        adapter.updateList(newList)
+                        //findNavController().navigateUp()
+                    }
+                }
+            }
+        }
     }
 
     private fun observeDeleteAddress() {
         lifecycleScope.launch {
-            mViewModel.delAddressFlow.collect{
-                when(it){
+            mViewModel.delAddressFlow.collect {
+                when (it) {
                     is Resource.Failure -> {
-                        if(it.errorCode==200){
+                        if (it.errorCode == 200) {
                             adapter.deleteItem(deletedItemPosition)
                         }
                         Log.e(TAG, "observeDeleteAddress: ${it.errorCode}: ${it.errorBody}")
                     }
+
                     Resource.Loading -> {
-                        Log.i(TAG, "observeDeleteAddress: loading")}
+                        Log.i(TAG, "observeDeleteAddress: loading")
+                    }
+
                     is Resource.Success -> {
 
                     }
