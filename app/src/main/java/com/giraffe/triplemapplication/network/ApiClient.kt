@@ -243,7 +243,7 @@ object ApiClient : RemoteSource {
     }
 
     override suspend fun getCoupons() = flow {emit(getApiServices().getCoupons())}
-    override fun uploadCustomerId(customerId: Long): Task<Void?>? {
+    override suspend fun uploadCustomerId(customerId: Long): Task<Void?>? {
         var mTask: Task<Void?>? = null
         FirebaseFirestore.getInstance().collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -290,6 +290,10 @@ object ApiClient : RemoteSource {
         return flow {
             emit(getApiServices().createNewDraftOrder(draftRequest))
         }
+    }
+
+    override suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>> {
+        TODO()
     }
 
     override suspend fun modifyWishListDraft(

@@ -139,7 +139,7 @@ class Repo private constructor(
     }
 
     override suspend fun uploadCustomerId(customerId: Long): Task<Void?>? {
-        localSource.setCustomerID(customerId)//create fun here
+        localSource.setCustomerID(getCustomerIdLocally()!!)//create fun here
         return remoteSource.uploadCustomerId(customerId)
     }
 
@@ -164,9 +164,6 @@ class Repo private constructor(
         localSource.deleteAllCartItems()
     }
 
-    override suspend fun getCartId(): Flow<Long> {
-        return remoteSource.getCartId()
-    }
 
     override suspend fun removeCartDraft(draftOrderId: Long) = remoteSource.removeCartDraft(draftOrderId)
 
@@ -235,11 +232,9 @@ class Repo private constructor(
     override suspend fun completeOrder(orderId: Long) = remoteSource.completeOrder(orderId)
 
     override suspend fun getCoupons()=remoteSource.getCoupons()
-    override suspend fun setCartIdLocally(cartId: Long?) {
-        localSource.setCartID(cartId)
-    }
 
-  override suspend fun getCoupons() = remoteSource.getCoupons()
+
+
     override fun setCartIdLocally(cartId: Long?): Flow<Unit> = localSource.setCartID(cartId)
 
     

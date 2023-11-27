@@ -92,7 +92,7 @@ interface RemoteSource {
   suspend fun uploadCustomerId(cartId: Long): Task<Void?>?
   
   suspend fun createNewWishListDraft(draftRequest: DraftRequest): Flow<Response<DraftResponse>>
-    fun uploadCustomerId(cartId: Long): Task<Void?>?
+
     fun getCustomerIdFromFirebase(): Flow<Long>
     suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>>
   suspend fun modifyWishListDraft(

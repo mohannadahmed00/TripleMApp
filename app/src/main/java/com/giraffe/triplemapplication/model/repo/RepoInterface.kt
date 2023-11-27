@@ -93,12 +93,11 @@ interface RepoInterface {
     suspend fun getCartItems(): Flow<List<CartItem>>
     suspend fun deleteAllCartItems()
 
-  suspend fun getCartId(): Flow<Long>
     suspend fun removeCartDraft(draftOrderId: Long, ): Flow<Response<Void>>
 
 
   
-  fun getCartId(): Flow<Long>
+    fun getCartId(): Flow<Long>
     fun getCustomerIdFromFirebase(): Flow<Long>
     fun getCustomerIdLocally(): Long?
 
