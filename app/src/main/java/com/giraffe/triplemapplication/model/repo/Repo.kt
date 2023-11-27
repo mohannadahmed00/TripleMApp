@@ -6,6 +6,7 @@ import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
+import com.giraffe.triplemapplication.model.customers.CustomerDetails
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
@@ -261,6 +262,8 @@ class Repo private constructor(
 
     override suspend fun clearData(): Flow<Unit> =
         localSource.clearData()
+
+    override suspend fun getCustomerById(customerId: Long) = remoteSource.getCustomerById(customerId)
 
 
 }
