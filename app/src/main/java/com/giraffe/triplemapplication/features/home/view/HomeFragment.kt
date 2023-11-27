@@ -22,9 +22,9 @@ import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.home.adapters.SliderAdapter
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.model.products.Product
-import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.OnCodeClick {
@@ -47,7 +47,15 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
 
     override fun handleView() {
         // Recycler View
-        productsAdapter = ProductAdapter(requireContext()) { navigateToProductInfoScreen(it) }
+        lifecycleScope.launch {
+            sharedViewModel.currencyFlow.collect {
+                productsAdapter = if (it is Resource.Success) {
+                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, it.value) { product -> navigateToProductInfoScreen(product) }
+                } else {
+                    ProductAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, "") { product -> navigateToProductInfoScreen(product) }
+                }
+            }
+        }
         binding.productsRecyclerView.apply {
             adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {

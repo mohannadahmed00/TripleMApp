@@ -1,5 +1,9 @@
 package com.giraffe.triplemapplication.model.orders
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Customer(
     val accepts_marketing: Boolean,
     val accepts_marketing_updated_at: String,
@@ -12,15 +16,15 @@ data class Customer(
     val first_name: String,
     val id: Long,
     val last_name: String,
-    val marketing_opt_in_level: Any,
-    val multipass_identifier: Any,
-    val note: Any,
+//    val marketing_opt_in_level: Any,
+//    val multipass_identifier: Any,
+//    val note: Any,
     val phone: String,
     val sms_marketing_consent: SmsMarketingConsent,
     val state: String,
     val tags: String,
     val tax_exempt: Boolean,
-    val tax_exemptions: List<Any>,
+//    val tax_exemptions: List<Any>,
     val updated_at: String,
     val verified_email: Boolean
-)
+): Parcelable

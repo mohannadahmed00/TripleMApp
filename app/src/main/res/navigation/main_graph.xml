@@ -124,7 +124,11 @@
         android:id="@+id/ordersFragment"
         android:name="com.giraffe.triplemapplication.features.orders.view.OrdersFragment"
         android:label="fragment_orders"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/checkoutFragment"
         android:name="com.giraffe.triplemapplication.features.checkout.view.CheckoutFragment"
@@ -144,5 +148,17 @@
             app:destination="@id/ordersFragment"
             app:popUpTo="@id/orderPlacedFragment"
             app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.giraffe.triplemapplication.features.orderdetails.view.OrderDetailsFragment"
+        android:label="fragment_order_details"
+        tools:layout="@layout/fragment_order_details" >
+        <argument
+            android:name="orderId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_productInfoFragment"
+            app:destination="@id/productInfoFragment" />
     </fragment>
 </navigation>
