@@ -15,14 +15,11 @@ import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
-
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
-
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
-import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
@@ -105,5 +102,8 @@ interface RemoteSource {
     ): Flow<Response<Void>>
 
     suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
+    suspend fun getWishListId(): Flow<Long>
+
+    suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
     fun getWishListId(): Flow<Long>
 }

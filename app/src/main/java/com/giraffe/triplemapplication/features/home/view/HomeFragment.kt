@@ -107,7 +107,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
                         val coupons = it.value.price_rules.map {priceRule ->
                             priceRule.title
                         }
-                        sliderAdapter = SliderAdapter(requireContext(), coupons,this@HomeFragment)
+                        sliderAdapter = SliderAdapter(requireContext(), it.value.price_rules,this@HomeFragment)
                         binding.sliderViewPager.adapter = sliderAdapter
                     }
                 }

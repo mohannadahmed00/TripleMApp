@@ -71,24 +71,28 @@ class CurrencyFragment : BaseFragment<ProfileVM, FragmentCurrencyBinding>() {
             hideAll()
             binding.ivEgpCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.EGP)
+            sharedViewModel.setCurrencySymbol(Constants.Currencies.EGP.symbolRes)
             mViewModel.setCurrency(Constants.Currencies.EGP)
         }
         binding.tvUsd.setOnClickListener {
             hideAll()
             binding.ivUsdCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.USD)
+            sharedViewModel.setCurrencySymbol(Constants.Currencies.USD.symbolRes)
             mViewModel.setCurrency(Constants.Currencies.USD)
         }
         binding.tvEur.setOnClickListener {
             hideAll()
             binding.ivEurCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.EUR)
+            sharedViewModel.setCurrencySymbol(Constants.Currencies.EUR.symbolRes)
             mViewModel.setCurrency(Constants.Currencies.EUR)
         }
         binding.tvGbp.setOnClickListener {
             hideAll()
             binding.ivGbpCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.GBP)
+            sharedViewModel.setCurrencySymbol(Constants.Currencies.GBP.symbolRes)
             mViewModel.setCurrency(Constants.Currencies.GBP)
         }
     }

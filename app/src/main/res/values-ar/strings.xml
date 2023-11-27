@@ -94,4 +94,20 @@
     <string name="dialog_del_ok">Remove</string>
     <string name="dialog_del_cancel">Cancel</string>
     <string name="dialog_del">Are you sure you want to remove this order?</string>
+    <string name="for_orders_that_is_greater_than_or_equal">for orders that is greater than or equal %1$s</string>
+    <string name="enter_apartment_number">Enter Apartment number</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="empty_phone_number">empty phone number</string>
+    <string name="empty_building_number">empty building number</string>
+    <string name="empty_apartment_number">empty apartment number</string>
+    <string name="empty_tag">empty tag</string>
+    <string name="invalid_phone_number">invalid phone number</string>
+
+    <string name="egp_sym">ج.م</string>
+    <string name="usd_sym">$</string>
+    <string name="gbp_sym">£</string>
+    <string name="eur_sym">€</string>
+    <string name="clear_all">clear all</string>
+    <string name="do_you_want_to_perform_this_action">Do you want to perform this action?</string>
+    <string name="undo">Undo</string>
 </resources>

@@ -30,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCallback,
@@ -50,6 +51,7 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
     private var location: Location? = null
     private var lat: Double = 0.0
     private var lon: Double = 0.0
+    private var mAddress = ""
 
 
     private var postalCode:String?= null
@@ -81,23 +83,55 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
         mapFragment.getMapAsync(this)
     }
 
+    private fun validFields(tag:String,apart:String,build:String,phone:String):Boolean{
+        if (tag.isBlank()) {
+            showSnackBAr(getString(R.string.empty_tag))
+            return false
+        }
+        if (apart.isBlank()) {
+            showSnackBAr(getString(R.string.empty_apartment_number))
+            return false
+        }
+        if (build.isBlank()) {
+            showSnackBAr(getString(R.string.empty_building_number))
+            return false
+        }
+        if (phone.isBlank()) {
+            showSnackBAr(getString(R.string.empty_phone_number))
+            return false
+        }
+        if (!isValidPhoneNumber(phone)) {
+            showSnackBAr(getString(R.string.invalid_phone_number))
+            return false
+        }
+        return true
+    }
 
+    private fun showSnackBAr(txt:String){
+        Snackbar.make(requireView(), txt, Snackbar.LENGTH_SHORT).show()
+    }
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        val regex = """^(\+20|0)?1([0-2]|5)\d{8}$""".toRegex()
+        return regex.matches(phoneNumber)
+    }
     override fun handleClicks() {
         binding.btnConfirm.setOnClickListener {
             Log.i(TAG, "handleClicks: ")
-            val tag = binding.edtTag.text
-            if (!tag.isNullOrBlank()){
+            val tag = binding.edtTag.text.toString()
+            val apartNum = binding.edtApartNum.text.toString()
+            val buildNum = binding.edtBuildNum.text.toString()
+            val phone = binding.edtPhone.text.toString()
+            if (validFields(tag,apartNum,buildNum,phone) ){
                 Log.i(TAG, "handleClicks: isNotNullOrBlank")
                 val addressRequest = AddressRequest(
                     address = Address(
-                        address1 = binding.tvAddress.text.toString(),
-                        address2 = street,
+                        address1 = mAddress,
+                        address2 = apartNum.plus(", $buildNum, $street."),
                         city = city,
-                        //first_name = tag.trim().toString(),
-                        //last_name = " ",
+                        phone = phone,
                         province = area?.replace(" Governorate",""),
                         zip = postalCode,
-                        name = tag.trim().toString(),
+                        name = tag.trim(),
                         country_code = countryCode,
                     )
                 )
@@ -176,9 +210,8 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
                 area = address[0].adminArea
                 country = address[0].countryName
                 countryCode = address[0].countryCode
-                var mAddress = "${address[0].postalCode}, ${address[0].thoroughfare}, ${address[0].subAdminArea}, ${address[0].adminArea}, ${address[0].countryName}"
+                mAddress = "${address[0].postalCode}, ${address[0].thoroughfare}, ${address[0].subAdminArea}, ${address[0].adminArea}, ${address[0].countryName}"
                 mAddress = mAddress.replace("null, ","")
-                binding.tvAddress.text= mAddress
                 Log.i(TAG, mAddress)
             }
         }catch (e:Exception){

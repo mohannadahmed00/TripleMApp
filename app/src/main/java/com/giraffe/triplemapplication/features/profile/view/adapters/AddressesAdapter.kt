@@ -6,13 +6,22 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.giraffe.triplemapplication.databinding.AddressItemBinding
 import com.giraffe.triplemapplication.model.address.Address
+import com.giraffe.triplemapplication.utils.hide
+import com.giraffe.triplemapplication.utils.show
 
 class AddressesAdapter(
-    private val addresses: MutableList<Address>,
+    val addresses: MutableList<Address>,
     private val onAddressClick: OnAddressClick,
 ) : Adapter<AddressesAdapter.AddressVH>() {
 
-    //private var selectedItemPosition: Int = -1
+    private var defaultPosition: Int = -1
+
+    fun selectNewDefault(newPosition: Int,oldDefaultPosition:Int){
+        addresses[newPosition].default = true
+        addresses[oldDefaultPosition].default = false
+        notifyItemChanged(newPosition)
+        notifyItemChanged(oldDefaultPosition)
+    }
 
     class AddressVH(val binding: AddressItemBinding) : ViewHolder(binding.root)
 
@@ -49,6 +58,17 @@ class AddressesAdapter(
         holder.binding.ivDelete.setOnClickListener {
             onAddressClick.onAddressClick(item, position)
         }
+        if (item.default == true){
+            defaultPosition = position
+            holder.binding.ivStar.show()
+        }else{
+            holder.binding.ivStar.hide()
+        }
+
+        holder.binding.root.setOnLongClickListener {
+            onAddressClick.onAddressLongPress(item.id?.toLong()?:0,position,defaultPosition)
+            true
+        }
 
 
         /*holder.binding.root.setOnClickListener {
@@ -69,5 +89,7 @@ class AddressesAdapter(
 
     interface OnAddressClick {
         fun onAddressClick(address: Address, position: Int)
+        fun onAddressLongPress(addressId: Long, position: Int,oldDefaultPosition:Int)
+
     }
 }
