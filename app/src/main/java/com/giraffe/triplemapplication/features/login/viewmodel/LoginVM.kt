@@ -73,9 +73,7 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
             _wishListId.collectLatest {
                 when(it){
                     is Resource.Failure -> {}
-                    Resource.Loading -> {
-
-                    }
+                    Resource.Loading -> {}
                     is Resource.Success -> {
                         wishListId = it.value
                     }

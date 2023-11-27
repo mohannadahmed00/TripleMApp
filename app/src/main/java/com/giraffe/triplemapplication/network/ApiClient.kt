@@ -227,7 +227,7 @@ object ApiClient : RemoteSource {
     }
 
     override suspend fun getCoupons() = flow {emit(getApiServices().getCoupons())}
-    override suspend fun uploadCustomerId(customerId: Long): Task<Void?>? {
+    override fun uploadCustomerId(customerId: Long): Task<Void?>? {
         var mTask: Task<Void?>? = null
         FirebaseFirestore.getInstance().collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -250,7 +250,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override fun getCustomerId(): Flow<Long> {
+    override fun getCustomerIdFromFirebase(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)

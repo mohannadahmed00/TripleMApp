@@ -158,8 +158,12 @@ class Repo private constructor(
         return remoteSource.getCartId()
     }
 
-    override fun getCustomer(): Flow<Long> {
-        return remoteSource.getCustomerId()
+    override fun getCustomerIdFromFirebase(): Flow<Long> {
+        return remoteSource.getCustomerIdFromFirebase()
+    }
+
+    override fun getCustomerIdLocally(): Long? {
+        return localSource.getCustomerID()
     }
 
     override suspend fun uploadWishListId(wishListId: Long): Task<Void?>? {
@@ -211,14 +215,14 @@ class Repo private constructor(
 
     override suspend fun delOrder(orderId: Long) = remoteSource.delOrder(orderId)
     override suspend fun getCoupons() = remoteSource.getCoupons()
-    override suspend fun setCartIdLocally(cartId: Long?): Flow<Unit> = localSource.setCartID(cartId)
+    override fun setCartIdLocally(cartId: Long?): Flow<Unit> = localSource.setCartID(cartId)
 
 
-    override suspend fun setWishListIdLocally(wishListId: Long?): Flow<Unit> =
+    override fun setWishListIdLocally(wishListId: Long?): Flow<Unit> =
         localSource.setWishListID(wishListId)
 
 
-    override suspend fun setCustomerIdLocally(customerId: Long): Flow<Unit> =
+    override fun setCustomerIdLocally(customerId: Long): Flow<Unit> =
         localSource.setCustomerID(customerId)
 
 

@@ -34,12 +34,9 @@ interface RemoteSource {
 
     fun getCustomerByEmail(email :String ):Flow<MultipleCustomerResponse>
     fun signUpFirebase(
-
-
         email: String,
         password: String,
     ): Flow<AuthResult>
-
 
     fun signInFirebase(email: String, password: String): Flow<AuthResult>
 
@@ -87,8 +84,8 @@ interface RemoteSource {
 
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>
 
-    suspend fun uploadCustomerId(cartId: Long): Task<Void?>?
-    fun getCustomerId(): Flow<Long>
+    fun uploadCustomerId(cartId: Long): Task<Void?>?
+    fun getCustomerIdFromFirebase(): Flow<Long>
     suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>>
 
     suspend fun modifyWishListDraft(

@@ -91,12 +91,16 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         shared.store(Constants.CURRENCY, currency.value)
     }
 
-    override suspend fun setCartID(id: Long?) : Flow<Unit> = flow{
+    override  fun setCartID(id: Long?) : Flow<Unit> = flow{
         emit(shared.store(Constants.CART_ID, id.toString()))
     }
 
-    override suspend fun setCustomerID(id: Long) : Flow<Unit> = flow{
+    override  fun setCustomerID(id: Long) : Flow<Unit> = flow{
         emit(shared.store(Constants.CUSTOMER_ID, id.toString()))
+    }
+
+    override fun getCustomerID(): Long? {
+       return  shared.read(Constants.CUSTOMER_ID)?.toLong()
     }
 
     override suspend fun getCartID(): Long? {
@@ -127,7 +131,7 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         cartDao.updateCartItem(cartItem)
     }
 
-    override suspend fun setWishListID(id: Long?): Flow<Unit> = flow {
+    override  fun setWishListID(id: Long?): Flow<Unit> = flow {
         emit(shared.store(Constants.WISH_LIST_ID, id.toString()))
     }
 

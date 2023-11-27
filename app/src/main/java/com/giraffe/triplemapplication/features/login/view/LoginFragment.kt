@@ -54,18 +54,6 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
     }
 
     private fun showSuccess() {
-//        mViewModel.getData(binding.emailEditText.text.toString())
-//        lifecycleScope.launch {
-//            mViewModel.customerId.collectLatest {
-//                if(it != null){
-//                    mViewModel.setData()
-//                    findNavController().setGraph(R.navigation.main_graph)
-//                }else{
-//                    Snackbar.make(requireView() , "Failed" , Snackbar.LENGTH_SHORT).show()
-//                }
-//
-//            }
-//        }
         mViewModel.getCustomerByEmail(binding.emailEditText.text.toString())
         lifecycleScope.launch {
             mViewModel.customer.collectLatest {
