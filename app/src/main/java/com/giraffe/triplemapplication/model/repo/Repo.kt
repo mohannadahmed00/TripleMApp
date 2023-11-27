@@ -7,6 +7,7 @@ import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.products.Product
@@ -68,8 +69,7 @@ class Repo private constructor(
         return remoteSource.getCurrentUser()
     }
 
-    override fun isLoggedIn(): Flow<Boolean>  =
-       remoteSource.isLoggedIn()
+    override fun isLoggedIn(): Boolean  =remoteSource.isLoggedIn()
 
 
     override fun logout(): Flow<Unit> = remoteSource.logout()
@@ -154,11 +154,11 @@ class Repo private constructor(
         return localSource.getCartItems()
     }
 
-    override suspend fun getCartId(): Flow<Long> {
+    override fun getCartId(): Flow<Long> {
         return remoteSource.getCartId()
     }
 
-    override suspend fun getCustomer(): Flow<Long> {
+    override fun getCustomer(): Flow<Long> {
         return remoteSource.getCustomerId()
     }
 
@@ -191,12 +191,13 @@ class Repo private constructor(
         return localSource.getWishListItems()
     }
 
-    override fun getCustomerByEmail(email: String): Flow<CustomerResponse> =
+    override fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse> =
         remoteSource.getCustomerByEmail(email)
 
-    override suspend fun getWishListId(): Flow<Long> {
-        return remoteSource.getWishListId()
-    }
+    override fun getWishListId(): Flow<Long>  =
+        remoteSource.getWishListId()
+
+
 
 
     override suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double, Double>> {

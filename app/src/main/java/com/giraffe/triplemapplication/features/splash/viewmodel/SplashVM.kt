@@ -26,9 +26,7 @@ class SplashVM(private val repo: RepoInterface) : ViewModel() {
         MutableStateFlow(Resource.Loading)
     val exchangeRatesFlow: StateFlow<Resource<Long>> = _exchangeRatesFlow.asStateFlow()
 
-    private val _currentUser: MutableStateFlow<Resource<Boolean>> =
-        MutableStateFlow(Resource.Loading)
-    val currentUser : StateFlow<Resource<Boolean>> = _currentUser.asStateFlow()
+
     fun getFirstTimeFlag() {
         viewModelScope.launch(Dispatchers.IO) {
             _firstFlagFlow.emit(safeCall { repo.getFirstTimeFlag() })
@@ -53,10 +51,8 @@ class SplashVM(private val repo: RepoInterface) : ViewModel() {
             _exchangeRatesFlow.emit(safeCall { repo.setExchangeRates(value) })
         }
     }
-    fun isLoggedIn(){
-        viewModelScope.launch(Dispatchers.IO) {
-            _currentUser.emit(safeCall { repo.isLoggedIn() })
-        }
-    }
+    fun isLoggedIn():Boolean = repo.isLoggedIn()
+
+
 
 }

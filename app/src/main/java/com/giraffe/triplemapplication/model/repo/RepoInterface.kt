@@ -17,6 +17,7 @@ import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
@@ -47,7 +48,7 @@ interface RepoInterface {
     fun doPasswordsMatch(password: String, confirmPassword: String): Boolean
     fun isDataValid(email: String, password: String, confirmPassword: String): Boolean
     fun getCurrentUser(): FirebaseUser
-    fun isLoggedIn(): Flow<Boolean>
+    fun isLoggedIn(): Boolean
     fun logout() : Flow<Unit>
 
     fun createCustomer(customer: Request): Flow<CustomerResponse>
@@ -87,8 +88,8 @@ interface RepoInterface {
 
     suspend fun getCartItems(): Flow<List<CartItem>>
 
-    suspend fun getCartId(): Flow<Long>
-    suspend fun getCustomer(): Flow<Long>
+    fun getCartId(): Flow<Long>
+    fun getCustomer(): Flow<Long>
     suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
 
     suspend fun insertWishListItem(product: Product): Flow<Long>
@@ -99,10 +100,10 @@ interface RepoInterface {
     suspend fun createWishListDraft(variants: List<LineItem>): Flow<Response<DraftResponse>>
 
     suspend fun getWishListItems(): Flow<List<Product>>
-    fun getCustomerByEmail(email: String): Flow<CustomerResponse>
+    fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse>
 
 
-    suspend fun getWishListId(): Flow<Long>
+    fun getWishListId(): Flow<Long>
 
     suspend fun getExchangeRateOf(currencyCode: Constants.Currencies): Flow<Pair<Double, Double>>
 

@@ -182,44 +182,31 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
 
                             //must go to onboard graph
                         } else {
-                            mViewModel.isLoggedIn()
-                            setGraph()
-
                             //should check here if authorized (go to main graph) or not (go to auth graph)
-                        }
 
-//                        setGraph()
-                        val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
-//                        val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
-                        findNavController().navigate(action)
+                            if (mViewModel.isLoggedIn()) {
+                                val action =
+                                    SplashFragmentDirections.actionSplashFragmentToMainGraph()
+                                findNavController().navigate(action)
+
+
+                            } else {
+                                val action =
+                                    SplashFragmentDirections.actionSplashFragmentToAuthGraph()
+                                findNavController().navigate(action)
+
+
+                            }
+
+                        }
+//                        findNavController().setGraph(R.navigation.auth_graph)
+
                     }
                 }
             }
         }
     }
 
-    private fun setGraph() {
-        lifecycleScope.launch {
-            mViewModel.currentUser.collectLatest { it ->
-                when (it) {
-                    is Resource.Failure -> {}
-                    Resource.Loading -> {
-
-                    }
-
-                    is Resource.Success -> {
-                        if (!it.value) {
-//                            val action = SplashFragmentDirections.actionSplashFragmentToAuthGraph()
-                            findNavController().setGraph(R.navigation.auth_graph)
-                        } else {
-//                            val action = SplashFragmentDirections.actionSplashFragmentToMainGraph()
-                            findNavController().setGraph(R.navigation.main_graph)
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     override fun handleClicks() {}
 }

@@ -8,6 +8,7 @@ import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.utils.Constants
@@ -59,7 +60,7 @@ object ApiClient : RemoteSource {
         emit(getApiServices(Constants.CURRENCY_URL).getExchangeRates())
     }
 
-    override fun getCustomerByEmail(email: String): Flow<CustomerResponse> =flow{
+    override fun getCustomerByEmail(email: String): Flow<MultipleCustomerResponse> =flow{
         emit(getApiServices().getCustomerByEmail(email))
     }
 
@@ -168,12 +169,8 @@ object ApiClient : RemoteSource {
         return FirebaseAuth.getInstance().currentUser!!
     }
 
-    override fun isLoggedIn(): Flow<Boolean> = flow {
-        if(FirebaseAuth.getInstance().currentUser != null){
-            emit(true)
-        }else{
-            emit(false)
-        }
+    override fun isLoggedIn(): Boolean {
+        return FirebaseAuth.getInstance().currentUser != null
     }
 
     override fun logout() :Flow<Unit> = flow{
@@ -209,7 +206,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override suspend fun getCartId(): Flow<Long> {
+    override  fun getCartId(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)//?????????
@@ -253,7 +250,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override suspend fun getCustomerId(): Flow<Long> {
+    override fun getCustomerId(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -322,7 +319,7 @@ object ApiClient : RemoteSource {
         return mTask
     }
 
-    override suspend fun getWishListId(): Flow<Long> {
+    override  fun getWishListId(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)

@@ -10,6 +10,7 @@ import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
+import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 
@@ -31,7 +32,7 @@ interface RemoteSource {
     suspend fun getAllProducts(): Flow<AllProductsResponse>
     suspend fun getCurrencies(): Flow<ExchangeRatesResponse>
 
-    fun getCustomerByEmail(email :String ):Flow<CustomerResponse>
+    fun getCustomerByEmail(email :String ):Flow<MultipleCustomerResponse>
     fun signUpFirebase(
 
 
@@ -43,7 +44,7 @@ interface RemoteSource {
     fun signInFirebase(email: String, password: String): Flow<AuthResult>
 
     fun getCurrentUser(): FirebaseUser
-    fun isLoggedIn(): Flow<Boolean>
+    fun isLoggedIn(): Boolean
     fun logout():Flow<Unit>
     fun createCustomer(customer: Request): Flow<CustomerResponse>
     suspend fun getAllCategories(): Flow<AllCategoriesResponse>
@@ -82,12 +83,12 @@ interface RemoteSource {
     ): Flow<Response<Void>>
 
     suspend fun uploadCartId(cartId: Long): Task<Void?>?
-    suspend fun getCartId():Flow<Long>
+    fun getCartId():Flow<Long>
 
     suspend fun getCoupons(): Flow<Response<CouponsResponse>>
 
     suspend fun uploadCustomerId(cartId: Long): Task<Void?>?
-    suspend fun getCustomerId(): Flow<Long>
+    fun getCustomerId(): Flow<Long>
     suspend fun createNewWishListDraft(productsItem: List<LineItem>): Flow<Response<DraftResponse>>
 
     suspend fun modifyWishListDraft(
@@ -100,5 +101,5 @@ interface RemoteSource {
     ): Flow<Response<Void>>
 
     suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
-    suspend fun getWishListId(): Flow<Long>
+    fun getWishListId(): Flow<Long>
 }
