@@ -81,7 +81,7 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         dismissLoading()
-                        ordersAdapter.submitList(it.value.orders)
+                        ordersAdapter.submitList(it.value.orders.filter { order -> order.customer?.id == mViewModel.customerId })
                     }
                 }
             }

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.request.AppliedDiscount
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
@@ -60,21 +61,6 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
         viewModelScope.launch {
             _creationCartFlow.emit(safeApiCall { repo.createCartDraft(DraftRequest(DraftOrder(line_items = lineItems))) })
         }
-            /*repo.getCartItems().collect{
-                val lineItems = it.map {cartItem ->
-                    LineItem(cartItem.quantity,cartItem.variantId, "Custom Tee", 20.00)
-                }
-                val customerId = repo.getCustomerIdLocally()!!
-                Log.i("hahahahaha", "updateCartDraft: custimer id $customerId")
-                if (lineItems.size<=1){
-                    val draftRequest = DraftRequest(DraftOrder(line_items = lineItems, use_customer_default_address = true, appliedDiscount = AppliedDiscount("", "", 0.0, 0.0, "Custom Tee"), customer =  Customer(customerId)))
-                    _updateCartFlow.emit(safeApiCall { repo.createCartDraft(draftRequest) })
-                }else{
-                    val draftRequest = DraftRequest(DraftOrder(line_items = lineItems, use_customer_default_address = true, appliedDiscount = AppliedDiscount("", "", 0.0, 0.0, "Custom Tee"), customer =  Customer(customerId)))
-                    _updateCartFlow.emit(safeApiCall { repo.modifyCartDraft(draftRequest) })
-                }
-            }
-        }*/
     }
 
     fun uploadCartId(cartId:Long){
