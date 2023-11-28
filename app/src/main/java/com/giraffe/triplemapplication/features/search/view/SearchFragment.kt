@@ -2,6 +2,7 @@ package com.giraffe.triplemapplication.features.search.view
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
@@ -30,7 +31,24 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
     ): FragmentSearchBinding = FragmentSearchBinding.inflate(inflater, container, false)
 
     override fun handleView() {
+        findNavController().addOnDestinationChangedListener{_ , navDestination , _ ->
+            when (navDestination.id) {
+                R.id.searchResultFragment -> {
 
+                    Log.i("TAG", "SearchView: ")
+                }
+                R.id.filterFragment -> {
+                    Log.d("TAG", "FilterView: ")
+
+                }
+                else -> {
+                    sharedViewModel.allProducts.value?.let { sharedViewModel.setFiltered(it) }
+
+                    Log.e("TAG", "another: ")
+
+                }
+            }
+        }
     }
 
     override fun onResume() {

@@ -40,7 +40,7 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
         getAllCategories()
         getAllProducts()
         getCoupons()
-        getCustomerId()
+
     }
 
 
@@ -69,11 +69,5 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
             _couponsFlow.emit(safeApiCall {repo.getCoupons()})
         }
     }
-    private fun getCustomerId(){
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.i("TAG", "getCustomerId: ${repo.getCustomerIdLocally()}")
-            Log.i("TAG", "getCustomerId: ${repo.getCartId()}")
 
-        }
-    }
 }
