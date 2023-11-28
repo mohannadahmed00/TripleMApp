@@ -1,6 +1,5 @@
 package com.giraffe.triplemapplication.features.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.brands.AllBrandsResponse
@@ -15,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeVM(private val repo:RepoInterface):ViewModel() {
@@ -58,7 +56,7 @@ class HomeVM(private val repo:RepoInterface):ViewModel() {
         }
     }
 
-    private fun getAllProducts() {
+    fun getAllProducts() {
         viewModelScope.launch(Dispatchers.IO) {
             _allProductsFlow.emit(safeCall { repo.getAllProducts() })
         }

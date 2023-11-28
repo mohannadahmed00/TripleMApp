@@ -23,8 +23,6 @@ import com.giraffe.triplemapplication.features.home.adapters.SliderAdapter
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.OnCodeClick {
@@ -47,17 +45,6 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
 
     override fun handleView() {
         // Recycler View
-        productsAdapter = ProductAdapter(
-            requireContext(),
-            sharedViewModel.exchangeRateFlow.value,
-            sharedViewModel.currencySymFlow.value
-        ) { product -> navigateToProductInfoScreen(product) }
-        binding.productsRecyclerView.apply {
-            adapter = productsAdapter
-            layoutManager = LinearLayoutManager(context).apply {
-                orientation = RecyclerView.HORIZONTAL
-            }
-        }
         brandsAdapter = BrandsAdapter(requireContext()) { navigateToAllCategoriesScreen(true, it) }
         binding.brandsRecyclerView.apply {
             adapter = brandsAdapter
@@ -73,14 +60,8 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
             }
         }
 
+
         handleClicks()
-
-        /*images = arrayListOf()
-        images.add(R.drawable.banner)
-        images.add(R.drawable.banner)
-        images.add(R.drawable.banner)*/
-
-
         observeGetAllProducts()
         observeGetAllCategories()
         observeGetAllBrands()
@@ -103,7 +84,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
                         val coupons = it.value.price_rules.map {priceRule ->
                             priceRule.title
                         }
-                        sliderAdapter = SliderAdapter(requireContext(), it.value.price_rules,this@HomeFragment)
+                        sliderAdapter = SliderAdapter(requireContext(), it.value.price_rules,this@HomeFragment,sharedViewModel.exchangeRateFlow.value,sharedViewModel.currencySymFlow.value)
                         binding.sliderViewPager.adapter = sliderAdapter
                     }
                 }
@@ -154,6 +135,17 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
                     is Resource.Failure -> { dismissLoading() }
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
+                        productsAdapter = ProductAdapter(
+                            requireContext(),
+                            sharedViewModel.exchangeRateFlow.value,
+                            sharedViewModel.currencySymFlow.value
+                        ) { product -> navigateToProductInfoScreen(product) }
+                        binding.productsRecyclerView.apply {
+                            adapter = productsAdapter
+                            layoutManager = LinearLayoutManager(context).apply {
+                                orientation = RecyclerView.HORIZONTAL
+                            }
+                        }
                         sharedViewModel.setAllProduct(it.value.products)
                         productsAdapter.submitList(it.value.products)
                         dismissLoading()

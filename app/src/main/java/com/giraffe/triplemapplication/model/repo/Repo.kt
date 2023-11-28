@@ -6,7 +6,6 @@ import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-import com.giraffe.triplemapplication.model.customers.CustomerDetails
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
@@ -14,7 +13,6 @@ import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
 import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
 import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
-import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
@@ -71,7 +69,7 @@ class Repo private constructor(
 
     }
 
-    override fun getCurrentUser(): FirebaseUser {
+    override fun getCurrentUser(): Flow<FirebaseUser> {
         return remoteSource.getCurrentUser()
     }
 
@@ -254,6 +252,14 @@ class Repo private constructor(
 
         localSource.setCustomerID(customerId)
 
+    }
+
+    override suspend fun setFullNameLocally(fullName: String) {
+        localSource.setFullNameLocally(fullName)
+    }
+
+    override suspend fun getFullName(): Flow<String?> {
+        return localSource.getFullName()
     }
 
     override suspend fun setDefaultAddress(

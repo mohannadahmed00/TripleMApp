@@ -1,6 +1,5 @@
 package com.giraffe.triplemapplication.features.profile.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.address.AddressRequest
@@ -11,11 +10,11 @@ import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ProfileVM(private val repo: RepoInterface) : ViewModel() {
@@ -44,6 +43,12 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
     val dataCleared : StateFlow<Resource<Unit>> = _dataCleared
     private val _signOut : MutableStateFlow<Resource<Unit>> = MutableStateFlow(Resource.Loading)
     val signOut : StateFlow<Resource<Unit>> = _signOut
+
+    private val _firebaseUserFlow : MutableStateFlow<Resource<FirebaseUser>> = MutableStateFlow(Resource.Loading)
+    val firebaseUserFlow : StateFlow<Resource<FirebaseUser>> = _firebaseUserFlow
+
+    private val _fullNameFlow : MutableStateFlow<Resource<String?>> = MutableStateFlow(Resource.Loading)
+    val fullNameFlow : StateFlow<Resource<String?>> = _fullNameFlow
     fun setLanguage(code: Constants.Languages) {
         viewModelScope.launch {
             repo.setLanguage(code)
@@ -99,6 +104,18 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
     fun setDefaultAddress(customerId:Long, addressId:Long){
         viewModelScope.launch(Dispatchers.IO) {
             _defAddressFlow.emit(safeApiCall{ repo.setDefaultAddress(customerId, addressId) })
+        }
+    }
+
+    fun getEmail(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _firebaseUserFlow.emit(safeCall { repo.getCurrentUser() })
+        }
+    }
+
+    fun getFullName(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _fullNameFlow.emit(safeCall { repo.getFullName() })
         }
     }
 

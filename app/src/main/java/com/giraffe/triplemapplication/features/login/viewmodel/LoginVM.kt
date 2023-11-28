@@ -3,7 +3,6 @@ package com.giraffe.triplemapplication.features.login.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
@@ -99,10 +98,17 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
             repo.setCustomerIdLocally(customerId)
             repo.setCartIdLocally(cartId)
             repo.setWishListIdLocally(wishListId)
+
             Log.d("TAG", "setData: customer $customerId ")
             Log.d("TAG", "setData: cart $cartId ")
             Log.d("TAG", "setData: wish $wishListId ")
 
+        }
+    }
+
+    fun setFullNameLocally(fullName:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.setFullNameLocally(fullName)
         }
     }
 

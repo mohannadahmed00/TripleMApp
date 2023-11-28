@@ -1,24 +1,17 @@
 package com.giraffe.triplemapplication.features.fav.view
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentFavBinding
-import com.giraffe.triplemapplication.features.details.view.FavAdapter
 import com.giraffe.triplemapplication.features.fav.swipe.OnSwipe
 import com.giraffe.triplemapplication.features.fav.swipe.SwipeGesture
 import com.giraffe.triplemapplication.features.fav.viewmodel.FavVM
-import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
-import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
     override fun getViewModel(): Class<FavVM> = FavVM::class.java
-    private lateinit var adapter:FavAdapter
+    private lateinit var adapter: FavAdapter
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,7 +58,9 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
 
     private fun showSuccess(products: List<WishListItem>) {
 
-        adapter = FavAdapter() { navigateToProductInfo(it) }
+        adapter = FavAdapter(exchangeRate = sharedViewModel.exchangeRateFlow.value, currency = sharedViewModel.currencySymFlow.value, onItemClick = {
+            navigateToProductInfo(it)
+        })
         binding.rvProducts.adapter = adapter
         adapter.submitList(products)
 
@@ -85,10 +80,9 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
     }
 
     private fun navigateToProductInfo(product: WishListItem) {
-//        sharedViewModel.setCurrentProduct(product.product)
-//        val action = FavFragmentDirections.actionFavFragmentToProductInfoFragment()
-//        findNavController().navigate(action)
-        mViewModel.deleteWishListItemLocally(product)
+        sharedViewModel.setCurrentProduct(product.product)
+        val action = FavFragmentDirections.actionFavFragmentToProductInfoFragment()
+        findNavController().navigate(action)
     }
 
 

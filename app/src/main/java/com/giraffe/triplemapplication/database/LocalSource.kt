@@ -1,13 +1,7 @@
 package com.giraffe.triplemapplication.database
 
 import com.giraffe.triplemapplication.model.cart.CartItem
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +24,9 @@ interface LocalSource {
     suspend fun setCustomerID(id:Long)
     suspend fun getCustomerID() : Long?
     suspend fun getCartID():Long?
+
+    suspend fun setFullNameLocally(fullName:String)
+    suspend fun getFullName():Flow<String?>
 
     suspend fun getCartItems(): Flow<List<CartItem>>
 

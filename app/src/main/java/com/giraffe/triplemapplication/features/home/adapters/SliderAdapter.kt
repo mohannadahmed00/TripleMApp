@@ -9,12 +9,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.PagerAdapter
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.model.discount.PriceRule
+import com.giraffe.triplemapplication.utils.convert
 import java.util.Objects
 
 class SliderAdapter(
     private val context: Context,
     private val codes: List<PriceRule>,
-    private val onCodeClick: OnCodeClick
+    private val onCodeClick: OnCodeClick,
+    private val exchangeRate:Pair<Double,Double>?,
+    private val currency:Int
 ) : PagerAdapter() {
     override fun getCount(): Int {
         return codes.size
@@ -36,12 +39,13 @@ class SliderAdapter(
         tvCode.text = codes[position].title.subSequence(0,codes[position].title.length/2).toString().plus("****")
         tvHint.text = context.getString(
             R.string.for_orders_that_is_greater_than_or_equal,
-            codes[position].prerequisite_subtotal_range.greater_than_or_equal_to.toDouble()
+            codes[position].prerequisite_subtotal_range.greater_than_or_equal_to.toDouble().convert(exchangeRate).toString().plus(" ${card.context.getString(currency)}")
         )
         if (codes[position].value_type=="percentage"){
             tvGift.text = codes[position].value.plus("%")
         }else{
-            tvGift.text = codes[position].value
+            tvGift.text = codes[position].value.toDouble().convert(exchangeRate).toString()
+                .plus(" ${card.context.getString(currency)}")
         }
 
         card.setOnLongClickListener {

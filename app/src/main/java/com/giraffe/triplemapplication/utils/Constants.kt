@@ -19,6 +19,7 @@ object Constants {
     const val CART_ID = "CART_ID"
     const val CUSTOMER_ID = "CUSTOMER_ID"
     const val WISH_LIST_ID = "WISH_LIST_ID"
+    const val FULL_NAME = "FULL_NAME"
 
 
     const val STRIPE_URL = "https://api.stripe.com/v1/"

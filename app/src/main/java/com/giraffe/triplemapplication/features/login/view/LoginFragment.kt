@@ -69,12 +69,10 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                     }
 
                     is Resource.Success -> {
-//
-
                         mViewModel.setData(it.value.customers.first().id)
+                        mViewModel.setFullNameLocally(it.value.customers.first().first_name)
                         findNavController().setGraph(R.navigation.main_graph)
                         dismissLoading()
-
                     }
                 }
             }

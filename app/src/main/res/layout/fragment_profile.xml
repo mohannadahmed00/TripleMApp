@@ -8,15 +8,7 @@
     android:paddingHorizontal="20dp"
     tools:context=".features.profile.view.ProfileFragment">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_profile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/profile"
-        app:layout_constraintBottom_toTopOf="@id/cv_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/tv_name"
@@ -24,13 +16,15 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:gravity="center"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_email"
         android:text="Mohannad Ahmed"
         android:textColor="@color/dark_gary"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_profile"
-        app:layout_constraintTop_toTopOf="@+id/iv_profile" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_email"
@@ -40,27 +34,10 @@
         android:text="mohannad199344@gmail.com"
         android:textColor="@color/dark_gary"
         android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintEnd_toEndOf="@+id/tv_name"
         app:layout_constraintStart_toStartOf="@+id/tv_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_edit_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="11dp"
-        android:background="@drawable/white_button_stroked"
-        android:paddingHorizontal="18dp"
-        android:text="@string/edit_profile"
-        android:textColor="@color/dark_gary"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@+id/tv_email"
-        app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_profile"
@@ -71,7 +48,7 @@
         app:layout_constraintBottom_toTopOf="@id/cv_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
+        app:layout_constraintTop_toBottomOf="@id/tv_email"
         app:layout_constraintVertical_bias="0"
         app:layout_constraintVertical_chainStyle="packed">
 
@@ -107,6 +84,7 @@
                 app:layout_constraintTop_toTopOf="@id/tv_all_orders" />
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/iv_enter_all_orders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -152,6 +130,7 @@
                 app:layout_constraintTop_toBottomOf="@id/line1" />
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/iv_enter_pend_orders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -197,6 +176,7 @@
                 app:layout_constraintTop_toBottomOf="@id/line2" />
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/iv_enter_pend_pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -242,6 +222,7 @@
                 app:layout_constraintTop_toBottomOf="@id/line3" />
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/iv_enter_finish_orders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -299,6 +280,7 @@
             <ImageView
                 android:id="@+id/iv_enter_addresses"
                 android:layout_width="wrap_content"
+                android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@drawable/enter_ic"
                 app:layout_constraintBottom_toBottomOf="@id/tv_addresses"
@@ -321,7 +303,7 @@
                 android:id="@+id/iv_pay_method"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/fav"
+                android:src="@drawable/not_fav"
                 app:layout_constraintBottom_toBottomOf="@id/tv_pay_method"
                 app:layout_constraintEnd_toStartOf="@id/tv_pay_method"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -345,6 +327,7 @@
                 android:id="@+id/iv_enter_pay_method"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:src="@drawable/enter_ic"
                 app:layout_constraintBottom_toBottomOf="@id/tv_pay_method"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -382,7 +365,7 @@
                 android:textColor="@color/gary"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/line6"
-                app:layout_constraintEnd_toStartOf="@id/tv_currency_code"
+                app:layout_constraintEnd_toStartOf="@id/iv_currency_flag"
                 app:layout_constraintStart_toEndOf="@id/iv_currency"
                 app:layout_constraintTop_toBottomOf="@id/line5" />
 
@@ -392,30 +375,21 @@
                 android:layout_height="0dp"
                 android:src="@drawable/username"
                 app:layout_constraintBottom_toBottomOf="@id/tv_currency"
-                app:layout_constraintEnd_toStartOf="@id/tv_currency_code"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@id/tv_currency"
                 app:layout_constraintTop_toTopOf="@id/tv_currency" />
-            <TextView
-                android:id="@+id/tv_currency_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="19dp"
-                android:text="EGP"
-                android:textColor="@color/gary"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_currency"
-                app:layout_constraintEnd_toStartOf="@id/iv_enter_currency"
-                app:layout_constraintStart_toEndOf="@id/iv_currency_flag"
-                app:layout_constraintTop_toTopOf="@id/tv_currency" />
+
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/iv_enter_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/enter_ic"
                 app:layout_constraintBottom_toBottomOf="@id/tv_currency"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_currency_code"
+                app:layout_constraintStart_toEndOf="@id/tv_currency"
                 app:layout_constraintTop_toTopOf="@id/tv_currency" />
 
             <View
@@ -425,7 +399,7 @@
                 android:layout_marginVertical="14dp"
                 android:background="@color/light_gary"
                 app:layout_constraintBottom_toTopOf="@id/tv_languages"
-                app:layout_constraintEnd_toEndOf="@id/iv_enter_currency"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_currency"
                 app:layout_constraintTop_toBottomOf="@id/tv_currency" />
 
@@ -457,12 +431,12 @@
                 android:id="@+id/tv_language_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="19dp"
+                android:layout_marginStart="19dp"
                 android:text="@string/english"
                 android:textColor="@color/gary"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/tv_languages"
-                app:layout_constraintEnd_toStartOf="@id/iv_enter_languages"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_languages"
                 app:layout_constraintTop_toTopOf="@id/tv_languages" />
 
@@ -471,6 +445,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/enter_ic"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/tv_languages"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_language_code"
@@ -521,7 +496,7 @@
         android:text="@string/log_out"
         android:layout_marginTop="18dp"
         android:textColor="@color/red"
-        android:textSize="12sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -6,7 +6,6 @@ import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
-import com.giraffe.triplemapplication.model.customers.CustomerDetails
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
@@ -193,9 +192,9 @@ object ApiClient : RemoteSource {
     }
 
 
-    override fun getCurrentUser(): FirebaseUser {
+    override fun getCurrentUser(): Flow<FirebaseUser> {
 
-        return FirebaseAuth.getInstance().currentUser!!
+        return flow { emit(FirebaseAuth.getInstance().currentUser!!) }
     }
 
     override fun isLoggedIn(): Boolean {

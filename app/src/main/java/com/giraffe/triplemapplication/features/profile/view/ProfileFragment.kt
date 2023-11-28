@@ -12,7 +12,6 @@ import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.load
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -34,6 +33,39 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
         observeGetLanguage()
         mViewModel.getCurrency()
         observeGetCurrency()
+        mViewModel.getEmail()
+        observeGetEmail()
+        mViewModel.getFullName()
+        observeGetFullName()
+    }
+
+    private fun observeGetFullName() {
+        lifecycleScope.launch {
+            mViewModel.fullNameFlow.collect{
+                when(it){
+                    is Resource.Failure -> {}
+                    Resource.Loading -> {}
+                    is Resource.Success -> {
+                        binding.tvName.text = it.value
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeGetEmail() {
+        lifecycleScope.launch {
+            mViewModel.firebaseUserFlow.collect{
+                when(it){
+                    is Resource.Failure -> {}
+                    Resource.Loading -> {}
+                    is Resource.Success -> {
+                        //binding.tvName.text = it.value.displayName
+                        binding.tvEmail.text = it.value.email
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -155,7 +187,7 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
                     is Resource.Failure -> {}
                     Resource.Loading -> {}
                     is Resource.Success -> {
-                        binding.tvCurrencyCode.text = it.value
+                        //binding.tvCurrencyCode.text = it.value
                         handleFlags(it.value)
                     }
                 }

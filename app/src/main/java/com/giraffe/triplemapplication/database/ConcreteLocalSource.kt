@@ -1,10 +1,8 @@
 package com.giraffe.triplemapplication.database
 
 import android.content.Context
-import android.util.Log
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
-import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import kotlinx.coroutines.flow.Flow
@@ -111,6 +109,14 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     override suspend fun getCartID(): Long? {
 
         return shared.read(Constants.CART_ID)?.toLong()
+    }
+
+    override suspend fun setFullNameLocally(fullName: String) {
+        shared.store(Constants.FULL_NAME,fullName)
+    }
+
+    override suspend fun getFullName(): Flow<String?> {
+        return flow { emit(shared.read(Constants.FULL_NAME)) }
     }
 
     override suspend fun getCartItems(): Flow<List<CartItem>> {

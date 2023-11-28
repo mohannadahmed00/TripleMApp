@@ -24,7 +24,6 @@ import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyRes
 import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
 import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
-import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import com.google.android.gms.tasks.Task
@@ -48,7 +47,7 @@ interface RepoInterface {
     fun isPasswordValid(password: String): Boolean
     fun doPasswordsMatch(password: String, confirmPassword: String): Boolean
     fun isDataValid(email: String, password: String, confirmPassword: String): Boolean
-    fun getCurrentUser(): FirebaseUser
+    fun getCurrentUser(): Flow<FirebaseUser>
     fun isLoggedIn(): Boolean
     fun logout(): Flow<Unit>
 
@@ -125,6 +124,9 @@ interface RepoInterface {
     suspend fun setCartIdLocally(cartId: Long?)
     suspend fun setWishListIdLocally(cartId: Long?)
     suspend fun setCustomerIdLocally(cartId: Long)
+
+    suspend fun setFullNameLocally(fullName:String)
+    suspend fun getFullName():Flow<String?>
 
     suspend fun setDefaultAddress(
         customerId: Long,
