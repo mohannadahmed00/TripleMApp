@@ -75,7 +75,7 @@ class OrdersFragment: BaseFragment<OrdersViewModel, FragmentOrdersBinding>() {
                     is Resource.Success -> {
                         dismissLoading()
                         Log.i("hahahaha", "observeGetOrders: customer id ${mViewModel.customerId}")
-                        ordersAdapter.submitList(it.value.orders.filter { order -> order.customer?.id == mViewModel.customerId })
+                        ordersAdapter.submitList(it.value.orders)//.filter { order -> order.customer?.id == mViewModel.customerId })
                     }
                 }
             }

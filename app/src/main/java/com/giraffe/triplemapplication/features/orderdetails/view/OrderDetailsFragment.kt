@@ -62,6 +62,7 @@ class OrderDetailsFragment : BaseFragment<OrderDetailsVM, FragmentOrderDetailsBi
                         binding.discount.text = "${order.total_discounts} ${order.currency}"
 
                         var productsIds = ""
+                        Log.i("hahahahahaha", "observeGetOrder: order order ${it.value.order}")
                         val products = it.value.order.line_items
                         products.forEachIndexed { index, product ->
                             productsIds += if (index == products.size - 1) {
