@@ -11,6 +11,7 @@ import com.giraffe.triplemapplication.databinding.FragmentCartBinding
 import com.giraffe.triplemapplication.features.cart.view.adapters.CartAdapter
 import com.giraffe.triplemapplication.features.cart.viewmodel.CartVM
 import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.Carts
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.convert
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 
 class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.OnCartItemClick {
     private lateinit var adapter: CartAdapter
+    private var items: List<CartItem> = emptyList()
 
     companion object {
         private const val TAG = "CartFragment"
@@ -37,7 +39,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
     }
 
     private fun navigateToCheckoutFragment() {
-        val action: NavDirections = CartFragmentDirections.actionCartFragmentToCheckoutFragment()
+        val action: NavDirections = CartFragmentDirections.actionCartFragmentToCheckoutFragment(Gson().toJson(Carts(items)))
         Navigation.findNavController(requireView()).navigate(action)
     }
 
@@ -70,6 +72,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
 
                     is Resource.Success -> {
                         Log.d(TAG, "observeGetLocallyCartItems: (Success)")
+                        items = it.value
                         adapter.updateList(it.value)
                         val total = it.value.sumOf { cartItem ->
                             (cartItem.product.variants?.get(0)?.price?.toDouble()

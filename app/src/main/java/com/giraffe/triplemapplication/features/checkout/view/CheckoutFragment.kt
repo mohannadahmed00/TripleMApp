@@ -11,9 +11,12 @@ import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCheckoutBinding
+import com.giraffe.triplemapplication.features.checkout.adapters.ItemsAdapter
 import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
+import com.giraffe.triplemapplication.features.fav.view.FavAdapter
 import com.giraffe.triplemapplication.features.splash.view.SplashFragment
 import com.giraffe.triplemapplication.model.address.Address
+import com.giraffe.triplemapplication.model.cart.Carts
 import com.giraffe.triplemapplication.model.cart.ShippingAddress
 import com.giraffe.triplemapplication.model.cart.request.Customer
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
@@ -24,6 +27,7 @@ import com.giraffe.triplemapplication.model.orders.createorder.TaxLine
 import com.giraffe.triplemapplication.model.orders.createorder.Transaction
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
+import com.google.gson.Gson
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
@@ -36,6 +40,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private var ephemeralKey: String = ""
     private var clientSecret: String = ""
     private var visaFlag = false
+    private lateinit var adapter: ItemsAdapter
 
 
     override fun getViewModel(): Class<CheckoutVM> = CheckoutVM::class.java
@@ -54,6 +59,13 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     ): FragmentCheckoutBinding = FragmentCheckoutBinding.inflate(inflater, container, false)
 
     override fun handleView() {
+        val itemsString = CheckoutFragmentArgs.fromBundle(requireArguments()).items
+        val items = Gson().fromJson(itemsString, Carts::class.java).carts
+
+        adapter = ItemsAdapter(exchangeRate = sharedViewModel.exchangeRateFlow.value, currency = sharedViewModel.currencySymFlow.value, onItemClick = { })
+        binding.rvItems.adapter = adapter
+        adapter.submitList(items)
+
         mViewModel.getAddresses()
         observeGetAddresses()
 

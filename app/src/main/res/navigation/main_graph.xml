@@ -137,6 +137,9 @@
         <action
             android:id="@+id/action_checkoutFragment_to_orderPlacedFragment"
             app:destination="@id/orderPlacedFragment" />
+        <argument
+            android:name="items"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/orderPlacedFragment"
