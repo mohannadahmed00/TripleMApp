@@ -6,4 +6,5 @@ object FilterOptions {
     var onSale = false
     var selectedColor = ""
     var selectedBrands : List<String>  = listOf()
+    var isApplied : Boolean =false
 }

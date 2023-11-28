@@ -30,13 +30,19 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() {
     ): FragmentSearchBinding = FragmentSearchBinding.inflate(inflater, container, false)
 
     override fun handleView() {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         observeData()
 
     }
 
+
     private fun observeData() {
         lifecycleScope.launch {
-            sharedViewModel.allProducts.collectLatest {
+            sharedViewModel.filteredProducts.collectLatest {
                     if(!it.isNullOrEmpty()){
                         showSuccess(it)
 
