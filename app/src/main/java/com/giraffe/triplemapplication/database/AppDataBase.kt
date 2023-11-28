@@ -8,8 +8,9 @@ import androidx.room.TypeConverters
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 
-@Database(entities = [Product::class, ExchangeRatesResponse::class, CartItem::class], version = 1)
+@Database(entities = [WishListItem::class, ExchangeRatesResponse::class, CartItem::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun getFavoritesDao(): FavoritesDao

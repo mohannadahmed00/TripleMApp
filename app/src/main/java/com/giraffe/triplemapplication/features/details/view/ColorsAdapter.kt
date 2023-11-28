@@ -48,9 +48,13 @@ class ColorsAdapter( private val onClick: OnColorClickListener , private val col
     }
     private fun getColorByName(colorName: String): Int {
         return try {
-            Color.parseColor(colorName)
+            if(colorName=="white"||colorName=="White"){
+                Color.parseColor("#D8D8D8") // Default color white if parsing fails
+            }else{
+                Color.parseColor(colorName)
+            }
         } catch (e: IllegalArgumentException) {
-            Color.parseColor("#FFFFFF") // Default color white if parsing fails
+            Color.parseColor("#D8D8D8") // Default color white if parsing fails
         }
     }
 

@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "products_table")
+
 @Parcelize
 data class Product(
-    @PrimaryKey val id: Long,
+    val id: Long,
     val admin_graphql_api_id: String?,
     val body_html: String?,
     val created_at: String?,

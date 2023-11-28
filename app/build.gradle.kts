@@ -61,6 +61,9 @@ dependencies {
     //glide
     implementation("com.github.bumptech.glide:glide:4.12.0")
 
+    //stripe (payment gateway)
+    implementation("com.stripe:stripe-android:20.34.4")
+
     //phoenix
     implementation("com.jakewharton:process-phoenix:2.1.2")
 

@@ -11,12 +11,13 @@ import com.giraffe.triplemapplication.databinding.ColorPickerItemBinding
 import com.giraffe.triplemapplication.databinding.FavItemBinding
 import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.load
 
 class FavAdapter(
-    private val onItemClick: (Product) -> Unit
+    private val onItemClick: (WishListItem) -> Unit
 ) :
-    ListAdapter<Product, FavAdapter.ViewHolder>(ProductAdapter.ProductDataDiffUtil() ) {
+    ListAdapter<WishListItem, FavAdapter.ViewHolder>(WishListItemDataDiffUtil() ) {
 
     private lateinit var binding: FavItemBinding
     class ViewHolder(var binding :FavItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -29,12 +30,23 @@ class FavAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentProduct = getItem(position)
-        holder.binding.ivProduct.load(currentProduct.image!!.src!!)
-        holder.binding.tvProductTitle.text = currentProduct.title
-        holder.binding.tvPrice.text = currentProduct.variants?.first()?.price
-        holder.binding.tvVariants.text = currentProduct.vendor
+        holder.binding.ivProduct.load(currentProduct.product.image!!.src!!)
+        holder.binding.tvProductTitle.text = currentProduct.product.title
+        holder.binding.tvPrice.text = currentProduct.product.variants?.first()?.price
+        holder.binding.tvVariants.text = currentProduct.product.vendor
         holder.binding.root.setOnClickListener { onItemClick(currentProduct) }
 
     }
+    class WishListItemDataDiffUtil: DiffUtil.ItemCallback<WishListItem>() {
+        override fun areItemsTheSame(oldItem: WishListItem, newItem: WishListItem): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: WishListItem, newItem: WishListItem): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
 
 }

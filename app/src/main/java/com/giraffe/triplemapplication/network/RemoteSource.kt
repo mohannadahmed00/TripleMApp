@@ -19,6 +19,9 @@ import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
+import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
+import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
+import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -106,4 +109,15 @@ interface RemoteSource {
 
     suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
     suspend fun getCustomerById(customerId: Long): Flow<CustomerDetails>
+
+    suspend fun createStripeCustomer():Flow<Response<StripeCustomerResponse>>
+
+    suspend fun createEphemeralKey(customerId: String):Flow<Response<EphemeralKeyResponse>>
+
+
+    suspend fun createPaymentIntent(
+        customerId: String,
+        amount: String,
+        currency: String
+    ):Flow<Response<PaymentIntentResponse>>
 }

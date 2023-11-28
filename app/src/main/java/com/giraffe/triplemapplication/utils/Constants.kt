@@ -20,6 +20,11 @@ object Constants {
     const val CUSTOMER_ID = "CUSTOMER_ID"
     const val WISH_LIST_ID = "WISH_LIST_ID"
 
+
+    const val STRIPE_URL = "https://api.stripe.com/v1/"
+    const val STRIPE_SECRET_KEY = "sk_test_51OHARDIuGQ52jwY9iqlD2D03RftUITPBkRTaUNUABkUk2qqqDheirvD34wVX47qKnX0k5PcaKZwuwG8FPPJfRQia007squq1bU"
+    const val STRIPE_PUBLISHED_KEY = "pk_test_51OHARDIuGQ52jwY9A0DZCcXJ7Qt7bNpWj1TqUiiegESCR6VTv8rNN3vwSFLd5G17BEnjf5xNH75YxcKDh3sHYfPz00rW9NkkBc"
+
     enum class Languages(val value:String) {
         ARABIC("ar"),
         ENGLISH("en")

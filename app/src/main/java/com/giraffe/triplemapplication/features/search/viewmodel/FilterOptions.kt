@@ -1,8 +1,5 @@
 package com.giraffe.triplemapplication.features.search.viewmodel
 
 object FilterOptions {
-    var currentCategory = ""
-    var onSale = false
-    var selectedColor = ""
-    var selectedBrands : List<String>  = listOf()
+    val colorsList: MutableList<String> = mutableListOf("Blue", "Black", "White", "Red", "Gray", "Yellow")
 }
