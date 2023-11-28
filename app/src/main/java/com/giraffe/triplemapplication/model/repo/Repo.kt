@@ -14,6 +14,7 @@ import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyRes
 import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
 import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
 import com.google.android.gms.tasks.Task
@@ -182,15 +183,15 @@ class Repo private constructor(
     }
 
     override suspend fun uploadWishListId(wishListId: Long): Task<Void?>? {
-        localSource.setWishListID(wishListId)
+
         return remoteSource.uploadWishListId(wishListId)
     }
 
-    override suspend fun insertWishListItem(product: Product): Flow<Long> {
-        return localSource.insertWishListItem(product)
+    override fun insertWishListItem(wishListItem: WishListItem): Flow<Long> {
+        return localSource.insertWishListItem(wishListItem)
     }
 
-    override suspend fun deleteWishListItem(product: Product): Flow<Int> {
+    override suspend fun deleteWishListItem(product: WishListItem): Flow<Int> {
         return localSource.deleteWishListItem(product)
     }
 
@@ -206,7 +207,7 @@ class Repo private constructor(
         return remoteSource.createNewCartDraft(draftRequest)
     }
 
-    override suspend fun getWishListItems(): Flow<List<Product>> {
+    override fun getWishListItems(): Flow<List<WishListItem>> {
         return localSource.getWishListItems()
     }
 

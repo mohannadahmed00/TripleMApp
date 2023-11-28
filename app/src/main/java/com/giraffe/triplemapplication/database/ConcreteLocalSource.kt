@@ -5,6 +5,7 @@ import android.util.Log
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -144,16 +145,16 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         return shared.read(Constants.WISH_LIST_ID)?.toLong()
     }
 
-    override suspend fun getWishListItems(): Flow<List<Product>> {
+    override fun getWishListItems(): Flow<List<WishListItem>> {
         return favoritesDao.getAllFavorites()
 
     }
 
-    override fun insertWishListItem(product: Product): Flow<Long> = flow {
+    override  fun insertWishListItem(product: WishListItem): Flow<Long> = flow {
         emit(favoritesDao.insertFavorite(product))
     }
 
-    override fun deleteWishListItem(product: Product): Flow<Int> = flow {
+    override suspend fun deleteWishListItem(product: WishListItem): Flow<Int> = flow {
         emit(favoritesDao.deleteFavorite(product))
     }
 
@@ -161,7 +162,7 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         favoritesDao.deleteAllFavorites()
     }
 
-    override suspend fun updateWishListItem(product: Product) {
+    override suspend fun updateWishListItem(product: WishListItem) {
         favoritesDao.updateFavorite(product)
     }
 

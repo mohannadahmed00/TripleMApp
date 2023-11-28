@@ -5,6 +5,8 @@
     <string name="cart">سلة</string>
     <string name="me">أنا</string>
 
+    <string name="wishlist">Favourites</string>
+
     <string name="favourite">Favourite</string>
     <string name="edit_profile">EDIT PROFILE</string>
     <string name="all_my_orders">All My Orders</string>
@@ -19,6 +21,9 @@
     <string name="password_hint">Enter your password</string>
     <string name="confirm_password">Confirm your password</string>
     <string name="email_hint">Enter your e-mail</string>
+
+    <string name="min_hint">Min</string>
+    <string name="max_hint">Max</string>
     <string name="user_hint">Enter your username</string>
     <string name="sign_up_title">Sign Up</string>
     <string name="forget_password">Forget Password</string>

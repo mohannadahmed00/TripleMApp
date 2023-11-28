@@ -319,9 +319,9 @@
 
             <ImageView
                 android:id="@+id/iv_pay_method"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/payment_ic"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/fav"
                 app:layout_constraintBottom_toBottomOf="@id/tv_pay_method"
                 app:layout_constraintEnd_toStartOf="@id/tv_pay_method"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -333,7 +333,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="19dp"
-                android:text="Payment Method"
+                android:text="@string/wishlist"
                 android:textColor="@color/gary"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/line5"
