@@ -6,8 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
+import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
+import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
+import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,6 +48,51 @@ class CheckoutVM(private val repo: RepoInterface): ViewModel() {
             repo.setCartIdLocally(null)
 //            repo.uploadCartId(-1)
             repo.deleteAllCartItems()
+        }
+    }
+
+
+
+    private val _stripeCustomerFlow: MutableStateFlow<Resource<StripeCustomerResponse>> =
+        MutableStateFlow(Resource.Loading)
+    val stripeCustomerFlow: StateFlow<Resource<StripeCustomerResponse>> =
+        _stripeCustomerFlow.asStateFlow()
+
+    private val _ephemeralFlow: MutableStateFlow<Resource<EphemeralKeyResponse>> =
+        MutableStateFlow(Resource.Loading)
+    val ephemeralFlow: StateFlow<Resource<EphemeralKeyResponse>> = _ephemeralFlow.asStateFlow()
+
+    private val _paymentIntentFlow: MutableStateFlow<Resource<PaymentIntentResponse>> =
+        MutableStateFlow(Resource.Loading)
+    val paymentIntentFlow: StateFlow<Resource<PaymentIntentResponse>> =
+        _paymentIntentFlow.asStateFlow()
+
+
+    fun createStripeCustomer() {
+        viewModelScope.launch {
+            _stripeCustomerFlow.emit(safeApiCall { repo.createStripeCustomer() })
+        }
+    }
+
+    fun createEphemeralKey(customerId: String) {
+        viewModelScope.launch {
+            _ephemeralFlow.emit(safeApiCall { repo.createEphemeralKey(customerId) })
+        }
+    }
+
+    fun createPaymentIntent(
+        customerId: String,
+        amount: String,
+        currency: String
+    ) {
+        viewModelScope.launch {
+            _paymentIntentFlow.emit(safeApiCall {
+                repo.createPaymentIntent(
+                    customerId,
+                    amount,
+                    currency
+                )
+            })
         }
     }
 }

@@ -110,4 +110,9 @@
     <string name="clear_all">clear all</string>
     <string name="do_you_want_to_perform_this_action">Do you want to perform this action?</string>
     <string name="undo">Undo</string>
+    <string name="credit_card">Credit card</string>
+    <string name="cash_on_delivery">Cash on delivery</string>
+    <string name="payment_method">PAYMENT METHOD</string>
+    <string name="add_promo_code">Add Promo Code</string>
+    <string name="apply">apply</string>
 </resources>

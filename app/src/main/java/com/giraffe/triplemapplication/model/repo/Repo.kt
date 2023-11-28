@@ -10,6 +10,9 @@ import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
+import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
+import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
@@ -261,6 +264,22 @@ class Repo private constructor(
 
     override suspend fun clearData(): Flow<Unit> =
         localSource.clearData()
+
+    override suspend fun createStripeCustomer(): Flow<Response<StripeCustomerResponse>> {
+        return remoteSource.createStripeCustomer()
+    }
+
+    override suspend fun createEphemeralKey(customerId: String): Flow<Response<EphemeralKeyResponse>> {
+        return remoteSource.createEphemeralKey(customerId)
+    }
+
+    override suspend fun createPaymentIntent(
+        customerId: String,
+        amount: String,
+        currency: String
+    ): Flow<Response<PaymentIntentResponse>> {
+        return remoteSource.createPaymentIntent(customerId, amount, currency)
+    }
 
 
 }
