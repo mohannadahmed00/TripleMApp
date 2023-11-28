@@ -8,6 +8,7 @@ import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerDetails
+import com.giraffe.triplemapplication.model.orders.Customer
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
@@ -27,6 +28,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class CheckoutVM(private val repo: RepoInterface): ViewModel() {
+
+    private val _customerFlow: MutableStateFlow<Resource<CustomerDetails>> = MutableStateFlow(
+        Resource.Loading)
+    val customerFlow: StateFlow<Resource<CustomerDetails>> = _customerFlow.asStateFlow()
 
     private val _ordersFlow: MutableStateFlow<Resource<CreateOrderResponse>> = MutableStateFlow(
         Resource.Loading)
@@ -58,9 +63,11 @@ class CheckoutVM(private val repo: RepoInterface): ViewModel() {
         getCustomerId()
     }
 
-    fun getCustomerId() {
+    private fun getCustomerId() {
         viewModelScope.launch {
             customerId = repo.getCustomerIdLocally() ?: 0L
+            Log.i("hahahahahaha", "getCustomerId: $customerId")
+            getCustomerById(customerId)
         }
     }
 
@@ -75,6 +82,13 @@ class CheckoutVM(private val repo: RepoInterface): ViewModel() {
     fun checkout(orderCreate: OrderCreate) {
         viewModelScope.launch {
             _ordersFlow.emit(safeCall { repo.createOrder(orderCreate) })
+        }
+    }
+
+    fun getCustomerById(customerId: Long) {
+        viewModelScope.launch {
+            Log.i("hahahahahaha", "getCustomerById: customerId customerId $customerId")
+            _customerFlow.emit(safeCall { repo.getCustomerById(customerId)})
         }
     }
 

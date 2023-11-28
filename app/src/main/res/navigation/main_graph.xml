@@ -140,6 +140,9 @@
         <argument
             android:name="items"
             app:argType="string" />
+        <argument
+            android:name="lineItems"
+            app:argType="com.giraffe.triplemapplication.model.orders.createorder.LineItems" />
     </fragment>
     <fragment
         android:id="@+id/orderPlacedFragment"

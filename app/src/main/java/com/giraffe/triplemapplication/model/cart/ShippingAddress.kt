@@ -1,5 +1,9 @@
 package com.giraffe.triplemapplication.model.cart
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class ShippingAddress(
     val address1: String,
     val city: String,
@@ -9,4 +13,4 @@ data class ShippingAddress(
     val phone: String,
     val province: String,
     val zip: String
-)
+): Parcelable

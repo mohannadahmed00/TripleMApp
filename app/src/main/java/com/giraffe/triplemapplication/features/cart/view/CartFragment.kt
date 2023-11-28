@@ -13,6 +13,7 @@ import com.giraffe.triplemapplication.features.cart.viewmodel.CartVM
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.Carts
 import com.giraffe.triplemapplication.model.cart.request.LineItem
+import com.giraffe.triplemapplication.model.orders.createorder.LineItems
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.convert
 import com.google.gson.Gson
@@ -21,6 +22,8 @@ import kotlinx.coroutines.launch
 class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.OnCartItemClick {
     private lateinit var adapter: CartAdapter
     private var items: List<CartItem> = emptyList()
+    private var quantity: Int = 0
+    private var lineItems = LineItems(emptyList())
 
     companion object {
         private const val TAG = "CartFragment"
@@ -39,7 +42,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
     }
 
     private fun navigateToCheckoutFragment() {
-        val action: NavDirections = CartFragmentDirections.actionCartFragmentToCheckoutFragment(Gson().toJson(Carts(items)))
+        val action: NavDirections = CartFragmentDirections.actionCartFragmentToCheckoutFragment(Gson().toJson(Carts(items)), lineItems)
         Navigation.findNavController(requireView()).navigate(action)
     }
 
@@ -73,6 +76,15 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
                     is Resource.Success -> {
                         Log.d(TAG, "observeGetLocallyCartItems: (Success)")
                         items = it.value
+                        lineItems.lineItems = it.value.map { cartItem ->
+                            com.giraffe.triplemapplication.model.orders.createorder.LineItem(
+                                variantId = cartItem.variantId,
+                                quantity = cartItem.quantity,
+                                name = cartItem.product.handle.toString(),
+                                title = cartItem.product.title.toString(),
+                                price = cartItem.product.variants?.get(0)?.price?.toDouble() ?: 0.0
+                            )
+                        }
                         adapter.updateList(it.value)
                         val total = it.value.sumOf { cartItem ->
                             (cartItem.product.variants?.get(0)?.price?.toDouble()
@@ -96,12 +108,14 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
 
     override fun onPlusClick(cartItem: CartItem) {
         cartItem.quantity++
+        quantity++
         mViewModel.insertCartItem(cartItem)
         observeInsertCartItem()
     }
 
     override fun onMinusClick(cartItem: CartItem, position: Int) {
         cartItem.quantity--
+        quantity--
         if (cartItem.quantity == 0) {
             mViewModel.deleteCartItemLocally(cartItem)
             observeDeleteCartItemLocally(position)
