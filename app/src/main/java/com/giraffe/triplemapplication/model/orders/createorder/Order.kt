@@ -14,5 +14,5 @@ data class Order(
     val shippingAddress: ShippingAddress,
     val transactions: List<Transaction>,
     val financial_status: String,
-    val discount_codes: DiscountCodes?
+    val discount_codes: List<DiscountCodes>?
 ): Parcelable

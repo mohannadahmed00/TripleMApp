@@ -295,7 +295,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
             order = Order(
                 line_items = lineItems.lineItems,
                 email = FirebaseAuth.getInstance().currentUser?.email,
-                phone = FirebaseAuth.getInstance().currentUser?.phoneNumber,
+                phone = FirebaseAuth.getInstance().currentUser?.phoneNumber ?: "",
                 billingAddress = BillingAddress(
                     address1 = selectedAddress?.address1.toString(),
                     city = selectedAddress?.city.toString(),
@@ -324,10 +324,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                     )
                 ),
                 financial_status = financialStatus,
-                discount_codes = if (discountCode == "") null else DiscountCodes(
+                discount_codes = if (discountCode == "") null else listOf(
+                    DiscountCodes(
                     amount = "0.0",
                     code = discountCode,
                     type = "percentage"
+                )
                 )
             )
         )

@@ -61,6 +61,7 @@ class OrderDetailsFragment : BaseFragment<OrderDetailsVM, FragmentOrderDetailsBi
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
                         val order = it.value.order
+                        Log.i("hahahahahah", "observeGetOrder: order object ${order}")
                         binding.price.text = "${order.current_total_price} ${order.currency}"
                         binding.discount.text = "${order.total_discounts} ${order.currency}"
 
