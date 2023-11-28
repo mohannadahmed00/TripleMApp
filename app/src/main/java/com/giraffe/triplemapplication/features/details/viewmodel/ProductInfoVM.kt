@@ -15,12 +15,15 @@ import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
+
+
     private val _cartFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
     val cartFlow: StateFlow<Resource<Long>> = _cartFlow.asStateFlow()
     private val _wishListFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
@@ -197,4 +200,5 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
             repo.setWishListIdLocally(wishListId)
         }
     }
+
 }

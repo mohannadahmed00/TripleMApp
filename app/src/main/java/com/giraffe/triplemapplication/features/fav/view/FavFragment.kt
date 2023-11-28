@@ -74,7 +74,7 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
         val snackbar =
             Snackbar.make(requireView(), "${product.product.handle} deleted", Snackbar.LENGTH_SHORT)
         snackbar.setAction("UNDO") {
-            mViewModel.returnLastDeleted()
+            sharedViewModel.returnLastDeleted()
         }
             .show()
     }
@@ -93,7 +93,7 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
     override fun onSwipe(position: Int) {
         val item = adapter.currentList[position]
         showSnackBar(item)
-        mViewModel.deleteWishListItemLocally(item)
+        sharedViewModel.deleteWishListItemLocally(item)
 
     }
 

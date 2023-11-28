@@ -38,6 +38,7 @@ abstract class SwipeGesture(context:Context) : ItemTouchHelper.SimpleCallback(0 
             .addSwipeLeftActionIcon(deleteIcon)
             .addSwipeRightBackgroundColor(deleteColor)
             .addSwipeRightActionIcon(deleteIcon)
+            .addCornerRadius(1 ,5)
             .create()
             .decorate()
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)

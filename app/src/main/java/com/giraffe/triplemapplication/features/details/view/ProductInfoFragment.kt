@@ -69,7 +69,9 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
         binding.imageSlider.adapter = ImagePagerAdapter(requireContext(), product.images)
         binding.productName.text = product.title
-        binding.productPrice.text = product.variants?.first()?.price?.toDouble()?.convert(sharedViewModel.exchangeRateFlow.value).toString().plus(" ${getString(sharedViewModel.currencySymFlow.value)}")
+        binding.productPrice.text = product.variants?.first()?.price?.toDouble()
+            ?.convert(sharedViewModel.exchangeRateFlow.value).toString()
+            .plus(" ${getString(sharedViewModel.currencySymFlow.value)}")
         showDetailsData(product)
         showProductData(product)
         showReviewsData()
@@ -170,22 +172,68 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
         }
 
         binding.addToFav.setOnClickListener {
-            if (selectedColor != null && selectedSize != null) {
+            if (!isFav) {
                 val wishListItem = WishListItem(
-                    variantId = product.variants?.first { it.option1 == selectedSize && it.option2 == selectedColor }!!.id!!.toLong(),//?????
+                    variantId = product.variants?.first()!!.id!!.toLong(),//?????
                     product = product,
                     false
                 )
 
-                    mViewModel.insertWishListItem(wishListItem)
-                    observeInsertWishItem()
-                    showSnackbar(isSuccess = true, isCart = false)
+                sharedViewModel.insertFavorite(wishListItem)
+                observeInsertWishItem()
+                showSnackbar(isSuccess = true, isCart = false)
+            } else {
+                val wishListItem = WishListItem(
+                    variantId = product.variants?.first()!!.id!!.toLong(),//?????
+                    product = product,
+                    false
+                )
+                sharedViewModel.deleteWishListItemLocally(wishListItem)
+                observeDeletedWishItem(wishListItem)
+                isFav =false
 
-            }else{
-                   showSnackbar(isSuccess = false, isCart = false)
+
             }
 
+
         }
+    }
+
+    private fun observeDeletedWishItem(wishListItem: WishListItem) {
+        lifecycleScope.launch {
+            sharedViewModel.delWishListItemFlow.collectLatest {
+                when (it) {
+                    is Resource.Failure -> {
+                        dismissLoading()
+                        showDeleteFailure(it)
+                    }
+
+                    Resource.Loading -> {
+                        showLoading()
+
+                    }
+
+                    is Resource.Success -> {
+                        dismissLoading()
+                        showUndoDeleteSnackBar(wishListItem)
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showUndoDeleteSnackBar(wishListItem: WishListItem) {
+        val snackbar =
+            Snackbar.make(requireView(), "${wishListItem.product.handle} deleted", Snackbar.LENGTH_SHORT)
+        snackbar.setAction("UNDO") {
+            sharedViewModel.returnLastDeleted()
+        }
+            .show()
+    }
+
+    private fun showDeleteFailure(it: Resource.Failure) {
+        Snackbar.make(requireView() , it.errorBody.toString() , Snackbar.LENGTH_SHORT).show()
     }
 
 
