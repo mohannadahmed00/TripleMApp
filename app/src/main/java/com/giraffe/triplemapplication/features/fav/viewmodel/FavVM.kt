@@ -54,11 +54,8 @@ class FavVM(private val repo: RepoInterface) : ViewModel() {
     init {
         getLocallyWishListItems()
     }
-    fun insertWishListItem(wishListItem: WishListItem) {
-        viewModelScope.launch {
-            _wishListFlow.emit(safeCall { repo.insertWishListItem(wishListItem) })
-        }
-    }
+
+
 
     private fun getLocallyWishListItems() {
         viewModelScope.launch {
@@ -80,33 +77,5 @@ class FavVM(private val repo: RepoInterface) : ViewModel() {
         }
     }
 
-    fun uploadWishListId(wishListId: Long) {
-        viewModelScope.launch {
-            repo.uploadCartId(wishListId).let {
 
-                    _wishIdFlow.emit(Resource.Success(true))
-
-
-            }
-        }
-    }
-
-    fun insertWishListItemIdLocally(wishListId: Long) {
-        viewModelScope.launch {
-            repo.setWishListIdLocally(wishListId)
-        }
-    }
-
-    fun deleteWishListItemLocally(wishListItem: WishListItem) {
-        viewModelScope.launch {
-            _lastDeleted.emit(wishListItem)
-            _delWishListItemFlow.emit(safeCall { repo.deleteWishListItem(wishListItem) })
-        }
-    }
-
-    fun returnLastDeleted(){
-        viewModelScope.launch(Dispatchers.IO) {
-            _wishListFlow.emit(safeCall { repo.insertWishListItem(_lastDeleted.value!!) })
-        }
-    }
 }

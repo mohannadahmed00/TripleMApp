@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -14,18 +15,22 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentHomeBinding
 import com.giraffe.triplemapplication.features.home.adapters.BrandsAdapter
 import com.giraffe.triplemapplication.features.home.adapters.CategoriesAdapter
+import com.giraffe.triplemapplication.features.home.adapters.OnProductClickListener
 import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.home.adapters.SliderAdapter
 import com.giraffe.triplemapplication.features.home.viewmodel.HomeVM
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.OnCodeClick {
+class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.OnCodeClick , OnProductClickListener {
     companion object{
         private const val TAG = "HomeFragment"
     }
@@ -129,17 +134,20 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
     }
 
     private fun observeGetAllProducts() {
+
+        productsAdapter = ProductAdapter(
+            requireContext(),
+            sharedViewModel.exchangeRateFlow.value,
+            sharedViewModel.currencySymFlow.value,
+            this
+
+        ) { product -> navigateToProductInfoScreen(product) }
         lifecycleScope.launch {
             mViewModel.allProductsFlow.collect {
                 when(it) {
                     is Resource.Failure -> { dismissLoading() }
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
-                        productsAdapter = ProductAdapter(
-                            requireContext(),
-                            sharedViewModel.exchangeRateFlow.value,
-                            sharedViewModel.currencySymFlow.value
-                        ) { product -> navigateToProductInfoScreen(product) }
                         binding.productsRecyclerView.apply {
                             adapter = productsAdapter
                             layoutManager = LinearLayoutManager(context).apply {
@@ -179,4 +187,39 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
         copyToClipboard(code)
         Toast.makeText(requireContext(), "copied: $code", Toast.LENGTH_SHORT).show()
     }
+
+    override fun onProductClickListener(isFav: ImageView, wishListItem: WishListItem) {
+        if(isFav.id == R.drawable.fav){
+            sharedViewModel.deleteWishListItemLocally(wishListItem)
+            isFav.setImageResource(R.drawable.not_fav)
+            showSnackBar(false , wishListItem.product)
+        }else{
+            sharedViewModel.insertFavorite(wishListItem)
+            isFav.setImageResource(R.drawable.fav)
+
+            showSnackBar(true , wishListItem.product)
+
+        }
+    }
+    private fun showSnackBar(isAdding: Boolean, current: Product?) {
+        if (isAdding) {
+
+            Snackbar.make(
+                binding.root.rootView,
+                "${current!!.handle} added to wish list successfully",
+                Snackbar.LENGTH_SHORT
+            ).show()
+
+        } else {
+            Snackbar.make(
+                binding.root.rootView,
+                "${current!!.handle} deleted to wish list successfully",
+                Snackbar.LENGTH_SHORT
+            ).setAction("UNDO") {
+                sharedViewModel.returnLastDeleted()
+            }.show()
+
+        }
+    }
+
 }

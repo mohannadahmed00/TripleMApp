@@ -12,12 +12,14 @@ import com.giraffe.triplemapplication.features.fav.swipe.OnSwipe
 import com.giraffe.triplemapplication.features.fav.swipe.SwipeGesture
 import com.giraffe.triplemapplication.features.fav.viewmodel.FavVM
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
+import com.giraffe.triplemapplication.utils.hide
+import com.giraffe.triplemapplication.utils.show
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
+class FavFragment : BaseFragment<FavVM, FragmentFavBinding>(), OnSwipe {
     override fun getViewModel(): Class<FavVM> = FavVM::class.java
     private lateinit var adapter: FavAdapter
     override fun getFragmentBinding(
@@ -50,22 +52,33 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
     private fun observeData() {
         lifecycleScope.launch {
             mViewModel.wishListItemsFlow.collectLatest {
-
-                showSuccess(it)
+                if (it.isNotEmpty())
+                    showSuccess(it)
+                else
+                    showAnimation()
             }
         }
     }
 
+    private fun showAnimation() {
+        binding.animationView.show()
+        binding.animationView.isActivated = false
+
+    }
+
     private fun showSuccess(products: List<WishListItem>) {
 
-        adapter = FavAdapter(exchangeRate = sharedViewModel.exchangeRateFlow.value, currency = sharedViewModel.currencySymFlow.value, onItemClick = {
-            navigateToProductInfo(it)
-        })
+        binding.animationView.hide()
+        binding.animationView.isActivated = false
+
+        adapter = FavAdapter(
+            exchangeRate = sharedViewModel.exchangeRateFlow.value,
+            currency = sharedViewModel.currencySymFlow.value,
+            onItemClick = {
+                navigateToProductInfo(it)
+            })
         binding.rvProducts.adapter = adapter
         adapter.submitList(products)
-
-
-
 
 
     }
@@ -74,7 +87,7 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
         val snackbar =
             Snackbar.make(requireView(), "${product.product.handle} deleted", Snackbar.LENGTH_SHORT)
         snackbar.setAction("UNDO") {
-            mViewModel.returnLastDeleted()
+            sharedViewModel.returnLastDeleted()
         }
             .show()
     }
@@ -93,7 +106,7 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
     override fun onSwipe(position: Int) {
         val item = adapter.currentList[position]
         showSnackBar(item)
-        mViewModel.deleteWishListItemLocally(item)
+        sharedViewModel.deleteWishListItemLocally(item)
 
     }
 

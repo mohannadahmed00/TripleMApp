@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication
 
+import android.widget.ResourceCursorAdapter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.products.Product
@@ -54,9 +55,24 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     )
     val delWishListItemFlow: StateFlow<Resource<Int>> = _delWishListItemFlow.asStateFlow()
     private val _lastDeleted: MutableStateFlow<WishListItem?> = MutableStateFlow(null)
+    private val _wishListFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
+    val wishListItem: StateFlow<Resource<Long>> = _wishListFlow.asStateFlow()
 
     init {
         getLocallyWishListItems()
+    }
+
+    fun deleteWishListItemLocally(wishListItem: WishListItem) {
+        viewModelScope.launch {
+            _lastDeleted.emit(wishListItem)
+            _delWishListItemFlow.emit(safeCall { repo.deleteWishListItem(wishListItem) })
+        }
+    }
+
+    fun returnLastDeleted() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _wishListFlow.emit(safeCall { repo.insertWishListItem(_lastDeleted.value!!) })
+        }
     }
 
     fun setAllProduct(products: List<Product>) {
@@ -83,7 +99,7 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            repo.insertWishListItem(product)
+            _wishListFlow.emit(safeCall { repo.insertWishListItem(product) })
         }
     }
 
@@ -139,12 +155,23 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         }
     }
 
-    fun deleteWishListItemLocally(wishListItem: WishListItem) {
-        viewModelScope.launch {
-            _lastDeleted.emit(wishListItem)
-            _delWishListItemFlow.emit(safeCall { repo.deleteWishListItem(wishListItem) })
+    fun isFav(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+
+            _wishListItemsFlow.collect { wishListItems ->
+                val productExistsInWishlist =
+                    wishListItems.map { it.product }.any { it == product }
+
+                if (productExistsInWishlist) {
+                    _isFav.emit(true)
+                } else {
+                    _isFav.emit(false)
+                }
+            }
         }
     }
+
 
     fun setFiltered(filteredProducts: List<Product>) {
         viewModelScope.launch(Dispatchers.IO) {
