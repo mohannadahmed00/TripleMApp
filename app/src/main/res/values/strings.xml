@@ -17,10 +17,10 @@
     <string name="price_range">Price Range</string>
 
     <string name="adidas">Adidas</string>
-    <string name="ascis">Ascis-Tiger</string>
+    <string name="ascis">Ascis Tiger</string>
     <string name="converse">Converse</string>
-    <string name="dr">Dr-Martens</string>
-    <string name="flex">Flex-Fit</string>
+    <string name="dr">Dr Martens</string>
+    <string name="flex">Flex Fit</string>
     <string name="herschel">Herschel</string>
     <string name="nike">Nike</string>
     <string name="puma">Puma</string>
@@ -48,6 +48,8 @@
     <string name="password_hint">Enter your password</string>
     <string name="confirm_password">Confirm your password</string>
     <string name="email_hint">Enter your e-mail</string>
+    <string name="min_hint">Min</string>
+    <string name="max_hint">Max</string>
     <string name="user_hint">Enter your username</string>
     <string name="sign_up_title">Sign Up</string>
     <string name="forget_password">Forget Password</string>

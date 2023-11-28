@@ -117,3 +117,20 @@ fun Double.convert(rates:Pair<Double,Double>?) :Double {
         0.0
     }
 }
+fun <T> findCommonElements(vararg lists: List<T>): List<T> {
+    if (lists.isEmpty()) {
+        return emptyList()
+    }
+
+    // Create a map to count occurrences of each element
+    val occurrences = mutableMapOf<T, Int>()
+    for (list in lists) {
+        val uniqueElements = list.toSet()
+        for (element in uniqueElements) {
+            occurrences[element] = occurrences.getOrDefault(element, 0) + 1
+        }
+    }
+
+    // Filter elements that occur in all lists
+    return occurrences.filter { it.value == lists.size }.keys.toList()
+}
