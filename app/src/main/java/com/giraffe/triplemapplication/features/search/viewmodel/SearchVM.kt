@@ -31,22 +31,9 @@ class SearchVM(private val repo: RepoInterface) : ViewModel() {
 
     }
 
-    private fun collectProducts() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getAllProducts()
-            _allProductsFlow.collectLatest {
-                when (it) {
-                    is Resource.Failure -> {}
-                    Resource.Loading -> {}
-                    is Resource.Success -> {
-                        _allProducts.emit(it.value.products)
-                    }
-                }
-            }
-        }
-    }
 
-    fun filterColor(selectedColor: String = "", products: List<Product>): List<Product> {
+
+    private fun filterColor(selectedColor: String = "", products: List<Product>): List<Product> {
         val filteredProducts = products.filter { product ->
             val colorMatches =
                 product.variants?.first()?.option2.equals(selectedColor, ignoreCase = true)
@@ -127,44 +114,7 @@ class SearchVM(private val repo: RepoInterface) : ViewModel() {
     }
 
 
-    fun setCategory(category: String) {
-        Log.i(TAG, "setCategory: $category")
-        FilterOptions.currentCategory = category.lowercase()
-    }
 
-    fun setBrands(brands: List<String>) {
-        FilterOptions.selectedBrands = brands
-    }
 
-    fun setColor(selectedColor: String) {
-        FilterOptions.selectedColor = selectedColor
-    }
-
-    fun setFilterData() {
-        FilterOptions.isApplied = true
-    }
-
-    private fun getFilterData(): Boolean {
-        return FilterOptions.isApplied
-    }
-
-    private fun getCategory(): String {
-        return FilterOptions.currentCategory
-    }
-
-    private fun getColor(): String {
-        return FilterOptions.selectedColor
-    }
-
-    private fun getBrands(): List<String> {
-        return FilterOptions.selectedBrands
-    }
-
-    private fun getAllProducts() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _allProductsFlow.emit(safeCall { repo.getAllProducts() })
-        }
-
-    }
 
 }

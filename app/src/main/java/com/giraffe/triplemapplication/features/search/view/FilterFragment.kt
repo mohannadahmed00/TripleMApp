@@ -1,16 +1,11 @@
 package com.giraffe.triplemapplication.features.search.view
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.view.forEach
-import androidx.core.view.get
 import androidx.navigation.fragment.findNavController
-import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentFilterBinding
 import com.giraffe.triplemapplication.features.details.view.ColorsAdapter
@@ -49,7 +44,6 @@ class FilterFragment : BaseFragment<SearchVM, FragmentFilterBinding>(), OnColorC
             // Check if a RadioButton is checked
             checkedRadioButton?.let {
                 val textOfCheckedRadioButton: String = it.text.toString()
-                mViewModel.setCategory(textOfCheckedRadioButton)
                 selectedCategory = textOfCheckedRadioButton.lowercase()
 
             }
@@ -71,7 +65,7 @@ class FilterFragment : BaseFragment<SearchVM, FragmentFilterBinding>(), OnColorC
 
 
                     }
-                    mViewModel.setBrands(selectedChips)
+
                 }
             }
         }
@@ -99,14 +93,12 @@ class FilterFragment : BaseFragment<SearchVM, FragmentFilterBinding>(), OnColorC
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
+
 
     override fun onColorClickListener(color: String) {
         selectedColor = color
-        mViewModel.setColor(selectedColor)
-        showToast(selectedColor)
+
+
     }
 
 
