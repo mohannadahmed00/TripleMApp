@@ -64,6 +64,8 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
         lineItems = CheckoutFragmentArgs.fromBundle(requireArguments()).lineItems
         observeGetCustomerById()
 
+        binding.tvTotal.text = lineItems.lineItems.sumOf { it.price }.toString().plus(getString(sharedViewModel.currencySymFlow.value))
+
         adapter = ItemsAdapter(exchangeRate = sharedViewModel.exchangeRateFlow.value, currency = sharedViewModel.currencySymFlow.value, onItemClick = { })
         binding.rvItems.adapter = adapter
         adapter.submitList(items)
