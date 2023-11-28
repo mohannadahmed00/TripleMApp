@@ -97,15 +97,17 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     }
 
     override fun handleClicks() {
-      /*
+
       val dialogFragment = AddressDialogFragment(addresses) {
                 Log.i("hahahahahaha", "handleClicks: $it")
                 binding.tvName.text = it.first_name
                 binding.tvAddress.text = it.address1
                 selectedAddress = it
             }
-            dialogFragment.show(parentFragmentManager, "AddressDialogFragment")
-      */
+            binding.tvAddress.setOnClickListener {
+                dialogFragment.show(parentFragmentManager, "AddressDialogFragment")
+            }
+
         binding.btnClose.setOnClickListener { navigateUp() }
         binding.btnCheckout.setOnClickListener {
             if (visaFlag) {

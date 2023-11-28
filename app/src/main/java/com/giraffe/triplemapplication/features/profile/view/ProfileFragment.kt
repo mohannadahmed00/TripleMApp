@@ -111,7 +111,7 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
             findNavController().navigate(action)
         }
 
-        binding.ivEnterAllOrders.setOnClickListener {
+        binding.tvAllOrders.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToOrdersFragment()
             findNavController().navigate(action)
         }
