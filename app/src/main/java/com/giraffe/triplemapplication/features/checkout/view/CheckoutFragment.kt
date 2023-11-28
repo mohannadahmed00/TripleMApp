@@ -47,6 +47,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private lateinit var adapter: ItemsAdapter
     private lateinit var lineItems: LineItems
     private var customer: CustomerDetails? = null
+    private var financialStatus: String = "pending"
 
 
     override fun getViewModel(): Class<CheckoutVM> = CheckoutVM::class.java
@@ -113,7 +114,9 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private fun onPaymentResult(paymentSheetResult: PaymentSheetResult) {
         if (paymentSheetResult is PaymentSheetResult.Completed) {
             Log.d(TAG, "onPaymentResult() called with: Success")
+            financialStatus = "paid"
         } else {
+            financialStatus = "pending"
             Log.e(TAG, "onPaymentResult() called with: Canceled")
         }
     }
@@ -136,6 +139,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
             }
         }
         binding.btnCod.setOnClickListener {
+            financialStatus = "pending"
             visaFlag = false
             binding.btnCod.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.red_button_stroked)
@@ -150,6 +154,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
             )
         }
         binding.btnPayVisa.setOnClickListener {
+            financialStatus = "pending"
             visaFlag = true
             binding.btnPayVisa.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.red_button_stroked)
@@ -321,7 +326,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                         status = "success"
                     )
                 ),
-                financial_status = "paid",
+                financial_status = financialStatus,
                 discount_codes = if (discountCode == "") null else DiscountCodes(
                     amount = "0.0",
                     code = discountCode,
@@ -457,6 +462,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                     is Resource.Success -> {
                         dismissLoading()
                         navigateToOrderPlacedFragment()
+                        mViewModel.removeCart()
                         Log.i(TAG, "observeCreateOrder: SUCCESS ${it.value}")
                     }
                 }
