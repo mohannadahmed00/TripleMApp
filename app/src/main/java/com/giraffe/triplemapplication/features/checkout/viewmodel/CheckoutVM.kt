@@ -109,7 +109,9 @@ class CheckoutVM(private val repo: RepoInterface): ViewModel() {
 
     fun getAddresses(){
         viewModelScope.launch(Dispatchers.IO) {
-          _addressesFlow.emit(safeApiCall{ repo.getAddresses(repo.getCustomerIdLocally().toString()) })
+            val customerId = repo.getCustomerIdLocally().toString()
+            Log.i("hahahahahahahaha", "getAddresses: $customerId")
+          _addressesFlow.emit(safeApiCall{ repo.getAddresses(customerId) })
         }
     }
 

@@ -54,11 +54,13 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     ): FragmentCheckoutBinding = FragmentCheckoutBinding.inflate(inflater, container, false)
 
     override fun handleView() {
-        observeGetCartId()
-//        observeGetCustomerDetails()
         mViewModel.getAddresses()
         observeGetAddresses()
-        
+
+
+        observeGetCartId()
+//        observeGetCustomerDetails()
+
         PaymentConfiguration.init(requireContext(), Constants.STRIPE_PUBLISHED_KEY)
         paymentSheet = PaymentSheet(this) {
             onPaymentResult(it)
@@ -98,15 +100,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 
     override fun handleClicks() {
 
-      val dialogFragment = AddressDialogFragment(addresses) {
-                Log.i("hahahahahaha", "handleClicks: $it")
-                binding.tvName.text = it.first_name
-                binding.tvAddress.text = it.address1
-                selectedAddress = it
-            }
-            binding.tvAddress.setOnClickListener {
-                dialogFragment.show(parentFragmentManager, "AddressDialogFragment")
-            }
+
 
         binding.btnClose.setOnClickListener { navigateUp() }
         binding.btnCheckout.setOnClickListener {
@@ -442,7 +436,17 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                             binding.tvAddress.text = address.address1
                             selectedAddress = address
                         }
-                        addresses = it.value.addresses.toMutableList()
+                        Log.i("hahahahahaha", "observeGetAddresses: now ${it.value.addresses}")
+//                        addresses = it.value.addresses.toMutableList()
+                        val dialogFragment = AddressDialogFragment(it.value.addresses.toMutableList()) {
+                            Log.i("hahahahahaha", "handleClicks: $it")
+                            binding.tvName.text = it.first_name
+                            binding.tvAddress.text = it.address1
+                            selectedAddress = it
+                        }
+                        binding.tvAddress.setOnClickListener {
+                            dialogFragment.show(parentFragmentManager, "AddressDialogFragment")
+                        }
                     }
                 }
             }
