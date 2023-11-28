@@ -17,6 +17,8 @@ import com.giraffe.triplemapplication.features.search.viewmodel.SearchVM
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.hide
+import com.giraffe.triplemapplication.utils.show
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -66,10 +68,25 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() ,OnProduc
             sharedViewModel.filteredProducts.collectLatest {
                     if(!it.isNullOrEmpty()){
                         showSuccess(it)
-
+                        hideLottieAnimation()
+                }else{
+                    showLottieAnimation()
                 }
             }
         }
+    }
+
+    private fun hideLottieAnimation() {
+        binding.animationView.hide()
+        binding.animationView.isActivated = false
+        binding.searchRv.show()
+
+    }
+
+    private fun showLottieAnimation() {
+        binding.animationView.show()
+        binding.animationView.isActivated = true
+        binding.searchRv.hide()
     }
 
     private fun showSuccess(products: List<Product>) {
@@ -92,6 +109,11 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() ,OnProduc
                 val filteredProducts = products.filter { product ->
                     product.title!!.contains(userInput ,ignoreCase = true)
 
+                }
+                if(filteredProducts.isEmpty()){
+                    showLottieAnimation()
+                }else{
+                    hideLottieAnimation()
                 }
                 productsAdapter.submitList(filteredProducts)
                 // Update RecyclerView or UI with filteredProducts

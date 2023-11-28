@@ -84,11 +84,9 @@ class FilterFragment : BaseFragment<SearchVM, FragmentFilterBinding>(), OnColorC
                 max,
                 products = sharedViewModel.allProducts.value!!
             )
-            if(!filtered.isNullOrEmpty()){
+            sharedViewModel.setFiltered(filtered)
 
-                sharedViewModel.setFiltered(filtered)
 
-            }
             findNavController().navigateUp()
         }
     }
