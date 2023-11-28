@@ -33,6 +33,7 @@
 
         <RadioButton
             android:id="@+id/kid_radio"
+
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"

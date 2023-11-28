@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.features.search.viewmodel
 
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
@@ -16,8 +17,11 @@ import kotlinx.coroutines.launch
 class SearchVM(private val repo: RepoInterface): ViewModel() {
 
 
+    private val TAG: String = "SEARCH_VM"
+
     fun setCategory(category:String){
-        FilterOptions.currentCategory = category
+        Log.i(TAG, "setCategory: $category")
+        FilterOptions.currentCategory = category.lowercase()
     }
     fun setOnSale(onSale:Boolean){
         FilterOptions.onSale = onSale
