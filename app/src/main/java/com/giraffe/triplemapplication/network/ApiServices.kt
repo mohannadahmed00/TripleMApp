@@ -121,7 +121,7 @@ interface ApiServices {
     @GET("customers.json")
     suspend fun getCustomerByEmail(@Query("email") email:String) :MultipleCustomerResponse
 
-    @GET("customers/{customerId}/.json")
+    @GET("customers/{customerId}.json")
     suspend fun getCustomerById(@Path("customerId") customerId: Long): CustomerDetails
     @POST("customers")
     suspend fun createStripeCustomer():Response<StripeCustomerResponse>

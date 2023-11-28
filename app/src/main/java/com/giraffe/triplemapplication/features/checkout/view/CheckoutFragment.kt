@@ -13,24 +13,20 @@ import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCheckoutBinding
 import com.giraffe.triplemapplication.features.checkout.adapters.ItemsAdapter
 import com.giraffe.triplemapplication.features.checkout.viewmodel.CheckoutVM
-import com.giraffe.triplemapplication.features.fav.view.FavAdapter
-import com.giraffe.triplemapplication.features.splash.view.SplashFragment
 import com.giraffe.triplemapplication.model.address.Address
 import com.giraffe.triplemapplication.model.cart.BillingAddress
 import com.giraffe.triplemapplication.model.cart.Carts
 import com.giraffe.triplemapplication.model.cart.ShippingAddress
-import com.giraffe.triplemapplication.model.cart.request.Customer
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.customers.CustomerDetails
 import com.giraffe.triplemapplication.model.orders.createorder.DiscountCodes
-import com.giraffe.triplemapplication.model.orders.createorder.LineItem
 import com.giraffe.triplemapplication.model.orders.createorder.LineItems
 import com.giraffe.triplemapplication.model.orders.createorder.Order
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
-import com.giraffe.triplemapplication.model.orders.createorder.TaxLine
 import com.giraffe.triplemapplication.model.orders.createorder.Transaction
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
@@ -48,12 +44,9 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private lateinit var lineItems: LineItems
     private var customer: CustomerDetails? = null
     private var financialStatus: String = "pending"
-
+    private var selectedAddress: Address? = null
 
     override fun getViewModel(): Class<CheckoutVM> = CheckoutVM::class.java
-
-    private var addresses: MutableList<Address> = mutableListOf()
-    private var selectedAddress: Address? = null
 
     companion object {
         private const val TAG = "CheckoutFragment"
@@ -294,11 +287,13 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 //        mViewModel.completeOrder()
 //        observeDraftOrderOrder()
         val discountCode = binding.edtPromoCode.text.toString()
+        Log.i(TAG, "checkout: email ${FirebaseAuth.getInstance().currentUser?.email}")
+        Log.i(TAG, "checkout: phone ${FirebaseAuth.getInstance().currentUser?.phoneNumber}")
         val orderCreate = OrderCreate(
             order = Order(
                 line_items = lineItems.lineItems,
-                email = "mahmoudhamdyae@gmail.com",//customer?.email,
-                phone = "+201094826679",//customer?.phone,
+                email = FirebaseAuth.getInstance().currentUser?.email,
+                phone = FirebaseAuth.getInstance().currentUser?.phoneNumber,
                 billingAddress = BillingAddress(
                     address1 = selectedAddress?.address1.toString(),
                     city = selectedAddress?.city.toString(),
