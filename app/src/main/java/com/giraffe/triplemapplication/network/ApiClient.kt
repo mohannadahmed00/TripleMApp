@@ -311,30 +311,32 @@ object ApiClient : RemoteSource {
     override suspend fun uploadWishListId(wishListId: Long): Task<Void?>? {
         var mTask: Task<Void?>? = null
         FirebaseFirestore.getInstance().collection("users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .document(FirebaseAuth.getInstance().currentUser!!.uid + "Wish")
             .set(
                 hashMapOf(
-                    "wishListId" to wishListId,
+                    "wishListId" to wishListId,//wishList id from shopify
                 )
             )
             .addOnCompleteListener { task: Task<Void?> ->
                 if (task.isSuccessful) {
-                    Log.i(TAG, "cart id have been uploaded")
+                    Log.i(TAG, "wishListId id have been uploaded")
                 } else {
                     Log.e(
                         TAG,
-                        "cart id have not been uploaded => ${task.exception?.message} => ${task.result}"
+                        "wishListId id have not been uploaded => ${task.exception?.message} => ${task.result}"
                     )
                 }
                 mTask = task
             }
         return mTask
+
     }
+
 
     override suspend fun getWishListId(): Flow<Long> {
         return flow {
             val result = FirebaseFirestore.getInstance().collection("users")
-                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .document(FirebaseAuth.getInstance().currentUser!!.uid+"Wish")
                 .get().await().getLong("wishListId")
             if (result != null) {
                 emit(result)

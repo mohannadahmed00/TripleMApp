@@ -15,10 +15,12 @@ import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.products.Review
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.convert
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -31,6 +33,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     private var selectedColor: String? = null
     private var selectedSize: String? = null
     private lateinit var product: Product
+    private var isFav: Boolean = false
     override fun getViewModel(): Class<ProductInfoVM> = ProductInfoVM::class.java
 
     override fun getFragmentBinding(
@@ -40,11 +43,13 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     ): FragmentProductInfoBinding = FragmentProductInfoBinding.inflate(inflater, container, false)
 
     override fun handleView() {
-//        val product = ProductInfoFragmentArgs.fromBundle(requireArguments()).product
+        sharedViewModel.isFav()
+        observeFavOrNot()
         observeData()
     }
 
     private fun observeData() {
+
         lifecycleScope.launch {
             sharedViewModel.currentProduct.collectLatest { it ->
                 when (it) {
@@ -54,39 +59,39 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
                     }
                 }
             }
+
         }
 
     }
 
-    private fun showSuccess(product: Product) {
-        showData(product)
-        binding.addToFav.setOnClickListener {
-            sharedViewModel.insertFavorite(product)
-            navigateToFav()
-        }
-        binding.addToCartButton.setOnClickListener {
-            navigateToCart()
-        }
-    }
-
-    private fun navigateToFav() {
-        findNavController().navigate(R.id.favFragment)
-    }
-
-    private fun navigateToCart() {
-        val action = ProductInfoFragmentDirections.actionProductInfoFragmentToCartFragment()
-        findNavController().navigate(action)
-    }
 
     private fun showData(product: Product) {
+
         binding.imageSlider.adapter = ImagePagerAdapter(requireContext(), product.images)
         binding.productName.text = product.title
-        binding.productPrice.text = product.variants?.first()?.price?.toDouble()
-            ?.convert(sharedViewModel.exchangeRateFlow.value).toString()
+        binding.productPrice.text = product.variants?.first()?.price?.toDouble()?.convert(sharedViewModel.exchangeRateFlow.value).toString().plus(" ${getString(sharedViewModel.currencySymFlow.value)}")
         showDetailsData(product)
         showProductData(product)
         showReviewsData()
 
+    }
+
+    private fun observeFavOrNot() {
+        lifecycleScope.launch {
+            sharedViewModel.isFav.collectLatest {
+                isFav = when (it) {
+                    true -> {
+                        binding.addToFav.setImageResource(R.drawable.fav)
+                        true
+                    }
+
+                    false -> {
+                        binding.addToFav.setImageResource(R.drawable.not_fav)
+                        false
+                    }
+                }
+            }
+        }
     }
 
     private fun createReviewsList(): List<Review> {
@@ -142,9 +147,11 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
 
     override fun handleClicks() {
+
         binding.viewChangerRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             showSelectedLayout(checkedId)
         }
+
 
         binding.addToCartButton.setOnClickListener {
             if (selectedColor != null && selectedSize != null) {
@@ -161,22 +168,161 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
                 showSnackbar(false)
             }
         }
+
+        binding.addToFav.setOnClickListener {
+            if (selectedColor != null && selectedSize != null) {
+                val wishListItem = WishListItem(
+                    variantId = product.variants?.first { it.option1 == selectedSize && it.option2 == selectedColor }!!.id!!.toLong(),//?????
+                    product = product,
+                    false
+                )
+
+                    mViewModel.insertWishListItem(wishListItem)
+                    observeInsertWishItem()
+                    showSnackbar(isSuccess = true, isCart = false)
+
+            }else{
+                   showSnackbar(isSuccess = false, isCart = false)
+            }
+
+        }
     }
 
-    private fun showSnackbar(isSuccess: Boolean) {
+
+    private fun observeInsertWishItem() {
+        lifecycleScope.launch {
+            mViewModel.wishListFlow.collectLatest {
+                when (it) {
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeInsertWishListItem: (Failure) ${it.errorCode}) ${it.errorBody}"
+                        )
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeInsertWishListItem: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeInsertWishListItem: (ROOM) insertion is successful")
+                        mViewModel.getLocallyWishListItems()
+                        observeGetLocallyWishListItems()
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun observeGetLocallyWishListItems() {
+
+        lifecycleScope.launch {
+            mViewModel.wishListItemsFlow.collect {
+
+                Log.d(TAG, "observeGetLocallyWishListItems: (Success) $it")
+                val lineItems = it.map { wishListItem ->
+                    LineItem(1, wishListItem.variantId)
+                }
+                if (it.size == 1) {
+                    mViewModel.createWishListDraft(lineItems)
+                    observeCreateWishListDraft()
+                } else {
+                    mViewModel.updateWishListDraft(lineItems)
+                    observeUpdateWishListDraft()
+                }
+
+
+            }
+        }
+
+    }
+
+    private fun observeUpdateWishListDraft() {
+        lifecycleScope.launch {
+            mViewModel.updateWishListFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeUpdateWishDraft: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeUpdateWishDraft: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeUpdateWishDraft: (Success) ${Gson().toJson(it.value)}")
+                        mViewModel.uploadWishListId(it.value.draft_order.id)
+                        mViewModel.insertWishListIdLocally(it.value.draft_order.id)
+                        observeWishListID()
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun observeCreateWishListDraft() {
+        lifecycleScope.launch {
+            mViewModel.creationWishListFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeCreateWishDraft: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeCreateWishDraft: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeCreateWishDraft: (Success) ${Gson().toJson(it.value)}")
+                        mViewModel.uploadWishListId(it.value.draft_order.id)
+                        mViewModel.insertWishListIdLocally(it.value.draft_order.id)
+                        observeWishListID()
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun observeWishListID() {
+        lifecycleScope.launch {
+            mViewModel.wishListIdFlow.collectLatest {
+                when (it) {
+                    is Resource.Failure -> Log.e(TAG, "observeWishListID: ${it.errorBody}")
+                    Resource.Loading -> Log.i(TAG, "observeWishListID: $it")
+                    is Resource.Success -> Log.d(TAG, "observeWishListID: ${it.value}")
+                }
+            }
+        }
+    }
+
+    private fun showSnackbar(isSuccess: Boolean, isCart: Boolean = true) {
+        val text = if (isCart) {
+            "Cart"
+        } else {
+            "Wish List"
+        }
+
         if (isSuccess) {
 
             Snackbar.make(
                 requireView(),
-                "Added to cart Successfully",
+                "Added to $text Successfully",
                 Snackbar.LENGTH_SHORT
             ).show()
 
         } else {
-
             Snackbar.make(
                 requireView(),
-                "You cannot add to cart without choosing neither color nor size",
+                "You cannot add to $text without choosing neither color nor size",
                 Snackbar.LENGTH_SHORT
             ).show()
 
@@ -213,20 +359,25 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
             mViewModel.cartItemsFlow.collect {
                 when (it) {
                     is Resource.Failure -> {
-                        Log.e(TAG, "observeGetLocallyCartItems: (Failure ${it.errorCode}) ${it.errorBody}")
+                        Log.e(
+                            TAG,
+                            "observeGetLocallyCartItems: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
                     }
+
                     Resource.Loading -> {
                         Log.i(TAG, "observeGetLocallyCartItems: (Loading)")
                     }
+
                     is Resource.Success -> {
                         Log.d(TAG, "observeGetLocallyCartItems: (Success) ${it.value}")
                         val lineItems = it.value.map { cartItem ->
                             LineItem(cartItem.quantity, cartItem.variantId)
                         }
-                        if (it.value.size==1){
+                        if (it.value.size == 1) {
                             mViewModel.createCartDraft(lineItems)
                             observeCreateCartDraft()
-                        }else{
+                        } else {
                             mViewModel.updateCartDraft(lineItems)
                             observeUpdateCartDraft()
                         }

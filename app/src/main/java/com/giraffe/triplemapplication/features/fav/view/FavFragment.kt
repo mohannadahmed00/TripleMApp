@@ -13,18 +13,20 @@ import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentFavBinding
 import com.giraffe.triplemapplication.features.details.view.FavAdapter
+import com.giraffe.triplemapplication.features.fav.swipe.OnSwipe
 import com.giraffe.triplemapplication.features.fav.swipe.SwipeGesture
 import com.giraffe.triplemapplication.features.fav.viewmodel.FavVM
 import com.giraffe.triplemapplication.model.products.Product
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class FavFragment : BaseFragment<FavVM, FragmentFavBinding>() {
+class FavFragment : BaseFragment<FavVM, FragmentFavBinding>()  , OnSwipe{
     override fun getViewModel(): Class<FavVM> = FavVM::class.java
-
+    private lateinit var adapter:FavAdapter
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,55 +34,72 @@ class FavFragment : BaseFragment<FavVM, FragmentFavBinding>() {
     ): FragmentFavBinding = FragmentFavBinding.inflate(inflater, container, false)
 
     override fun handleView() {
+        setUpSwipeGesture()
         observeData()
+    }
+
+    private fun setUpSwipeGesture() {
+        val swipeGesture = object : SwipeGesture(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                showSnackBar(products[viewHolder.adapterPosition])
+                onSwipe(viewHolder.adapterPosition)
+
+
+            }
+        }
+
+        val touchHelper = ItemTouchHelper(swipeGesture)
+
+        touchHelper.attachToRecyclerView(binding.rvProducts)
+
     }
 
     private fun observeData() {
         lifecycleScope.launch {
-            mViewModel.allFavProducts.collectLatest { it ->
-                when (it) {
+            mViewModel.wishListItemsFlow.collectLatest {
 
-                    is List<Product> -> {
-                        showSuccess(it)
-                    }
-                }
+                showSuccess(it)
             }
         }
     }
 
-    private fun showSuccess(products: List<Product>) {
-        val adapter = FavAdapter() { navigateToProductInfo(it) }
-        val swipeGesture = object : SwipeGesture(requireContext()) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                showSnackBar(products[viewHolder.adapterPosition])
-                mViewModel.deleteFavourite(products[viewHolder.adapterPosition])
-            }
+    private fun showSuccess(products: List<WishListItem>) {
 
-
-        }
-        val touchHelper = ItemTouchHelper(swipeGesture)
-        touchHelper.attachToRecyclerView(binding.rvProducts)
+        adapter = FavAdapter() { navigateToProductInfo(it) }
         binding.rvProducts.adapter = adapter
         adapter.submitList(products)
+
+
+
+
+
     }
 
-    private fun showSnackBar(product: Product) {
+    private fun showSnackBar(product: WishListItem) {
         val snackbar =
-            Snackbar.make(requireView(), "${product.handle} deleted", Snackbar.LENGTH_SHORT)
+            Snackbar.make(requireView(), "${product.product.handle} deleted", Snackbar.LENGTH_SHORT)
         snackbar.setAction("UNDO") {
             mViewModel.returnLastDeleted()
         }
             .show()
     }
 
-    private fun navigateToProductInfo(product: Product) {
-        sharedViewModel.setCurrentProduct(product)
-        val action = FavFragmentDirections.actionFavFragmentToProductInfoFragment()
-        findNavController().navigate(action)
+    private fun navigateToProductInfo(product: WishListItem) {
+//        sharedViewModel.setCurrentProduct(product.product)
+//        val action = FavFragmentDirections.actionFavFragmentToProductInfoFragment()
+//        findNavController().navigate(action)
+        mViewModel.deleteWishListItemLocally(product)
     }
 
 
     override fun handleClicks() {
+
+    }
+
+    override fun onSwipe(position: Int) {
+        val item = adapter.currentList[position]
+        showSnackBar(item)
+        mViewModel.deleteWishListItemLocally(item)
 
     }
 
