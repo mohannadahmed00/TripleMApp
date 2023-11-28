@@ -9,11 +9,13 @@ import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
+import com.giraffe.triplemapplication.model.customers.CustomerDetails
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
+import com.giraffe.triplemapplication.model.orders.Customer
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
@@ -119,6 +121,8 @@ interface ApiServices {
     @GET("customers.json")
     suspend fun getCustomerByEmail(@Query("email") email:String) :MultipleCustomerResponse
 
+    @GET("customers/{customerId}/.json")
+    suspend fun getCustomerById(@Path("customerId") customerId: Long): CustomerDetails
     @POST("customers")
     suspend fun createStripeCustomer():Response<StripeCustomerResponse>
 

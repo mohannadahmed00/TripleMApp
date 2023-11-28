@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +13,6 @@ import com.giraffe.triplemapplication.databinding.FragmentAllCategoriesBinding
 import com.giraffe.triplemapplication.features.allcategories.adapters.BrandsAdapter
 import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
 import com.giraffe.triplemapplication.features.allcategories.viewmodel.AllCategoriesVM
-import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.model.brands.SmartCollection
 import com.giraffe.triplemapplication.model.categories.CustomCollection
 import com.giraffe.triplemapplication.model.products.Product
@@ -40,15 +37,7 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
         getNavArguments()
 
         // Recycler View
-        lifecycleScope.launch {
-            sharedViewModel.currencyFlow.collect {
-                productsAdapter = if (it is Resource.Success) {
-                    ProductsAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, it.value) { product -> navigateToProductInfoScreen(product) }
-                } else {
-                    ProductsAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, "") { product -> navigateToProductInfoScreen(product) }
-                }
-            }
-        }
+        productsAdapter = ProductsAdapter(requireContext(), sharedViewModel.exchangeRateFlow.value, sharedViewModel.currencySymFlow.value) { product -> navigateToProductInfoScreen(product) }
         binding.categoryRecyclerView.apply {
             adapter = productsAdapter
             layoutManager = LinearLayoutManager(context).apply {
@@ -58,8 +47,10 @@ class AllCategoriesFragment : BaseFragment<AllCategoriesVM, FragmentAllCategorie
 
         if (isBrand) {
             observeGetAllBrands()
+            binding.allCategoriesLabel.text = getString(R.string.all_brands)
         } else {
             observeGetAllCategories()
+            binding.allCategoriesLabel.text = getString(R.string.all_categories)
         }
         observeGetAllProducts()
     }

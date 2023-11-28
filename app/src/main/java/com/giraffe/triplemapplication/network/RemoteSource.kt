@@ -10,6 +10,7 @@ import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.categories.AllCategoriesResponse
 import com.giraffe.triplemapplication.model.currency.ExchangeRatesResponse
+import com.giraffe.triplemapplication.model.customers.CustomerDetails
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
@@ -107,7 +108,7 @@ interface RemoteSource {
     suspend fun getWishListId(): Flow<Long>
 
     suspend fun setDefaultAddress(customerId:Long, addressId:Long):Flow<Response<AddressResponse>>
-
+    suspend fun getCustomerById(customerId: Long): Flow<CustomerDetails>
 
     suspend fun createStripeCustomer():Flow<Response<StripeCustomerResponse>>
 

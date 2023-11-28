@@ -6,6 +6,7 @@ import com.giraffe.triplemapplication.model.address.AddressRequest
 import com.giraffe.triplemapplication.model.address.AddressResponse
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
+import com.giraffe.triplemapplication.model.customers.CustomerDetails
 import com.giraffe.triplemapplication.model.customers.CustomerResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
@@ -379,6 +380,9 @@ object ApiClient : RemoteSource {
         }
     }
 
+    override suspend fun getCustomerById(customerId: Long) = flow {
+        emit(getApiServices().getCustomerById(customerId))
+    }
     override suspend fun createStripeCustomer(): Flow<Response<StripeCustomerResponse>> {
         return flow{ emit(getApiServices(Constants.STRIPE_URL).createStripeCustomer()) }
     }

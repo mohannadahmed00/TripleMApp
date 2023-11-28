@@ -89,7 +89,7 @@
     <string name="gbp">GBP</string>
     <string name="log_out">LOG OUT</string>
     <string name="choose_your_preferred_address">Choose your preferred address</string>
-    <string name="enter_address_tag">Address tag</string>
+    <string name="enter_address_tag">Enter address tag</string>
     <string name="products">Products</string>
     <string name="categories">Categories</string>
     <string name="price">Price:</string>
@@ -117,6 +117,9 @@
     <string name="clear_all">clear all</string>
     <string name="do_you_want_to_perform_this_action">Do you want to perform this action?</string>
     <string name="undo">Undo</string>
+    <string name="ordered_by">Ordered by:</string>
+    <string name="discount">Discount:</string>
+    <string name="all_brands">All Brands</string>
     <string name="credit_card">Credit card</string>
     <string name="cash_on_delivery">Cash on delivery</string>
     <string name="payment_method">PAYMENT METHOD</string>

@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication.features.orderdetails.view
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentOrderDetailsBinding
-import com.giraffe.triplemapplication.features.allcategories.adapters.ProductsAdapter
-import com.giraffe.triplemapplication.features.allcategories.view.AllCategoriesFragmentDirections
 import com.giraffe.triplemapplication.features.orderdetails.viewmodel.OrderDetailsVM
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.utils.Resource
@@ -50,6 +49,7 @@ class OrderDetailsFragment : BaseFragment<OrderDetailsVM, FragmentOrderDetailsBi
         findNavController().navigate(action)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeGetOrder() {
         lifecycleScope.launch {
             mViewModel.orderFlow.collect {
@@ -57,6 +57,10 @@ class OrderDetailsFragment : BaseFragment<OrderDetailsVM, FragmentOrderDetailsBi
                     is Resource.Failure -> { dismissLoading() }
                     Resource.Loading -> { showLoading() }
                     is Resource.Success -> {
+                        val order = it.value.order
+                        binding.price.text = "${order.current_total_price} ${order.currency}"
+                        binding.discount.text = "${order.total_discounts} ${order.currency}"
+
                         var productsIds = ""
                         val products = it.value.order.line_items
                         products.forEachIndexed { index, product ->

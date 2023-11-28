@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".features.orderdetails.view.OrderDetailsFragment">
 
     <ImageView
@@ -16,6 +16,50 @@
         android:src="@drawable/close_ic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/price_label"
+        style="@style/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_recycler_view" />
+
+    <TextView
+        android:id="@+id/price"
+        style="@style/subtitle_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/price_label"
+        app:layout_constraintStart_toEndOf="@id/price_label"
+        app:layout_constraintTop_toTopOf="@id/price_label"
+        tools:text="$88.5" />
+
+    <TextView
+        android:id="@+id/discount_label"
+        style="@style/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/discount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_label" />
+
+    <TextView
+        android:id="@+id/discount"
+        style="@style/subtitle_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/discount_label"
+        app:layout_constraintStart_toEndOf="@id/discount_label"
+        app:layout_constraintTop_toTopOf="@id/discount_label"
+        tools:text="$18.5" />
 
     <TextView
         android:id="@+id/products_label"
@@ -33,7 +77,8 @@
         android:layout_height="wrap_content"
         android:background="@color/background"
         android:padding="16dp"
-        tools:listitem="@layout/item_category"
-        app:layout_constraintTop_toBottomOf="@id/products_label"/>
+        app:layout_constraintTop_toBottomOf="@id/products_label"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_category" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
