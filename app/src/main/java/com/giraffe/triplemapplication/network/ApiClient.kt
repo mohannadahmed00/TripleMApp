@@ -11,6 +11,9 @@ import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
+import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
+import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
+import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
@@ -27,6 +30,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient : RemoteSource {
     private const val TAG = "ApiClient"
+
+    private fun getStripeHeaders(): OkHttpClient {
+        val httpClient = OkHttpClient.Builder()
+        httpClient.addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer ${Constants.STRIPE_SECRET_KEY}")
+                .addHeader("Stripe-Version", "2020-08-27")
+                .build()
+            chain.proceed(request)
+        }
+        return httpClient.build()
+    }
 
     private fun provideOkHttpClient(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
@@ -45,6 +60,8 @@ object ApiClient : RemoteSource {
             .baseUrl(url)
         if (url == Constants.URL) {
             apiServices.client(provideOkHttpClient())
+        }else if (url == Constants.STRIPE_URL){
+            apiServices.client(getStripeHeaders())
         }
         return apiServices.build().create(ApiServices::class.java)
     }
@@ -360,6 +377,22 @@ object ApiClient : RemoteSource {
         return flow {
             emit(getApiServices().setDefaultAddress(customerId, addressId))
         }
+    }
+
+    override suspend fun createStripeCustomer(): Flow<Response<StripeCustomerResponse>> {
+        return flow{ emit(getApiServices(Constants.STRIPE_URL).createStripeCustomer()) }
+    }
+
+    override suspend fun createEphemeralKey(customerId: String): Flow<Response<EphemeralKeyResponse>> {
+        return flow{ emit(getApiServices(Constants.STRIPE_URL).createEphemeralKey(customerId)) }
+    }
+
+    override suspend fun createPaymentIntent(
+        customerId: String,
+        amount: String,
+        currency: String
+    ): Flow<Response<PaymentIntentResponse>> {
+        return flow{ emit(getApiServices(Constants.STRIPE_URL).createPaymentIntent(customerId, amount, currency)) }
     }
 
 }

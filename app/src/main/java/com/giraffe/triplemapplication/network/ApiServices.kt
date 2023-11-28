@@ -17,10 +17,15 @@ import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
+import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
+import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
+import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -113,4 +118,19 @@ interface ApiServices {
         @Path("address_id") addressId:Long):Response<AddressResponse>
     @GET("customers.json")
     suspend fun getCustomerByEmail(@Query("email") email:String) :MultipleCustomerResponse
+
+    @POST("customers")
+    suspend fun createStripeCustomer():Response<StripeCustomerResponse>
+
+    @POST("ephemeral_keys")
+    suspend fun createEphemeralKey(@Query("customer") customerId: String):Response<EphemeralKeyResponse>
+
+    @POST("payment_intents")
+    @FormUrlEncoded
+    suspend fun createPaymentIntent(
+        @Field("customer") customerId: String,
+        @Field("amount") amount: String,
+        @Field("currency") currency: String,
+        @Field("automatic_payment_methods[enabled]") automaticPaymentMethodsEnabled: Boolean = true
+    ):Response<PaymentIntentResponse>
 }

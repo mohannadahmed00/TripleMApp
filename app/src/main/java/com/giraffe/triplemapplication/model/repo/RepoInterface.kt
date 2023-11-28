@@ -19,6 +19,9 @@ import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
+import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
+import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
+import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
@@ -37,7 +40,6 @@ interface RepoInterface {
     suspend fun getAllProductsFromIds(ids: String): Flow<AllProductsResponse>
     suspend fun getLanguage(): Flow<String>
     suspend fun setLanguage(code: Constants.Languages)
-
     fun signUpFirebase(email: String, password: String, confirmPassword: String): Flow<AuthResult>
     fun signInFirebase(email: String, password: String): Flow<AuthResult>
 
@@ -130,5 +132,16 @@ interface RepoInterface {
 
     suspend fun deleteCartItem(cartItem: CartItem): Flow<Int>
 
-    suspend fun clearData(): Flow<Unit>
+    suspend fun clearData() : Flow<Unit>
+
+    suspend fun createStripeCustomer():Flow<Response<StripeCustomerResponse>>
+
+    suspend fun createEphemeralKey(customerId: String):Flow<Response<EphemeralKeyResponse>>
+
+    suspend fun createPaymentIntent(
+        customerId: String,
+        amount: String,
+        currency: String
+    ):Flow<Response<PaymentIntentResponse>>
+
 }
