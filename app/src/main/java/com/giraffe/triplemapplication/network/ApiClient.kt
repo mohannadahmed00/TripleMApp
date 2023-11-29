@@ -403,6 +403,10 @@ object ApiClient : RemoteSource {
         return flow { emit(getApiServices().getSingleCart(cartId)) }
     }
 
+    override suspend fun getSingleWishList(wishId: Long): Flow<Response<DraftResponse>> {
+        return flow { emit(getApiServices().getSingleWish(wishId)) }
+    }
+
     override suspend fun getListOfProducts(ids: String): Flow<Response<AllProductsResponse>> {
         return flow { emit(getApiServices().getListOfProducts(ids)) }
     }

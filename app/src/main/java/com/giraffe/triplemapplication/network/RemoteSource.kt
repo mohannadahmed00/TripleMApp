@@ -122,6 +122,7 @@ interface RemoteSource {
     ):Flow<Response<PaymentIntentResponse>>
 
     suspend fun getSingleCart(cartId: Long): Flow<Response<DraftResponse>>
+    suspend fun getSingleWishList(cartId: Long): Flow<Response<DraftResponse>>
 
     suspend fun getListOfProducts(ids: String): Flow<Response<AllProductsResponse>>
 

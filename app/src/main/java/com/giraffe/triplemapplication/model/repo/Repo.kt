@@ -187,7 +187,7 @@ class Repo private constructor(
         return remoteSource.uploadWishListId(wishListId)
     }
 
-    override fun insertWishListItem(wishListItem: WishListItem): Flow<Long> {
+    override suspend fun insertWishListItem(wishListItem: WishListItem): Flow<Long> {
         return localSource.insertWishListItem(wishListItem)
     }
 
@@ -294,6 +294,10 @@ class Repo private constructor(
 
     override suspend fun getSingleCart(cartId: Long): Flow<Response<DraftResponse>> {
         return remoteSource.getSingleCart(cartId)
+    }
+
+    override suspend fun getSingleWish(cartId: Long): Flow<Response<DraftResponse>> {
+        return remoteSource.getSingleWishList(cartId)
     }
 
     override suspend fun getListOfProducts(ids: String): Flow<Response<AllProductsResponse>> {
