@@ -25,12 +25,14 @@ class CartAdapter(
     }
 
     fun deleteItem(position: Int) {
-        cartItems.removeAt(position)
-        if (position == cartItems.size - 1) {
-            notifyDataSetChanged()
-        } else {
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, cartItems.size)
+        if (cartItems.isNotEmpty()) {
+            cartItems.removeAt(position)
+            if (position == cartItems.size - 1) {
+                notifyDataSetChanged()
+            } else {
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, cartItems.size)
+            }
         }
     }
 

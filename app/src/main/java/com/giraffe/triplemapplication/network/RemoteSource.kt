@@ -120,4 +120,9 @@ interface RemoteSource {
         amount: String,
         currency: String
     ):Flow<Response<PaymentIntentResponse>>
+
+    suspend fun getSingleCart(cartId: Long): Flow<Response<DraftResponse>>
+
+    suspend fun getListOfProducts(ids: String): Flow<Response<AllProductsResponse>>
+
 }

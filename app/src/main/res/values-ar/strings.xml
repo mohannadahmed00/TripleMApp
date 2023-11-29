@@ -111,4 +111,5 @@
     <string name="payment_method">طريقة الدفع</string>
     <string name="add_promo_code">إضافة كود التخفيض</string>
     <string name="apply">تطبيق</string>
+    <string name="as_a_guest">as a guest</string>
 </resources>

@@ -14,6 +14,7 @@ import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
 import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
 import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.await
 import com.google.android.gms.tasks.Task
@@ -396,6 +397,14 @@ object ApiClient : RemoteSource {
         currency: String
     ): Flow<Response<PaymentIntentResponse>> {
         return flow{ emit(getApiServices(Constants.STRIPE_URL).createPaymentIntent(customerId, amount, currency)) }
+    }
+
+    override suspend fun getSingleCart(cartId: Long): Flow<Response<DraftResponse>> {
+        return flow { emit(getApiServices().getSingleCart(cartId)) }
+    }
+
+    override suspend fun getListOfProducts(ids: String): Flow<Response<AllProductsResponse>> {
+        return flow { emit(getApiServices().getListOfProducts(ids)) }
     }
 
 }

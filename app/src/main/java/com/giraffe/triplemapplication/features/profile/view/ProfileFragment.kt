@@ -11,7 +11,9 @@ import com.giraffe.triplemapplication.databinding.FragmentProfileBinding
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.gone
 import com.giraffe.triplemapplication.utils.load
+import com.giraffe.triplemapplication.utils.show
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -33,10 +35,48 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
         observeGetLanguage()
         mViewModel.getCurrency()
         observeGetCurrency()
-        mViewModel.getEmail()
-        observeGetEmail()
-        mViewModel.getFullName()
-        observeGetFullName()
+
+        if (sharedViewModel.isLoggedFlow.value){
+            mViewModel.getEmail()
+            observeGetEmail()
+            mViewModel.getFullName()
+            observeGetFullName()
+
+            binding.ivAddresses.show()
+            binding.btnAddress.show()
+            binding.ivEnterAddresses.show()
+            binding.tvAddresses.show()
+            binding.ivPayMethod.show()
+            binding.btnPayment.show()
+            binding.ivEnterPayMethod.show()
+            binding.tvPayMethod.show()
+            binding.line4.show()
+            binding.line5.show()
+            binding.tvLogout.show()
+            binding.cvProfile.show()
+        }else{
+            binding.tvName.text = requireContext().getString(R.string.sign_in_title)
+            binding.tvName.setOnClickListener {
+                findNavController().setGraph(R.navigation.auth_graph)
+                Log.i(TAG, "handleView: go to auth graph")
+            }
+            binding.tvEmail.gone()
+            binding.ivAddresses.gone()
+            binding.btnAddress.gone()
+            binding.ivEnterAddresses.gone()
+            binding.tvAddresses.gone()
+            binding.ivPayMethod.gone()
+            binding.btnPayment.gone()
+            binding.ivEnterPayMethod.gone()
+            binding.tvPayMethod.gone()
+            binding.line4.gone()
+            binding.line5.gone()
+            binding.tvLogout.gone()
+            binding.cvProfile.gone()
+
+
+        }
+
     }
 
     private fun observeGetFullName() {
@@ -149,6 +189,7 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
                                     }
                                     is Resource.Success -> {
                                         Log.d("TAG", "logout: $it")
+                                        sharedViewModel.setIsLoggedFlag(false)
                                         findNavController().setGraph(R.navigation.auth_graph)
 
                                     }
