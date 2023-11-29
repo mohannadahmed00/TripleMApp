@@ -12,6 +12,7 @@ import com.giraffe.triplemapplication.databinding.FragmentLoginBinding
 import com.giraffe.triplemapplication.features.login.viewmodel.LoginVM
 import com.giraffe.triplemapplication.model.cart.CartItem
 import com.giraffe.triplemapplication.model.cart.response.LineItem
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -26,6 +27,7 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
     override fun getViewModel(): Class<LoginVM> = LoginVM::class.java
 
     private var listOfLineItems: List<LineItem> = mutableListOf()
+    private var wishListOfLineItems: List<LineItem> = mutableListOf()
     private val listOfCartItems: MutableList<CartItem> = mutableListOf()
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -80,7 +82,9 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                         mViewModel.setData(it.value.customers.first().id)
                         mViewModel.setFullNameLocally(it.value.customers.first().first_name)
                         Log.i(TAG, "showSuccess: ${mViewModel.cartIdFlow.value}")
+                        Log.i(TAG, "showSuccess: ${mViewModel.wishListIdFlow.value}")
                         mViewModel.getSingleCart()
+                        mViewModel.getSingleWishList()
                         observeGetSingleCart()
                     }
                 }
@@ -89,7 +93,109 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
 
     }
 
+    private fun observeGetSingleWishList() {
+        lifecycleScope.launch {
+            mViewModel.singleWishFlow.collectLatest {
+                when(it){
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeGetSingleWishList: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
+                        sharedViewModel.setIsLoggedFlag(true)
+                        findNavController().setGraph(R.navigation.main_graph)
+                        dismissLoading()
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeGetSingleWishList: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeGetSingleWishList: (all products) ${sharedViewModel.allProducts.value}")
+                        Log.d(TAG, "observeGetSingleWishList: (Success) ${Gson().toJson(it.value)}")
+                        if (it.value.draft_order.line_items.isEmpty()){
+                            sharedViewModel.setIsLoggedFlag(true)
+                            findNavController().setGraph(R.navigation.main_graph)
+                            dismissLoading()
+                        }else {
+                            var ids = ""
+                            wishListOfLineItems = it.value.draft_order.line_items
+                            wishListOfLineItems.forEach { lineItem ->
+                                ids += " ${lineItem.product_id},"
+                            }
+                            mViewModel.getWishListOfProducts(ids)
+                            observeGetWishListOfProducts()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeGetWishListOfProducts() {
+        lifecycleScope.launch {
+            mViewModel.productsWishListFlow.collect {
+                when(it){
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeGetWishListOfProducts: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeGetWishListOfProducts: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeGetWishListOfProducts: (Success) ${Gson().toJson(it.value)}")
+                        Log.d(TAG, "observeGetWishListOfProducts: (listOfLineItems size) ${wishListOfLineItems.size}")
+                        wishListOfLineItems.forEach {lineItem ->
+                            val product = it.value.products.firstOrNull {p-> p.id == lineItem.product_id}
+                            product?.let {pro->
+                                mViewModel.insertWishListItem(WishListItem(lineItem.variant_id, pro,true))
+                                observeInsertWishListItem()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeInsertWishListItem() {
+        lifecycleScope.launch {
+            mViewModel.wishListFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeInsertWishListItem: (Failure) ${it.errorCode}) ${it.errorBody}"
+                        )
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeInsertWishListItem: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeInsertWishListItem: (ROOM) insertion is successful")
+
+                        sharedViewModel.setIsLoggedFlag(true)
+                        findNavController().setGraph(R.navigation.main_graph)
+                        dismissLoading()
+                    }
+
+                }
+            }
+        }
+
+    }
+
     private fun observeGetSingleCart() {
+        observeGetSingleWishList()
+
         lifecycleScope.launch {
             mViewModel.singleCartFlow.collect{
                 when(it){
@@ -111,9 +217,10 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                         Log.d(TAG, "observeGetSingleCart: (all products) ${sharedViewModel.allProducts.value}")
                         Log.d(TAG, "observeGetSingleCart: (Success) ${Gson().toJson(it.value)}")
                         if (it.value.draft_order.line_items.isEmpty()){
-                            sharedViewModel.setIsLoggedFlag(true)
-                            findNavController().setGraph(R.navigation.main_graph)
-                            dismissLoading()
+//                            sharedViewModel.setIsLoggedFlag(true)
+//                            findNavController().setGraph(R.navigation.main_graph)
+//                            dismissLoading()
+
                         }else {
                             var ids = ""
                             listOfLineItems = it.value.draft_order.line_items
@@ -154,11 +261,6 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                                 observeInsertCartItem()
                             }
                         }
-                        //mViewModel().getWishList()
-                        //success or fail
-                        sharedViewModel.setIsLoggedFlag(true)
-                        findNavController().setGraph(R.navigation.main_graph)
-                        dismissLoading()
                     }
                 }
             }
@@ -190,7 +292,7 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
 
     private fun showFailure(it: Resource.Failure) {
         setError()
-        Snackbar.make(requireView(), it.toString(), Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), it.errorBody.toString(), Snackbar.LENGTH_SHORT).show()
 
     }
 

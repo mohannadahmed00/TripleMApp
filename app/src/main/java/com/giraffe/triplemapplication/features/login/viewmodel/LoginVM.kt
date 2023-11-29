@@ -8,6 +8,7 @@ import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
+import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
@@ -23,6 +24,7 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
 
     private var cartId: Long? = null
     private var wishListId: Long? = null
+
     private val _firebaseUser: MutableStateFlow<Resource<AuthResult>> =
         MutableStateFlow(Resource.Loading)
     val currentUser: StateFlow<Resource<AuthResult>> = _firebaseUser.asStateFlow()
@@ -31,11 +33,20 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
     private val _cartId : MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
     val cartIdFlow : StateFlow<Resource<Long>> = _cartId.asStateFlow()
 
+
+    val wishListIdFlow : StateFlow<Resource<Long>> = _wishListId.asStateFlow()
+
     private val _singleCartFlow : MutableStateFlow<Resource<DraftResponse>> = MutableStateFlow(Resource.Loading)
     val singleCartFlow : StateFlow<Resource<DraftResponse>> = _singleCartFlow.asStateFlow()
 
+    private val _singleWishFlow : MutableStateFlow<Resource<DraftResponse>> = MutableStateFlow(Resource.Loading)
+    val singleWishFlow : StateFlow<Resource<DraftResponse>> = _singleWishFlow.asStateFlow()
+
     private val _productsFlow : MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
     val productsFlow : StateFlow<Resource<AllProductsResponse>> = _productsFlow.asStateFlow()
+
+    private val _productsWishListFlow : MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
+    val productsWishListFlow : StateFlow<Resource<AllProductsResponse>> = _productsWishListFlow.asStateFlow()
 
 
 
@@ -63,6 +74,7 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
             _cartId.emit(safeCall{repo.getCartId()} )
         }
     }
+
     private fun collectCartId(){
         viewModelScope.launch(Dispatchers.IO) {
             _cartId.collectLatest {
@@ -140,6 +152,26 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
     fun insertCartItem(cartItem: CartItem) {
         viewModelScope.launch {
             _cartFlow.emit(safeCall { repo.insertCartItem(cartItem) })
+        }
+    }
+
+    fun getSingleWishList(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _singleWishFlow.emit(safeApiCall { repo.getSingleWish(wishListId?:0) })
+        }
+    }
+
+
+    fun getWishListOfProducts(ids: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _productsWishListFlow.emit(safeApiCall { repo.getListOfProducts(ids) })
+        }
+    }
+    private val _wishListFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
+    val wishListFlow: StateFlow<Resource<Long>> = _wishListFlow.asStateFlow()
+    fun insertWishListItem(wishListItem: WishListItem) {
+        viewModelScope.launch {
+            _wishListFlow.emit(safeCall { repo.insertWishListItem(wishListItem) })
         }
     }
 

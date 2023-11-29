@@ -49,6 +49,8 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
 
     private val _fullNameFlow : MutableStateFlow<Resource<String?>> = MutableStateFlow(Resource.Loading)
     val fullNameFlow : StateFlow<Resource<String?>> = _fullNameFlow
+
+
     fun setLanguage(code: Constants.Languages) {
         viewModelScope.launch {
             repo.setLanguage(code)
@@ -92,7 +94,7 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
     }
     fun logout(){
         viewModelScope.launch(Dispatchers.IO) {
-           _dataCleared.emit(safeCall { repo.clearData() })
+            _dataCleared.emit(safeCall { repo.clearData() })
             _signOut.emit(safeCall { repo.logout() })
 
         }

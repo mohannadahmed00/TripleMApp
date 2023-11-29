@@ -1,18 +1,25 @@
 package com.giraffe.triplemapplication
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.triplemapplication.model.cart.request.DraftOrder
+import com.giraffe.triplemapplication.model.cart.request.DraftRequest
+import com.giraffe.triplemapplication.model.cart.request.LineItem
+import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.discount.PriceRule
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -61,6 +68,14 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     private val _isLoggedFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoggedFlow: StateFlow<Boolean> = _isLoggedFlow.asStateFlow()
 
+    private val _creationWishListFlow: MutableStateFlow<Resource<DraftResponse>> =
+        MutableStateFlow(Resource.Loading)
+    private val _updateWishListFlow: MutableStateFlow<Resource<DraftResponse>> =
+        MutableStateFlow(Resource.Loading)
+    private val _uploadWishListIdFlow: MutableStateFlow<Resource<Boolean>> =
+        MutableStateFlow(Resource.Loading)
+    val uploadWishListIdFlow: StateFlow<Resource<Boolean>> = _uploadWishListIdFlow.asStateFlow()
+
     init {
         getLocallyWishListItems()
     }
@@ -69,12 +84,14 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         viewModelScope.launch {
             _lastDeleted.emit(wishListItem)
             _delWishListItemFlow.emit(safeCall { repo.deleteWishListItem(wishListItem) })
+            updateWishList()
         }
     }
 
     fun returnLastDeleted() {
         viewModelScope.launch(Dispatchers.IO) {
             _wishListFlow.emit(safeCall { repo.insertWishListItem(_lastDeleted.value!!) })
+            updateWishList()
         }
     }
 
@@ -103,6 +120,106 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
 
             _wishListFlow.emit(safeCall { repo.insertWishListItem(product) })
+            updateWishList()
+        }
+    }
+
+    private fun updateWishList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getLocallyWishListItems()
+            _wishListItemsFlow.collect {
+                val lineItems = it.map { wishListItem ->
+                    LineItem(1, wishListItem.variantId)
+                }
+                if (it.size == 1) {
+                    createWishListDraft(lineItems)
+                    observeCreateWishListDraft()
+                } else {
+                    updateWishListDraft(lineItems)
+                    observeUpdateWishListDraft()
+                }
+            }
+        }
+
+    }
+
+    private fun observeUpdateWishListDraft() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _updateWishListFlow.collectLatest {
+                when (it) {
+                    is Resource.Failure -> {
+                    }
+
+                    Resource.Loading -> {}
+                    is Resource.Success -> {
+                        repo.setWishListIdLocally(it.value.draft_order.id)
+                        uploadWishListId(it.value.draft_order.id)
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateWishListDraft(lineItems: List<LineItem>) {
+
+        viewModelScope.launch {
+            _updateWishListFlow.emit(safeApiCall {
+                repo.modifyWishListDraft(
+                    DraftRequest(
+                        DraftOrder(
+                            line_items = lineItems
+                        )
+                    )
+                )
+            })
+        }
+
+
+    }
+
+    private fun observeCreateWishListDraft() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _creationWishListFlow.collectLatest {
+                when (it) {
+                    is Resource.Failure -> {
+
+                    }
+
+                    Resource.Loading -> {}
+                    is Resource.Success -> {
+                        repo.setWishListIdLocally(it.value.draft_order.id)
+                        uploadWishListId(it.value.draft_order.id)
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun uploadWishListId(wishListId: Long) {
+        Log.i("Cs", "uploadWishListId:$wishListId ")
+
+        viewModelScope.launch {
+            Log.i("Cs", "uploadWishListId:$wishListId ")
+            repo.uploadWishListId(wishListId).let {
+
+                _uploadWishListIdFlow.emit(Resource.Success(true))
+
+
+            }
+        }
+    }
+
+    private fun createWishListDraft(lineItems: List<LineItem>) {
+        viewModelScope.launch {
+            _creationWishListFlow.emit(safeApiCall {
+                repo.createWishListDraft(
+                    DraftRequest(
+                        DraftOrder(line_items = lineItems)
+                    )
+                )
+            })
         }
     }
 

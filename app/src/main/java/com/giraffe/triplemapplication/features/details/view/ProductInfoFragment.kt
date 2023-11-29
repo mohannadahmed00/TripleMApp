@@ -248,7 +248,7 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
     private fun observeInsertWishItem() {
         lifecycleScope.launch {
-            mViewModel.wishListFlow.collectLatest {
+            sharedViewModel.wishListItem.collectLatest {
                 when (it) {
                     is Resource.Failure -> {
                         Log.e(

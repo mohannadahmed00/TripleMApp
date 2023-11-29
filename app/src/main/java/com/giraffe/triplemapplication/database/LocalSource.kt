@@ -43,7 +43,7 @@ interface LocalSource {
 
     fun getWishListItems(): Flow<List<WishListItem>>
 
-    fun insertWishListItem(product: WishListItem): Flow<Long>
+    suspend fun insertWishListItem(product: WishListItem): Flow<Long>
 
     suspend fun deleteWishListItem(product: WishListItem): Flow<Int>
 

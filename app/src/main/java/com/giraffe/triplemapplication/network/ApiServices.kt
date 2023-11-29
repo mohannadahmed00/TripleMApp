@@ -138,8 +138,11 @@ interface ApiServices {
     ):Response<PaymentIntentResponse>
 
 
+
     @GET("draft_orders/{cart_id}.json")
     suspend fun getSingleCart(@Path("cart_id") cartId: Long): Response<DraftResponse>
+    @GET("draft_orders/{wish_id}.json")
+    suspend fun getSingleWish(@Path("wish_id") wishId: Long): Response<DraftResponse>
     @GET("products.json")
     suspend fun getListOfProducts(@Query("ids") ids: String): Response<AllProductsResponse>
 }

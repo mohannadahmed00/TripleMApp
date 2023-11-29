@@ -96,7 +96,7 @@ interface RepoInterface {
 
     suspend fun uploadWishListId(wishListId: Long): Task<Void?>?
 
-    fun insertWishListItem(product: WishListItem): Flow<Long>
+    suspend fun insertWishListItem(product: WishListItem): Flow<Long>
     suspend fun deleteWishListItem(product: WishListItem): Flow<Int>
     suspend fun deleteAllWishListItem()
 
@@ -147,6 +147,7 @@ interface RepoInterface {
     ):Flow<Response<PaymentIntentResponse>>
 
     suspend fun getSingleCart(cartId: Long): Flow<Response<DraftResponse>>
+    suspend fun getSingleWish(cartId: Long): Flow<Response<DraftResponse>>
 
     suspend fun getListOfProducts(ids: String): Flow<Response<AllProductsResponse>>
 

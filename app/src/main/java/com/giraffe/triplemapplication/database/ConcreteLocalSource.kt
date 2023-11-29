@@ -156,7 +156,7 @@ class ConcreteLocalSource(context: Context) : LocalSource {
 
     }
 
-    override  fun insertWishListItem(product: WishListItem): Flow<Long> = flow {
+    override suspend fun insertWishListItem(product: WishListItem): Flow<Long> = flow {
         emit(favoritesDao.insertFavorite(product))
     }
 
