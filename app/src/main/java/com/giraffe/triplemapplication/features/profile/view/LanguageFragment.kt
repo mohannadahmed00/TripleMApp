@@ -35,14 +35,20 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
         binding.tvEnglish.setOnClickListener {
             binding.ivEnglishCorrect.show()
             binding.ivArabicCorrect.hide()
-            mViewModel.setLanguage(Constants.Languages.ENGLISH)
+            //mViewModel.setLanguage(Constants.Languages.ENGLISH)
+
+
+
             onActivityCallback.onLanguageSelected(Constants.Languages.ENGLISH.value)
 
         }
         binding.tvArabic.setOnClickListener {
             binding.ivEnglishCorrect.hide()
             binding.ivArabicCorrect.show()
-            mViewModel.setLanguage(Constants.Languages.ARABIC)
+            //mViewModel.setLanguage(Constants.Languages.ARABIC)
+
+
+
             onActivityCallback.onLanguageSelected(Constants.Languages.ARABIC.value)
         }
     }

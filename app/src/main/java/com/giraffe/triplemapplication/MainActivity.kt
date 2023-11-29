@@ -1,30 +1,21 @@
 package com.giraffe.triplemapplication
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
-import com.giraffe.triplemapplication.database.ConcreteLocalSource
 import com.giraffe.triplemapplication.databinding.ActivityMainBinding
-import com.giraffe.triplemapplication.model.repo.Repo
-import com.giraffe.triplemapplication.network.ApiClient
-import com.giraffe.triplemapplication.utils.Constants
-import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.LocalHelper
 import com.giraffe.triplemapplication.utils.ViewModelFactory
 import com.giraffe.triplemapplication.utils.gone
 import com.giraffe.triplemapplication.utils.show
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.Locale
 
 
 class MainActivity : AppCompatActivity(),OnActivityCallback{
+    private var context: Context? = null
     companion object{
         private const val TAG = "MainActivity"
     }
@@ -34,13 +25,15 @@ class MainActivity : AppCompatActivity(),OnActivityCallback{
     private lateinit var factory: ViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        factory = ViewModelFactory(Repo.getInstance(ApiClient, ConcreteLocalSource(this)))
+        /*factory = ViewModelFactory(Repo.getInstance(ApiClient, ConcreteLocalSource(this)))
         sharedVM = ViewModelProvider(this, factory)[SharedVM::class.java]
         sharedVM.getLanguage()
-        observeGetLanguage()
+        observeGetLanguage()*/
+        context = LocalHelper.setLocale(this,LocalHelper.getLanguage(this))
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        //window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
         navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, bundle: Bundle? ->
@@ -52,7 +45,7 @@ class MainActivity : AppCompatActivity(),OnActivityCallback{
         }
     }
 
-    private fun observeGetLanguage() {
+    /*private fun observeGetLanguage() {
         lifecycleScope.launch (Dispatchers.Main){
             sharedVM.languageFlow.collect{
                 when(it){
@@ -77,11 +70,11 @@ class MainActivity : AppCompatActivity(),OnActivityCallback{
     }
 
     private fun setLocale(languageCode: String) {
-        /*val locale = Locale(languageCode)
+        *//*val locale = Locale(languageCode)
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)
-        baseContext.resources.updateConfiguration(config,baseContext.resources.displayMetrics)*/
+        baseContext.resources.updateConfiguration(config,baseContext.resources.displayMetrics)*//*
 
         val res = resources
         val dm = res.displayMetrics
@@ -89,10 +82,12 @@ class MainActivity : AppCompatActivity(),OnActivityCallback{
         conf.setLocale(Locale(languageCode))
         conf.setLayoutDirection(Locale(languageCode))
         res.updateConfiguration(conf, dm)
-    }
+    }*/
 
     override fun onLanguageSelected(code: String) {
-        setLocale(code)
+        //setLocale(code)
+        //recreate()
+        context = LocalHelper.setLocale(this,code)
         recreate()
     }
 }

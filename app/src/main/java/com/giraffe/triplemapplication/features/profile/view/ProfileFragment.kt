@@ -12,6 +12,7 @@ import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.gone
+import com.giraffe.triplemapplication.utils.hide
 import com.giraffe.triplemapplication.utils.load
 import com.giraffe.triplemapplication.utils.show
 import kotlinx.coroutines.flow.collectLatest
@@ -42,6 +43,7 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
             mViewModel.getFullName()
             observeGetFullName()
 
+            binding.tvName.show()
             binding.ivAddresses.show()
             binding.btnAddress.show()
             binding.ivEnterAddresses.show()
@@ -54,12 +56,15 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
             binding.line5.show()
             binding.tvLogout.show()
             binding.cvProfile.show()
+
+            binding.btnLogin.gone()
         }else{
-            binding.tvName.text = requireContext().getString(R.string.sign_in_title)
-            binding.tvName.setOnClickListener {
+            binding.btnLogin.show()
+            binding.btnLogin.setOnClickListener {
                 findNavController().setGraph(R.navigation.auth_graph)
                 Log.i(TAG, "handleView: go to auth graph")
             }
+            binding.tvName.gone()
             binding.tvEmail.gone()
             binding.ivAddresses.gone()
             binding.btnAddress.gone()
@@ -72,7 +77,7 @@ class ProfileFragment : BaseFragment<ProfileVM, FragmentProfileBinding>() {
             binding.line4.gone()
             binding.line5.gone()
             binding.tvLogout.gone()
-            binding.cvProfile.gone()
+            binding.cvProfile.hide()
 
 
         }
