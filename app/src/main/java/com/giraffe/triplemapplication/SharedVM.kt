@@ -2,6 +2,7 @@ package com.giraffe.triplemapplication
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.triplemapplication.model.discount.PriceRule
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
@@ -185,5 +186,11 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         _isLoggedFlow.value = isLoggedFlag
     }
 
+    private val _couponsFlow: MutableStateFlow<List<PriceRule>> = MutableStateFlow(listOf())
+    val couponsFlow: StateFlow<List<PriceRule>> = _couponsFlow.asStateFlow()
+
+    fun setCoupons(coupons: List<PriceRule>){
+        _couponsFlow.value = coupons
+    }
 
 }

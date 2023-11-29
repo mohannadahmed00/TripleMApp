@@ -124,5 +124,6 @@
     <string name="gbp_sym">£</string>
     <string name="eur_sym">€</string>
     <string name="as_a_guest">as a guest</string>
+    <string name="you_must_be_logged_in_to_use_this_feature">You must be logged in to use this feature</string>
 
 </resources>

@@ -7,6 +7,7 @@
     tools:context=".features.details.view.ProductInfoFragment">
 
     <ImageView
+        android:visibility="invisible"
         android:id="@+id/back_btn"
         android:layout_width="20dp"
         android:layout_height="20dp"

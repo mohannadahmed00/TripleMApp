@@ -37,10 +37,11 @@ class SliderAdapter(
         val tvHint: TextView = itemView.findViewById<View>(R.id.tv_hint) as TextView
         //imageView.setImageResource(imageList[position])
         tvCode.text = codes[position].title.subSequence(0,codes[position].title.length/2).toString().plus("****")
-        tvHint.text = context.getString(
+        /*tvHint.text = context.getString(
             R.string.for_orders_that_is_greater_than_or_equal,
             codes[position].prerequisite_subtotal_range.greater_than_or_equal_to.toDouble().convert(exchangeRate).toString().plus(" ${card.context.getString(currency)}")
-        )
+        )*/
+        tvHint.text= "test test"
         if (codes[position].value_type=="percentage"){
             tvGift.text = codes[position].value.plus("%")
         }else{

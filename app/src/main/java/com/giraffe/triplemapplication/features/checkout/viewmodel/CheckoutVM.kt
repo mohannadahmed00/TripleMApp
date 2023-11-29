@@ -8,7 +8,6 @@ import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.response.DraftOrder
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.CustomerDetails
-import com.giraffe.triplemapplication.model.orders.Customer
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
@@ -16,6 +15,7 @@ import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyRes
 import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
 import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
+import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
@@ -23,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -125,7 +124,7 @@ class CheckoutVM(private val repo: RepoInterface): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val customerId = repo.getCustomerIdLocally().toString()
             Log.i("hahahahahahahaha", "getAddresses: $customerId")
-          _addressesFlow.emit(safeApiCall{ repo.getAddresses(customerId) })
+          _addressesFlow.emit(safeApiCall{ repo.getAddresses() })
         }
     }
 
@@ -163,6 +162,16 @@ class CheckoutVM(private val repo: RepoInterface): ViewModel() {
     ) {
         viewModelScope.launch {
             _paymentIntentFlow.emit(safeApiCall {repo.createPaymentIntent(customerId, amount,currency)})
+        }
+    }
+
+
+    private val _exchangeRateFlow: MutableStateFlow<Pair<Double, Double>?> = MutableStateFlow(null)
+    val exchangeRateFlow: StateFlow<Pair<Double, Double>?> = _exchangeRateFlow.asStateFlow()
+    fun getExchangeRateOfDollar() {
+        viewModelScope.launch {
+            val pair = repo.getExchangeRateOf(Constants.Currencies.USD)
+            _exchangeRateFlow.emit(pair.first())
         }
     }
 }

@@ -64,12 +64,10 @@ interface RepoInterface {
     suspend fun setCurrency(currency: Constants.Currencies)
 
     suspend fun addNewAddress(
-        customerId: String,
         address: AddressRequest,
     ): Flow<Response<AddressResponse>>
 
     suspend fun getAddresses(
-        customerId: String,
     ): Flow<Response<AddressesResponse>>
 
     suspend fun deleteAddress(
@@ -129,7 +127,6 @@ interface RepoInterface {
     suspend fun getFullName():Flow<String?>
 
     suspend fun setDefaultAddress(
-        customerId: Long,
         addressId: Long,
     ): Flow<Response<AddressResponse>>
 

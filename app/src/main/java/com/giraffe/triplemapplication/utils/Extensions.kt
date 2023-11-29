@@ -114,7 +114,8 @@ fun Double.convert(rates:Pair<Double,Double>?) :Double {
         val formattedValue = String.format("%.2f", (this / rates.first) * rates.second)
         formattedValue.toDouble()
     } else {
-        0.0
+        this
+        //0.0
     }
 }
 fun <T> findCommonElements(vararg lists: List<T>): List<T> {

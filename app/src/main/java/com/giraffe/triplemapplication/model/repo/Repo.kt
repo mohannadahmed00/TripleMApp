@@ -122,11 +122,10 @@ class Repo private constructor(
         localSource.setCurrency(currency)
 
     override suspend fun addNewAddress(
-        customerId: String,
         address: AddressRequest,
-    ) = remoteSource.addNewAddress(customerId, address)
+    ) = remoteSource.addNewAddress((localSource.getCustomerID()?:0).toString(), address)
 
-    override suspend fun getAddresses(customerId: String) = remoteSource.getAddresses(customerId)
+    override suspend fun getAddresses() = remoteSource.getAddresses((localSource.getCustomerID()?:0).toString())
     override suspend fun deleteAddress(
         customerId: String,
         addressId: String,
@@ -264,9 +263,8 @@ class Repo private constructor(
     }
 
     override suspend fun setDefaultAddress(
-        customerId: Long,
         addressId: Long
-    )= remoteSource.setDefaultAddress(customerId, addressId)
+    )= remoteSource.setDefaultAddress(localSource.getCustomerID()?:0, addressId)
 
     override suspend fun deleteCartItem(cartItem: CartItem) = localSource.deleteCartItem(cartItem)
 

@@ -135,7 +135,7 @@ class MapFragment : BaseFragment<ProfileVM, FragmentMapBinding>(), OnMapReadyCal
                         country_code = countryCode,
                     )
                 )
-                mViewModel.addNewAddress("6666401546315",addressRequest)
+                mViewModel.addNewAddress(addressRequest)
                 observeAddNewAddress()
             }
         }

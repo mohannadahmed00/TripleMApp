@@ -112,5 +112,17 @@
         app:layout_constraintStart_toEndOf="@id/tv_cart"
         app:layout_constraintTop_toTopOf="@id/tv_cart" />
 
+    <TextView
+        android:id="@+id/tv_block"
+        android:visibility="invisible"
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:layout_height="match_parent"
+        android:text="@string/you_must_be_logged_in_to_use_this_feature"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

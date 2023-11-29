@@ -31,7 +31,7 @@
             tools:text="Ankle Boots Ankle Boots Ankle Boots" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingStart="8dp"
@@ -40,9 +40,10 @@
 
             <TextView
                 android:id="@+id/product_price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textAlignment="textStart"
                 android:layout_height="wrap_content"
-
                 android:textSize="14sp"
                 android:textStyle="bold"
                 tools:text="$49.99" />
@@ -51,8 +52,6 @@
                 android:id="@+id/addToFav"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 android:src="@drawable/not_fav"/>
         </LinearLayout>
     </LinearLayout>

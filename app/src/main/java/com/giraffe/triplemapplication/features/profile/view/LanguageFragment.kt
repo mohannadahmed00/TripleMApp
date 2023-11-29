@@ -1,8 +1,5 @@
 package com.giraffe.triplemapplication.features.profile.view
 
-import android.app.Activity
-import android.content.Context
-import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
@@ -15,7 +12,6 @@ import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.hide
 import com.giraffe.triplemapplication.utils.show
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
     private lateinit var onActivityCallback: OnActivityCallback
@@ -41,6 +37,7 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
             binding.ivArabicCorrect.hide()
             mViewModel.setLanguage(Constants.Languages.ENGLISH)
             onActivityCallback.onLanguageSelected(Constants.Languages.ENGLISH.value)
+
         }
         binding.tvArabic.setOnClickListener {
             binding.ivEnglishCorrect.hide()
