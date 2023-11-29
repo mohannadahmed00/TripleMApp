@@ -93,49 +93,6 @@ class AddressesFragment : BaseFragment<ProfileVM, FragmentAddressesBinding>(),
         }
     }
 
-    //===========================
-
-    /*private fun getLocation() {
-        Log.i(MapFragment.TAG, "getLocation: ")
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                requestNewLocationData()
-            } else {
-                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-            }
-        } else {
-            requestPermissions()
-        }
-    }*/
-
-    /*private val locationCallback: LocationCallback = object : LocationCallback() {
-
-        override fun onLocationResult(locationResult: LocationResult) {
-            location = locationResult.lastLocation
-            lat = location?.latitude ?: 0.0
-            lon = location?.longitude ?: 0.0
-            Log.i(MapFragment.TAG, "onLocationResult: $lat , $lon ")
-            fusedLocationProviderClient.removeLocationUpdates(this)
-            val action = AddressesFragmentDirections.actionAddressesFragmentToMapFragment(lat.toFloat(),lon.toFloat())
-            findNavController().navigate(action)
-        }
-    }*/
-
-    /*@SuppressLint("MissingPermission")
-    private fun requestNewLocationData() {
-        Log.i(MapFragment.TAG, "requestNewLocationData: ")
-        val locationRequest = LocationRequest().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 0
-        }
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
-        )
-    }*/
-
     private fun checkPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(
             requireContext(),

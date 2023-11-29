@@ -111,8 +111,13 @@ fun ImageView.load(url:String){
 
 fun Double.convert(rates:Pair<Double,Double>?) :Double {
     return if (rates != null) {
-        val formattedValue = String.format("%.2f", (this / rates.first) * rates.second)
-        formattedValue.toDouble()
+        try {
+            val formattedValue = String.format("%.2f", (this / rates.first) * rates.second)
+            formattedValue.toDouble()
+        }catch(e:NumberFormatException){
+            this
+        }
+
     } else {
         this
         //0.0
