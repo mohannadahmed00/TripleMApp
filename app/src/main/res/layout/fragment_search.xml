@@ -10,6 +10,7 @@ tools:context=".features.search.view.SearchResultFragment">
 <ImageView
     android:id="@+id/back_btn"
     android:layout_width="20dp"
+    android:visibility="invisible"
     android:layout_height="20dp"
     android:layout_marginStart="20dp"
     android:layout_marginTop="36dp"
@@ -35,7 +36,7 @@ tools:context=".features.search.view.SearchResultFragment">
 
     app:cardCornerRadius="30dp"
     app:layout_constraintEnd_toStartOf="@id/filter_btn"
-    app:layout_constraintStart_toEndOf="@id/back_btn"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/back_btn"
     app:layout_constraintBottom_toBottomOf="@id/back_btn">
     <EditText

@@ -16,6 +16,8 @@ import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.orders.createorder.LineItems
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.convert
+import com.giraffe.triplemapplication.utils.hide
+import com.giraffe.triplemapplication.utils.show
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
@@ -28,6 +30,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
     companion object {
         private const val TAG = "CartFragment"
     }
+
 
     override fun getViewModel(): Class<CartVM> = CartVM::class.java
 
@@ -47,15 +50,21 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
     }
 
     override fun handleView() {
-        adapter = CartAdapter(
-            mutableListOf(),
-            sharedViewModel.exchangeRateFlow.value,
-            sharedViewModel.currencySymFlow.value,
-            this
-        )
-        binding.rvProducts.adapter = adapter
-        mViewModel.getLocallyCartItems()
-        observeGetLocallyCartItems(false)
+        if (sharedViewModel.isLoggedFlow.value){
+            binding.tvBlock.hide()
+            adapter = CartAdapter(
+                mutableListOf(),
+                sharedViewModel.exchangeRateFlow.value,
+                sharedViewModel.currencySymFlow.value,
+                this
+            )
+            binding.rvProducts.adapter = adapter
+            mViewModel.getLocallyCartItems()
+            observeGetLocallyCartItems(false)
+        }else{
+            binding.tvBlock.show()
+        }
+
     }
 
     private fun observeGetLocallyCartItems(forceUpdate: Boolean) {
@@ -74,7 +83,14 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
                     }
 
                     is Resource.Success -> {
-                        Log.d(TAG, "observeGetLocallyCartItems: (Success)")
+                        if (it.value.isEmpty()){
+                            binding.btnCheckout.hide()
+                        }else{
+                            binding.btnCheckout.show()
+                        }
+                        //mViewModel.getLocallyCartItems()
+                        //Log.d(TAG, "observeGetLocallyCartItems: (Success) ${Gson().toJson(it.value[0].quantity)}")
+                        adapter.updateList(it.value)
                         items = it.value
                         lineItems.lineItems = it.value.map { cartItem ->
                             com.giraffe.triplemapplication.model.orders.createorder.LineItem(
@@ -85,7 +101,6 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
                                 price = cartItem.product.variants?.get(0)?.price?.toDouble() ?: 0.0
                             )
                         }
-                        adapter.updateList(it.value)
                         val total = it.value.sumOf { cartItem ->
                             (cartItem.product.variants?.get(0)?.price?.toDouble()
                                 ?: 0.0) * (cartItem.quantity)
@@ -109,6 +124,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
     override fun onPlusClick(cartItem: CartItem) {
         cartItem.quantity++
         quantity++
+        Log.i(TAG, "onPlusClick: ${cartItem.quantity}")
         mViewModel.insertCartItem(cartItem)
         observeInsertCartItem()
     }
@@ -120,6 +136,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
             mViewModel.deleteCartItemLocally(cartItem)
             observeDeleteCartItemLocally(position)
         } else {
+            Log.i(TAG, "onMinusClick: ${cartItem.quantity}")
             mViewModel.insertCartItem(cartItem)
             observeInsertCartItem()
         }

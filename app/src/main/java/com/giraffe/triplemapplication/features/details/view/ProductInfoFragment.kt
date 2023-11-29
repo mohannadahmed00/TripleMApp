@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentProductInfoBinding
@@ -18,9 +17,11 @@ import com.giraffe.triplemapplication.model.products.Review
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.convert
+import com.giraffe.triplemapplication.utils.gone
+import com.giraffe.triplemapplication.utils.hide
+import com.giraffe.triplemapplication.utils.show
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -43,9 +44,17 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
     ): FragmentProductInfoBinding = FragmentProductInfoBinding.inflate(inflater, container, false)
 
     override fun handleView() {
+        if(sharedViewModel.isLoggedFlow.value){
+            binding.addToFav.show()
+            binding.addToCartButton.show()
+        }else{
+            binding.addToFav.hide()
+            binding.addToCartButton.gone()
+        }
         sharedViewModel.isFav()
         observeFavOrNot()
         observeData()
+
     }
 
     private fun observeData() {

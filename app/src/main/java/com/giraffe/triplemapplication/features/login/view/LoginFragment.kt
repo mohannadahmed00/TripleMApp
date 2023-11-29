@@ -204,6 +204,9 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                             TAG,
                             "observeGetSingleCart: (Failure ${it.errorCode}) ${it.errorBody}"
                         )
+                        sharedViewModel.setIsLoggedFlag(true)
+                        findNavController().setGraph(R.navigation.main_graph)
+                        dismissLoading()
                     }
 
                     Resource.Loading -> {
@@ -258,9 +261,6 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                                 observeInsertCartItem()
                             }
                         }
-//                        sharedViewModel.setIsLoggedFlag(true)
-//                        findNavController().setGraph(R.navigation.main_graph)
-//                        dismissLoading()
                     }
                 }
             }

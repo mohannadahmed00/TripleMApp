@@ -7,6 +7,7 @@ import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
+import com.giraffe.triplemapplication.model.discount.PriceRule
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
@@ -302,5 +303,11 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         _isLoggedFlow.value = isLoggedFlag
     }
 
+    private val _couponsFlow: MutableStateFlow<List<PriceRule>> = MutableStateFlow(listOf())
+    val couponsFlow: StateFlow<List<PriceRule>> = _couponsFlow.asStateFlow()
+
+    fun setCoupons(coupons: List<PriceRule>){
+        _couponsFlow.value = coupons
+    }
 
 }

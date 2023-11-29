@@ -26,6 +26,7 @@ import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.Transaction
 import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.convert
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.stripe.android.PaymentConfiguration
@@ -46,6 +47,9 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private var financialStatus: String = "pending"
     private var selectedAddress: Address? = null
 
+    private var totalPrice = 0.0
+    private var currency = "usd"
+
     override fun getViewModel(): Class<CheckoutVM> = CheckoutVM::class.java
 
     companion object {
@@ -64,9 +68,41 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
         lineItems = CheckoutFragmentArgs.fromBundle(requireArguments()).lineItems
         observeGetCustomerById()
 
-        binding.tvTotal.text = lineItems.lineItems.sumOf { it.price }.toString().plus(getString(sharedViewModel.currencySymFlow.value))
+        mViewModel.getExchangeRateOfDollar()
+        observeGetExchangeRateOfDollar()
+        totalPrice = lineItems.lineItems.sumOf { it.price * it.quantity }
 
-        adapter = ItemsAdapter(exchangeRate = sharedViewModel.exchangeRateFlow.value, currency = sharedViewModel.currencySymFlow.value, onItemClick = { })
+
+        /*val lis = sharedViewModel.couponsFlow.value
+
+
+        binding.edtPromoCode.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                TODO("Not yet implemented")
+            }
+
+        })*/
+        binding.tvTotal.text = lineItems.lineItems.sumOf { it.price * it.quantity }.convert(sharedViewModel.exchangeRateFlow.value).toString()
+            .plus(getString(sharedViewModel.currencySymFlow.value))
+
+        when (sharedViewModel.currencySymFlow.value) {
+            R.string.usd_sym -> currency = "usd"
+            R.string.egp_sym -> currency = "egp"
+            R.string.gbp_sym -> currency = "gbp"
+            R.string.eur_sym -> currency = "eur"
+        }
+        adapter = ItemsAdapter(
+            exchangeRate = sharedViewModel.exchangeRateFlow.value,
+            currency = sharedViewModel.currencySymFlow.value,
+            onItemClick = { })
         binding.rvItems.adapter = adapter
         adapter.submitList(items)
 
@@ -81,7 +117,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
         paymentSheet = PaymentSheet(this) {
             onPaymentResult(it)
         }
-   
+
 
 //    private fun observeGetCustomerDetails() {
 //        lifecycleScope.launch {
@@ -106,6 +142,14 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 //    }
     }
 
+    private fun observeGetExchangeRateOfDollar() {
+        lifecycleScope.launch {
+            mViewModel.exchangeRateFlow.collect{
+                totalPrice = totalPrice.convert(it)
+            }
+        }
+    }
+
     private fun onPaymentResult(paymentSheetResult: PaymentSheetResult) {
         if (paymentSheetResult is PaymentSheetResult.Completed) {
             Log.d(TAG, "onPaymentResult() called with: Success")
@@ -117,7 +161,6 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     }
 
     override fun handleClicks() {
-
 
 
         binding.btnClose.setOnClickListener { navigateUp() }
@@ -207,7 +250,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                     is Resource.Success -> {
                         Log.d(TAG, "observeCreateEphemeralKey: (Success) ${it.value}")
                         ephemeralKey = it.value.id
-                        mViewModel.createPaymentIntent(customerId, "1550" + "00", "usd")
+                        mViewModel.createPaymentIntent(
+                            customerId,
+                            totalPrice.toString().split(".")[0] + totalPrice.toString()
+                                .split(".")[1],
+                            "usd"
+                        )
                         observeCreatePaymentIntent()
 
                     }
@@ -326,10 +374,10 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                 financial_status = financialStatus,
                 discount_codes = if (discountCode == "") null else listOf(
                     DiscountCodes(
-                    amount = "0.0",
-                    code = discountCode,
-                    type = "percentage"
-                )
+                        amount = "0.0",
+                        code = discountCode,
+                        type = "percentage"
+                    )
                 )
             )
         )
@@ -403,10 +451,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                         dismissLoading()
                         Log.i(TAG, "observeOrder: ERROR ${it.errorBody}")
                     }
+
                     Resource.Loading -> {
                         showLoading()
                         Log.i(TAG, "observeOrder: LOADING")
                     }
+
                     is Resource.Success -> {
                         Log.i(TAG, "observeOrder: SUCCESS ${it.value}")
                         dismissLoading()
@@ -415,12 +465,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                             DraftOrder(
 //                                id = order.id,
                                 line_items = order.line_items.map {
-                                                                  com.giraffe.triplemapplication.model.cart.request.LineItem(
-                                                                      quantity = it.quantity,
-                                                                      variant_id = it.variant_id,
-                                                                      title = it.title,
-                                                                      price = it.price.toDouble()
-                                                                  )
+                                    com.giraffe.triplemapplication.model.cart.request.LineItem(
+                                        quantity = it.quantity,
+                                        variant_id = it.variant_id,
+                                        title = it.title,
+                                        price = it.price.toDouble()
+                                    )
                                 },
 //                                use_customer_default_address = true,
 //                                appliedDiscount = null,
@@ -477,10 +527,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                         dismissLoading()
                         Log.i(TAG, "observeModifyOrder: ERROR")
                     }
+
                     Resource.Loading -> {
                         showLoading()
                         Log.i(TAG, "observeModifyOrder: LOADING")
                     }
+
                     is Resource.Success -> {
                         Log.i(TAG, "observeModifyOrder: SUCCESS")
 //                        dismissLoading()
@@ -500,10 +552,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                         dismissLoading()
                         Log.i(TAG, "observeDraftOrderOrder: ${it.errorBody}")
                     }
+
                     Resource.Loading -> {
                         showLoading()
                         Log.i(TAG, "observeDraftOrderOrder: LOADING")
                     }
+
                     is Resource.Success -> {
                         dismissLoading()
                         navigateToOrderPlacedFragment()
@@ -529,7 +583,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 
                     is Resource.Success -> {
                         Log.i(TAG, "hg add: ${it.value}")
-                        if(it.value.addresses.isNotEmpty()) {
+                        if (it.value.addresses.isNotEmpty()) {
                             val address = it.value.addresses[0]
                             binding.tvName.text = address.first_name
                             binding.tvAddress.text = address.address1
@@ -537,12 +591,13 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                         }
                         Log.i("hahahahahaha", "observeGetAddresses: now ${it.value.addresses}")
 //                        addresses = it.value.addresses.toMutableList()
-                        val dialogFragment = AddressDialogFragment(it.value.addresses.toMutableList()) {
-                            Log.i("hahahahahaha", "handleClicks: $it")
-                            binding.tvName.text = it.first_name
-                            binding.tvAddress.text = it.address1
-                            selectedAddress = it
-                        }
+                        val dialogFragment =
+                            AddressDialogFragment(it.value.addresses.toMutableList()) {
+                                Log.i("hahahahahaha", "handleClicks: $it")
+                                binding.tvName.text = it.first_name
+                                binding.tvAddress.text = it.address1
+                                selectedAddress = it
+                            }
                         binding.tvAddress.setOnClickListener {
                             dialogFragment.show(parentFragmentManager, "AddressDialogFragment")
                         }

@@ -47,14 +47,14 @@ class AddressesFragment : BaseFragment<ProfileVM, FragmentAddressesBinding>(),
 
     override fun onResume() {
         super.onResume()
-        mViewModel.getAddresses("6666401546315")
+        mViewModel.getAddresses()
     }
 
 
     override fun handleView() {
         adapter = AddressesAdapter(mutableListOf(), this)
         binding.rvAddresses.adapter = adapter
-        mViewModel.getAddresses("6666401546315")
+        mViewModel.getAddresses()
         observeGetAddresses()
     }
 
@@ -196,14 +196,14 @@ class AddressesFragment : BaseFragment<ProfileVM, FragmentAddressesBinding>(),
                 val addressRequest = AddressRequest(
                     address = it
                 )
-                mViewModel.addNewAddress("6666401546315", addressRequest)
+                mViewModel.addNewAddress(addressRequest)
                 observeAddNewAddress()
             }
         }.show()
     }
 
     override fun onAddressLongPress(addressId: Long, position: Int,oldDefaultPosition:Int) {
-        mViewModel.setDefaultAddress(6666401546315, addressId)
+        mViewModel.setDefaultAddress( addressId)
         observeSetDefaultAddress(position,oldDefaultPosition)
     }
 

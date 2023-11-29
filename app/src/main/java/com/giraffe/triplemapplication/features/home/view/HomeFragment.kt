@@ -64,8 +64,6 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
                 orientation = RecyclerView.HORIZONTAL
             }
         }
-
-
         handleClicks()
         observeGetAllProducts()
         observeGetAllCategories()
@@ -86,6 +84,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
                     is Resource.Success -> {
                         Log.d(TAG, "observeGetCoupons: ${it.value}")
 
+                        sharedViewModel.setCoupons(it.value.price_rules)
                         val coupons = it.value.price_rules.map {priceRule ->
                             priceRule.title
                         }
@@ -136,6 +135,7 @@ class HomeFragment : BaseFragment<HomeVM, FragmentHomeBinding>(), SliderAdapter.
     private fun observeGetAllProducts() {
 
         productsAdapter = ProductAdapter(
+            sharedViewModel.isLoggedFlow.value,
             requireContext(),
             sharedViewModel.exchangeRateFlow.value,
             sharedViewModel.currencySymFlow.value,

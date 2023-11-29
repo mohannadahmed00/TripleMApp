@@ -16,11 +16,9 @@ import com.giraffe.triplemapplication.features.home.adapters.ProductAdapter
 import com.giraffe.triplemapplication.features.search.viewmodel.SearchVM
 import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
-import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.hide
 import com.giraffe.triplemapplication.utils.show
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -91,6 +89,7 @@ class SearchFragment : BaseFragment<SearchVM, FragmentSearchBinding>() ,OnProduc
 
     private fun showSuccess(products: List<Product>) {
         productsAdapter = ProductAdapter(
+            sharedViewModel.isLoggedFlow.value,
             requireContext(),
             sharedViewModel.exchangeRateFlow.value,
             sharedViewModel.currencySymFlow.value,

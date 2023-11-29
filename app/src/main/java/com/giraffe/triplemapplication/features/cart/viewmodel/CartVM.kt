@@ -52,7 +52,11 @@ class CartVM(private val repo: RepoInterface) : ViewModel() {
     }
 
     fun getLocallyCartItems() {
+
         viewModelScope.launch {
+            _cartItemsFlow.emit(Resource.Loading)
+            _cartItemsFlow.emit(safeCall { repo.getCartItems() })
+            //_cartItemsFlow.emit(Resource.Loading)
             _cartItemsFlow.emit(safeCall { repo.getCartItems() })
         }
     }

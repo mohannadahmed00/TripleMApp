@@ -69,20 +69,17 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
     }
 
     fun addNewAddress(
-        customerId:String,
         address: AddressRequest
     ){
         viewModelScope.launch(Dispatchers.IO) {
-            _addressFlow.emit(safeApiCall{ repo.addNewAddress(customerId, address) })
+            _addressFlow.emit(safeApiCall{ repo.addNewAddress(address) })
 
         }
     }
 
-    fun getAddresses(
-        customerId:String,
-    ){
+    fun getAddresses(){
         viewModelScope.launch(Dispatchers.IO) {
-            _addressesFlow.emit(safeApiCall{ repo.getAddresses(customerId) })
+            _addressesFlow.emit(safeApiCall{ repo.getAddresses() })
         }
     }
 
@@ -103,9 +100,9 @@ class ProfileVM(private val repo: RepoInterface) : ViewModel() {
         }
     }
 
-    fun setDefaultAddress(customerId:Long, addressId:Long){
+    fun setDefaultAddress( addressId:Long){
         viewModelScope.launch(Dispatchers.IO) {
-            _defAddressFlow.emit(safeApiCall{ repo.setDefaultAddress(customerId, addressId) })
+            _defAddressFlow.emit(safeApiCall{ repo.setDefaultAddress(addressId) })
         }
     }
 
