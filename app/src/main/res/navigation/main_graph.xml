@@ -84,15 +84,15 @@
             android:id="@+id/action_filterFragment_to_productInfoFragment"
             app:destination="@id/productInfoFragment" />
     </fragment>
-   <fragment
+    <fragment
         android:id="@+id/productInfoFragment"
         android:name="com.giraffe.triplemapplication.features.details.view.ProductInfoFragment"
         android:label="fragment_product_info"
         tools:layout="@layout/fragment_product_info">
-    <action
-        android:id="@+id/action_productInfoFragment_to_cartFragment"
-        app:destination="@id/cartFragment" />
-   </fragment>
+        <action
+            android:id="@+id/action_productInfoFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/addressesFragment"
@@ -137,7 +137,8 @@
         <action
             android:id="@+id/action_checkoutFragment_to_orderPlacedFragment"
             app:destination="@id/orderPlacedFragment"
-            app:popUpTo="@id/homeFragment" />
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="items"
             app:argType="string" />
@@ -153,7 +154,7 @@
         <action
             android:id="@+id/action_orderPlacedFragment_to_ordersFragment"
             app:destination="@id/ordersFragment"
-            app:popUpTo="@id/orderPlacedFragment"
+            app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
