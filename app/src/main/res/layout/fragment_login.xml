@@ -116,12 +116,12 @@
         app:layout_constraintTop_toBottomOf="@id/sign_in_btn" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/forget_password_btn"
+        android:id="@+id/btn_guest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/secondary_button"
-        android:text="@string/forget_password"
+        android:text="@string/as_a_guest"
         android:textColor="#FE6969"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/sign_in_card"

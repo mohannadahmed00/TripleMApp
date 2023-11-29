@@ -13,6 +13,7 @@ import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.payment.ephemeralkey.EphemeralKeyResponse
 import com.giraffe.triplemapplication.model.payment.paymentintent.PaymentIntentResponse
 import com.giraffe.triplemapplication.model.payment.stripecustomer.StripeCustomerResponse
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.network.RemoteSource
 import com.giraffe.triplemapplication.utils.Constants
@@ -289,6 +290,14 @@ class Repo private constructor(
         currency: String
     ): Flow<Response<PaymentIntentResponse>> {
         return remoteSource.createPaymentIntent(customerId, amount, currency)
+    }
+
+    override suspend fun getSingleCart(cartId: Long): Flow<Response<DraftResponse>> {
+        return remoteSource.getSingleCart(cartId)
+    }
+
+    override suspend fun getListOfProducts(ids: String): Flow<Response<AllProductsResponse>> {
+        return remoteSource.getListOfProducts(ids)
     }
 
 

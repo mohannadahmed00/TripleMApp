@@ -15,7 +15,6 @@ import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
 import com.giraffe.triplemapplication.model.customers.Request
 import com.giraffe.triplemapplication.model.discount.CouponsResponse
 import com.giraffe.triplemapplication.model.orders.AllOrdersResponse
-import com.giraffe.triplemapplication.model.orders.Customer
 import com.giraffe.triplemapplication.model.orders.OrderResponse
 import com.giraffe.triplemapplication.model.orders.createorder.OrderCreate
 import com.giraffe.triplemapplication.model.orders.createorder.createorderresponse.CreateOrderResponse
@@ -137,4 +136,10 @@ interface ApiServices {
         @Field("currency") currency: String,
         @Field("automatic_payment_methods[enabled]") automaticPaymentMethodsEnabled: Boolean = true
     ):Response<PaymentIntentResponse>
+
+
+    @GET("draft_orders/{cart_id}.json")
+    suspend fun getSingleCart(@Path("cart_id") cartId: Long): Response<DraftResponse>
+    @GET("products.json")
+    suspend fun getListOfProducts(@Query("ids") ids: String): Response<AllProductsResponse>
 }

@@ -123,5 +123,6 @@
     <string name="usd_sym">$</string>
     <string name="gbp_sym">£</string>
     <string name="eur_sym">€</string>
+    <string name="as_a_guest">as a guest</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.giraffe.triplemapplication
 
-import android.widget.ResourceCursorAdapter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.products.Product
@@ -57,6 +56,9 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
     private val _lastDeleted: MutableStateFlow<WishListItem?> = MutableStateFlow(null)
     private val _wishListFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
     val wishListItem: StateFlow<Resource<Long>> = _wishListFlow.asStateFlow()
+
+    private val _isLoggedFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoggedFlow: StateFlow<Boolean> = _isLoggedFlow.asStateFlow()
 
     init {
         getLocallyWishListItems()
@@ -177,6 +179,10 @@ class SharedVM(val repo: RepoInterface) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _filteredProducts.emit(filteredProducts)
         }
+    }
+
+    fun setIsLoggedFlag(isLoggedFlag: Boolean) {
+        _isLoggedFlow.value = isLoggedFlag
     }
 
 

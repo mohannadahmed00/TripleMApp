@@ -3,9 +3,13 @@ package com.giraffe.triplemapplication.features.login.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.triplemapplication.model.cart.CartItem
+import com.giraffe.triplemapplication.model.cart.response.DraftResponse
 import com.giraffe.triplemapplication.model.customers.MultipleCustomerResponse
+import com.giraffe.triplemapplication.model.products.AllProductsResponse
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
+import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +29,13 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
     private val _wishListId : MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
 
     private val _cartId : MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
+    val cartIdFlow : StateFlow<Resource<Long>> = _cartId.asStateFlow()
+
+    private val _singleCartFlow : MutableStateFlow<Resource<DraftResponse>> = MutableStateFlow(Resource.Loading)
+    val singleCartFlow : StateFlow<Resource<DraftResponse>> = _singleCartFlow.asStateFlow()
+
+    private val _productsFlow : MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
+    val productsFlow : StateFlow<Resource<AllProductsResponse>> = _productsFlow.asStateFlow()
 
 
 
@@ -57,9 +68,7 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
             _cartId.collectLatest {
                 when(it){
                     is Resource.Failure -> {}
-                    Resource.Loading -> {
-
-                    }
+                    Resource.Loading -> {}
                     is Resource.Success -> {
                         cartId = it.value
                     }
@@ -112,5 +121,26 @@ class LoginVM(private val repo: RepoInterface) : ViewModel() {
         }
     }
 
+
+    fun getSingleCart(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _singleCartFlow.emit(safeApiCall { repo.getSingleCart(cartId?:0) })
+        }
+    }
+
+
+    fun getListOfProducts(ids: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _productsFlow.emit(safeApiCall { repo.getListOfProducts(ids) })
+        }
+    }
+
+    private val _cartFlow: MutableStateFlow<Resource<Long>> = MutableStateFlow(Resource.Loading)
+    val cartFlow: StateFlow<Resource<Long>> = _cartFlow.asStateFlow()
+    fun insertCartItem(cartItem: CartItem) {
+        viewModelScope.launch {
+            _cartFlow.emit(safeCall { repo.insertCartItem(cartItem) })
+        }
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.giraffe.triplemapplication.features.splash.view
 
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -42,8 +43,7 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
         val fadeIn: Animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
         binding.ivLogo.startAnimation(fadeIn)
 
-        val handler = Handler()
-        handler.postDelayed({
+        Handler(Looper.myLooper()!!).postDelayed({
             sharedViewModel.getSelectedCurrency()
             observeGetSelectedCurrency()
             sharedViewModel.getCartId()
@@ -188,7 +188,9 @@ class SplashFragment : BaseFragment<SplashVM, FragmentSplashBinding>() {
                         } else {
                             //should check here if authorized (go to main graph) or not (go to auth graph)
 
-                            if (mViewModel.isLoggedIn()) {
+                            val isLogged = mViewModel.isLoggedIn()
+                            sharedViewModel.setIsLoggedFlag(isLogged)
+                            if (isLogged) {
                                 val action =
                                     SplashFragmentDirections.actionSplashFragmentToMainGraph()
                                 findNavController().navigate(action)
