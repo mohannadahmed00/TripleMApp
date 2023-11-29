@@ -3,6 +3,7 @@ package com.giraffe.triplemapplication.features.checkout.view
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -19,6 +20,7 @@ import com.giraffe.triplemapplication.model.cart.Carts
 import com.giraffe.triplemapplication.model.cart.ShippingAddress
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.customers.CustomerDetails
+import com.giraffe.triplemapplication.model.discount.PriceRule
 import com.giraffe.triplemapplication.model.orders.createorder.DiscountCodes
 import com.giraffe.triplemapplication.model.orders.createorder.LineItems
 import com.giraffe.triplemapplication.model.orders.createorder.Order
@@ -49,6 +51,7 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 
     private var totalPrice = 0.0
     private var currency = "usd"
+    var copons: List<PriceRule> = listOf()
 
     override fun getViewModel(): Class<CheckoutVM> = CheckoutVM::class.java
 
@@ -73,23 +76,9 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
         totalPrice = lineItems.lineItems.sumOf { it.price * it.quantity }
 
 
-        /*val lis = sharedViewModel.couponsFlow.value
+        copons = sharedViewModel.couponsFlow.value
+        Log.i(TAG, "handleView: $copons")
 
-
-        binding.edtPromoCode.addTextChangedListener(object :TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                TODO("Not yet implemented")
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                TODO("Not yet implemented")
-            }
-
-        })*/
         binding.tvTotal.text = lineItems.lineItems.sumOf { it.price * it.quantity }.convert(sharedViewModel.exchangeRateFlow.value).toString()
             .plus(getString(sharedViewModel.currencySymFlow.value))
 
@@ -337,86 +326,63 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 //        mViewModel.completeOrder()
 //        observeDraftOrderOrder()
         val discountCode = binding.edtPromoCode.text.toString()
-        Log.i(TAG, "checkout: email ${FirebaseAuth.getInstance().currentUser?.email}")
-        Log.i(TAG, "checkout: phone ${FirebaseAuth.getInstance().currentUser?.phoneNumber}")
-        val orderCreate = OrderCreate(
-            order = Order(
-                line_items = lineItems.lineItems,
-                email = FirebaseAuth.getInstance().currentUser?.email,
-                phone = FirebaseAuth.getInstance().currentUser?.phoneNumber ?: "",
-                billingAddress = BillingAddress(
-                    address1 = selectedAddress?.address1.toString(),
-                    city = selectedAddress?.city.toString(),
-                    country = selectedAddress?.country.toString(),
-                    first_name = selectedAddress?.first_name.toString(),
-                    last_name = selectedAddress?.last_name.toString(),
-                    phone = selectedAddress?.phone.toString(),
-                    province = selectedAddress?.province.toString(),
-                    zip = selectedAddress?.zip.toString(),
-                ),
-                shippingAddress = ShippingAddress(
-                    address1 = selectedAddress?.address1.toString(),
-                    city = selectedAddress?.city.toString(),
-                    country = selectedAddress?.country.toString(),
-                    first_name = selectedAddress?.first_name.toString(),
-                    last_name = selectedAddress?.last_name.toString(),
-                    phone = selectedAddress?.phone.toString(),
-                    province = selectedAddress?.province.toString(),
-                    zip = selectedAddress?.zip.toString()
-                ),
-                transactions = listOf(
-                    Transaction(
-                        amount = 50.0,
-                        kind = "sale",
-                        status = "success"
-                    )
-                ),
-                financial_status = financialStatus,
-                discount_codes = if (discountCode == "") null else listOf(
-                    DiscountCodes(
-                        amount = "0.0",
-                        code = discountCode,
-                        type = "percentage"
+        Log.i(TAG, "discount code $discountCode")
+        if (discountCode == "" || copons.any { it.title == binding.edtPromoCode.text.toString() }) {
+//            val copon = copons.first { it.title == discountCode }
+            Log.i(TAG, "checkout: email ${FirebaseAuth.getInstance().currentUser?.email}")
+            Log.i(TAG, "checkout: phone ${FirebaseAuth.getInstance().currentUser?.phoneNumber}")
+            val orderCreate = OrderCreate(
+                order = Order(
+                    line_items = lineItems.lineItems,
+                    email = FirebaseAuth.getInstance().currentUser?.email,
+                    phone = FirebaseAuth.getInstance().currentUser?.phoneNumber ?: "",
+                    billingAddress = BillingAddress(
+                        address1 = selectedAddress?.address1.toString(),
+                        city = selectedAddress?.city.toString(),
+                        country = selectedAddress?.country.toString(),
+                        first_name = selectedAddress?.first_name.toString(),
+                        last_name = selectedAddress?.last_name.toString(),
+                        phone = selectedAddress?.phone.toString(),
+                        province = selectedAddress?.province.toString(),
+                        zip = selectedAddress?.zip.toString(),
+                    ),
+                    shippingAddress = ShippingAddress(
+                        address1 = selectedAddress?.address1.toString(),
+                        city = selectedAddress?.city.toString(),
+                        country = selectedAddress?.country.toString(),
+                        first_name = selectedAddress?.first_name.toString(),
+                        last_name = selectedAddress?.last_name.toString(),
+                        phone = selectedAddress?.phone.toString(),
+                        province = selectedAddress?.province.toString(),
+                        zip = selectedAddress?.zip.toString()
+                    ),
+                    transactions = listOf(
+                        Transaction(
+                            amount = 50.0,
+                            kind = "sale",
+                            status = "success"
+                        )
+                    ),
+                    financial_status = financialStatus,
+                    discount_codes = if (discountCode == "") null else listOf(
+                        DiscountCodes(
+                            amount = "0.0",
+                            code = discountCode,//copon.title,
+                            type = "percentage"
+                        )
                     )
                 )
             )
-        )
-        mViewModel.checkout(orderCreate)
-        Log.i(TAG, "checkout: create order object $orderCreate")
-        observeCreateOrder()
-
-//        val orderCreate = OrderCreate(
-//            Order(
-//                currency = "EUR",
-//                line_items = listOf(
-//                    LineItem(
-//                        title = "Big Brown Bear Boots",
-//                        price = 74.99,
-//                        grams = "1300",
-//                        quantity = 3,
-//                        tax_lines = listOf(
-//                            TaxLine(
-//                                price = 13.5,
-//                                rate = 0.06,
-//                                title = "State tax"
-//                            )
-//                        )
-//                    )
-//                ),
-//                total_tax = 13.5,
-//                transactions = listOf(
-//                    Transaction(
-//                        amount = 238.47,
-//                        kind = "sale",
-//                        status = "success"
-//                    )
-//                )
-//            )
-//        )
-////        mViewModel.checkout(orderCreate)
-//
-////        observeCreateOrder()
-//        observeOrder()
+            mViewModel.checkout(orderCreate)
+            Log.i(TAG, "checkout: create order object $orderCreate")
+            observeCreateOrder()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Please, enter a valid discount code",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun observeGetCartId() {
