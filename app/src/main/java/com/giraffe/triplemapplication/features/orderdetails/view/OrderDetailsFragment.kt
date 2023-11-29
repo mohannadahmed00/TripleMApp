@@ -64,6 +64,14 @@ class OrderDetailsFragment : BaseFragment<OrderDetailsVM, FragmentOrderDetailsBi
                         Log.i("hahahahahah", "observeGetOrder: order object ${order}")
                         binding.price.text = "${order.current_total_price} ${order.currency}"
                         binding.discount.text = "${order.total_discounts} ${order.currency}"
+                        if (order?.shipping_address?.address1 == null) {
+                            binding.address.visibility = View.GONE
+                            binding.addressLabel.visibility = View.GONE
+                        } else {
+                            binding.address.visibility = View.VISIBLE
+                            binding.addressLabel.visibility = View.VISIBLE
+                            binding.address.text = "${order?.shipping_address?.address1}"
+                        }
 
                         it.value.order.line_items.forEach {
                             names.add(it.title)
