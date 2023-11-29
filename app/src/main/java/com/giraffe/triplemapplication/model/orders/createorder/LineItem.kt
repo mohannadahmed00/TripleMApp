@@ -5,9 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LineItem(
-    val grams: String,
+    var variantId: Long,
+    var quantity: Int,
     val price: Double,
-    val quantity: Int,
-    val tax_lines: List<TaxLine>,
+    val name: String,
     val title: String
 ): Parcelable

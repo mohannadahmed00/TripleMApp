@@ -9,6 +9,7 @@ import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeCall
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,6 +23,9 @@ class OrderDetailsVM(private val repo: RepoInterface): ViewModel() {
     private val _productsFlow: MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
     val productsFlow: StateFlow<Resource<AllProductsResponse>> = _productsFlow.asStateFlow()
 
+    private val _allProductsFlow: MutableStateFlow<Resource<AllProductsResponse>> = MutableStateFlow(Resource.Loading)
+    val allProductsFlow: StateFlow<Resource<AllProductsResponse>> = _allProductsFlow.asStateFlow()
+
     fun getOrder(orderId: Long) {
         viewModelScope.launch {
             _orderFlow.emit(safeCall { repo.getOrder(orderId) })
@@ -31,6 +35,12 @@ class OrderDetailsVM(private val repo: RepoInterface): ViewModel() {
     fun getProductsInOrder(productsIds: String) {
         viewModelScope.launch {
             _productsFlow.emit(safeCall { repo.getAllProductsFromIds(productsIds) })
+        }
+    }
+
+    fun getAllProducts() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _allProductsFlow.emit(safeCall { repo.getAllProducts() })
         }
     }
 }

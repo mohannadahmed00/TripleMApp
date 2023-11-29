@@ -2,6 +2,7 @@ package com.giraffe.triplemapplication.features.checkout.view
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ class AddressDialogFragment(
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_addresses)
         recyclerView.layoutManager = LinearLayoutManager(activity)
+        Log.i("hahahahahaha", "onCreateDialog: addresses $addresses")
         val adapter = AddressesAdapter2(addresses, this)
         recyclerView.adapter = adapter
 
