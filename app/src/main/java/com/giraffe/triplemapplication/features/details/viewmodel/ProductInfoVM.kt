@@ -4,18 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.triplemapplication.model.cart.CartItem
-import com.giraffe.triplemapplication.model.cart.request.AppliedDiscount
 import com.giraffe.triplemapplication.model.cart.request.DraftOrder
 import com.giraffe.triplemapplication.model.cart.request.DraftRequest
 import com.giraffe.triplemapplication.model.cart.request.LineItem
 import com.giraffe.triplemapplication.model.cart.response.DraftResponse
-import com.giraffe.triplemapplication.model.products.Product
 import com.giraffe.triplemapplication.model.repo.RepoInterface
 import com.giraffe.triplemapplication.model.wishlist.WishListItem
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.safeApiCall
 import com.giraffe.triplemapplication.utils.safeCall
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -165,13 +162,7 @@ class ProductInfoVM(private val repo: RepoInterface) : ViewModel() {
     fun uploadCartId(cartId: Long) {
         viewModelScope.launch {
             Log.i("hahahahaha", "uploadCartId: ==cart id $cartId")
-            repo.uploadCartId(cartId).let {
-                if (it != null && it.isSuccessful) {
-                    _cartIdFlow.emit(Resource.Success(true))
-                } else {
-                    _cartIdFlow.emit(Resource.Failure(false, 0, it?.exception?.message))
-                }
-            }
+            repo.uploadCartId(cartId)
         }
     }
 

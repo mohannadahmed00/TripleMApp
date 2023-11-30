@@ -1,5 +1,7 @@
 package com.giraffe.triplemapplication.features.checkout.view
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -53,6 +55,12 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private var currency = "usd"
     var copons: List<PriceRule> = listOf()
 
+    private var percent = 0.0
+    private var discount = 0.0
+    private var total = 0.0
+    private var totalInDollar = 0.0
+    private var dollarExchangeRate:Pair<Double,Double>? = null
+
     override fun getViewModel(): Class<CheckoutVM> = CheckoutVM::class.java
 
     companion object {
@@ -73,14 +81,47 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 
         mViewModel.getExchangeRateOfDollar()
         observeGetExchangeRateOfDollar()
-        totalPrice = lineItems.lineItems.sumOf { it.price * it.quantity }
+        total = lineItems.lineItems.sumOf { it.price * it.quantity }.convert(sharedViewModel.exchangeRateFlow.value)
+        totalPrice = lineItems.lineItems.sumOf { it.price * it.quantity }.convert(sharedViewModel.exchangeRateFlow.value)
 
 
         copons = sharedViewModel.couponsFlow.value
         Log.i(TAG, "handleView: $copons")
 
-        binding.tvTotal.text = lineItems.lineItems.sumOf { it.price * it.quantity }.convert(sharedViewModel.exchangeRateFlow.value).toString()
-            .plus(getString(sharedViewModel.currencySymFlow.value))
+        binding.tvTotal.text = totalPrice.toString().plus(getString(sharedViewModel.currencySymFlow.value))
+        //binding.tvTotal.text = lineItems.lineItems.sumOf { it.price * it.quantity }.convert(sharedViewModel.exchangeRateFlow.value).toString().plus(getString(sharedViewModel.currencySymFlow.value))
+
+
+        binding.edtPromoCode.addTextChangedListener(object:TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val coupon = copons.firstOrNull{it.title == s.toString()}
+                val condition = coupon?.prerequisite_subtotal_range?.greater_than_or_equal_to?.toDouble()?.convert(sharedViewModel.exchangeRateFlow.value)?:0.0
+                if (coupon!=null && totalPrice>=condition){
+                    if(coupon.value_type == "fixed_amount"){
+                        discount = coupon.value.toDouble().convert(sharedViewModel.exchangeRateFlow.value)
+                        Log.i(TAG, "afterTextChanged: $totalPrice => $discount")
+                        totalPrice += discount
+                    }else{
+                        percent = 1 - ((coupon.value.toDouble() * -1) /100)
+                        Log.i(TAG, "afterTextChanged: $totalPrice => $percent")
+                        totalPrice *= percent
+                    }
+                    totalPrice = String.format("%.2f", totalPrice).toDouble()
+                    binding.tvTotal.text = totalPrice.toString()
+                        .plus(getString(sharedViewModel.currencySymFlow.value))
+                }else{
+                    totalPrice = total
+                    binding.tvTotal.text = totalPrice.toString()
+                        .plus(getString(sharedViewModel.currencySymFlow.value))
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+
 
         when (sharedViewModel.currencySymFlow.value) {
             R.string.usd_sym -> currency = "usd"
@@ -134,7 +175,8 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
     private fun observeGetExchangeRateOfDollar() {
         lifecycleScope.launch {
             mViewModel.exchangeRateFlow.collect{
-                totalPrice = totalPrice.convert(it)
+                //totalInDollar = totalPrice.convert(it)
+                dollarExchangeRate = it
             }
         }
     }
@@ -154,6 +196,8 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
 
         binding.btnClose.setOnClickListener { navigateUp() }
         binding.btnCheckout.setOnClickListener {
+
+
             if (visaFlag) {
                 if (customerId != "" && ephemeralKey != "" && clientSecret != "") {
                     paymentFlow()
@@ -237,12 +281,19 @@ class CheckoutFragment : BaseFragment<CheckoutVM, FragmentCheckoutBinding>() {
                     }
 
                     is Resource.Success -> {
+                        //digits
+                        //val d = totalPrice
+                        val wholePart = totalPrice.toInt()
+                        var fractionalPart = ((totalPrice - wholePart) * 100).toInt().toString()
+                        if (fractionalPart.length!=2){
+                            fractionalPart+="0"
+                        }
+                        Log.d(TAG, "observeCreateEphemeralKey: (Success) $wholePart + $fractionalPart")
                         Log.d(TAG, "observeCreateEphemeralKey: (Success) ${it.value}")
                         ephemeralKey = it.value.id
                         mViewModel.createPaymentIntent(
                             customerId,
-                            totalPrice.toString().split(".")[0] + totalPrice.toString()
-                                .split(".")[1],
+                            wholePart.toString() +  fractionalPart,
                             "usd"
                         )
                         observeCreatePaymentIntent()

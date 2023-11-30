@@ -83,8 +83,11 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                         mViewModel.setFullNameLocally(it.value.customers.first().first_name)
                         Log.i(TAG, "showSuccess: ${mViewModel.cartIdFlow.value}")
                         Log.i(TAG, "showSuccess: ${mViewModel.wishListIdFlow.value}")
+
+                        //mViewModel.getSingleWishList()
+                        //observeGetSingleWishList()
+
                         mViewModel.getSingleCart()
-                        mViewModel.getSingleWishList()
                         observeGetSingleCart()
                     }
                 }
@@ -194,8 +197,6 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
     }
 
     private fun observeGetSingleCart() {
-        observeGetSingleWishList()
-
         lifecycleScope.launch {
             mViewModel.singleCartFlow.collect{
                 when(it){
@@ -217,10 +218,9 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                         Log.d(TAG, "observeGetSingleCart: (all products) ${sharedViewModel.allProducts.value}")
                         Log.d(TAG, "observeGetSingleCart: (Success) ${Gson().toJson(it.value)}")
                         if (it.value.draft_order.line_items.isEmpty()){
-//                            sharedViewModel.setIsLoggedFlag(true)
-//                            findNavController().setGraph(R.navigation.main_graph)
-//                            dismissLoading()
-
+                            sharedViewModel.setIsLoggedFlag(true)
+                            findNavController().setGraph(R.navigation.main_graph)
+                            dismissLoading()
                         }else {
                             var ids = ""
                             listOfLineItems = it.value.draft_order.line_items
@@ -261,6 +261,9 @@ class LoginFragment : BaseFragment<LoginVM, FragmentLoginBinding>() {
                                 observeInsertCartItem()
                             }
                         }
+                        sharedViewModel.setIsLoggedFlag(true)
+                        findNavController().setGraph(R.navigation.main_graph)
+                        dismissLoading()
                     }
                 }
             }

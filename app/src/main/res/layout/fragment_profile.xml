@@ -457,32 +457,32 @@
                 android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="@id/iv_addresses"
                 app:layout_constraintEnd_toEndOf="@id/iv_enter_addresses"
-                app:layout_constraintTop_toTopOf="@id/iv_addresses"
-                app:layout_constraintBottom_toBottomOf="@id/iv_addresses"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/line4"/>
             <View
                 android:id="@+id/btn_payment"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="@id/iv_pay_method"
                 app:layout_constraintEnd_toEndOf="@id/iv_enter_pay_method"
-                app:layout_constraintTop_toTopOf="@id/iv_pay_method"
-                app:layout_constraintBottom_toBottomOf="@id/iv_pay_method"/>
+                app:layout_constraintTop_toBottomOf="@id/line4"
+                app:layout_constraintBottom_toTopOf="@id/line5"/>
             <View
                 android:id="@+id/btn_currency"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="@id/iv_currency"
                 app:layout_constraintEnd_toEndOf="@id/iv_enter_currency"
-                app:layout_constraintTop_toTopOf="@id/iv_currency"
-                app:layout_constraintBottom_toBottomOf="@id/iv_currency"/>
+                app:layout_constraintTop_toBottomOf="@id/line5"
+                app:layout_constraintBottom_toTopOf="@id/line6"/>
             <View
                 android:id="@+id/btn_language"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="@id/iv_languages"
                 app:layout_constraintEnd_toEndOf="@id/iv_enter_languages"
-                app:layout_constraintTop_toTopOf="@id/iv_languages"
-                app:layout_constraintBottom_toBottomOf="@id/iv_languages"/>
+                app:layout_constraintTop_toBottomOf="@id/line6"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

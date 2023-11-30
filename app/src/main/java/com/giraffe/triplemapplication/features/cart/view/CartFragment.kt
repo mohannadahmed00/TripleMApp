@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import com.giraffe.triplemapplication.R
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentCartBinding
 import com.giraffe.triplemapplication.features.cart.view.adapters.CartAdapter
@@ -52,6 +54,7 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
     override fun handleView() {
         if (sharedViewModel.isLoggedFlow.value){
             binding.tvBlock.hide()
+            binding.btnLogin.hide()
             adapter = CartAdapter(
                 mutableListOf(),
                 sharedViewModel.exchangeRateFlow.value,
@@ -63,6 +66,10 @@ class CartFragment : BaseFragment<CartVM, FragmentCartBinding>(), CartAdapter.On
             observeGetLocallyCartItems(false)
         }else{
             binding.tvBlock.show()
+            binding.btnLogin.show()
+            binding.btnLogin.setOnClickListener {
+                findNavController().setGraph(R.navigation.auth_graph)
+            }
         }
 
     }

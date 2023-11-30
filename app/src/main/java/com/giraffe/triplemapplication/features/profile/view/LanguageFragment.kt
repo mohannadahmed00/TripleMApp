@@ -32,7 +32,7 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
 
     override fun handleClicks() {
 
-        binding.tvEnglish.setOnClickListener {
+        binding.btnEn.setOnClickListener {
             binding.ivEnglishCorrect.show()
             binding.ivArabicCorrect.hide()
             //mViewModel.setLanguage(Constants.Languages.ENGLISH)
@@ -42,7 +42,7 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
             onActivityCallback.onLanguageSelected(Constants.Languages.ENGLISH.value)
 
         }
-        binding.tvArabic.setOnClickListener {
+        binding.btnAr.setOnClickListener {
             binding.ivEnglishCorrect.hide()
             binding.ivArabicCorrect.show()
             //mViewModel.setLanguage(Constants.Languages.ARABIC)

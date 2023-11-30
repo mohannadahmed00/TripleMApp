@@ -206,6 +206,38 @@
                 app:layout_constraintStart_toEndOf="@id/tv_gbp"
                 app:layout_constraintTop_toTopOf="@id/tv_gbp" />
 
+            <View
+                android:id="@+id/btn_egp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/line1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/btn_usd"
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/line2"
+                app:layout_constraintTop_toBottomOf="@id/line1" />
+
+            <View
+                android:id="@+id/btn_eur"
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/line3"
+                app:layout_constraintTop_toBottomOf="@id/line2" />
+
+
+            <View
+                android:id="@+id/btn_gbp"
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line3" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

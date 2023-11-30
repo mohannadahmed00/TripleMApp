@@ -213,15 +213,16 @@ object ApiClient : RemoteSource {
 
 
     override suspend fun uploadCartId(cartId: Long): Task<Void?>? {
+        Log.i(TAG, "uploadCartId: ${FirebaseAuth.getInstance().currentUser!!.uid}")
         var mTask: Task<Void?>? = null
         FirebaseFirestore.getInstance().collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .set(
-                hashMapOf(
+                mapOf(
                     "cartId" to cartId,//cart id from shopify
                 )
-            )
-            .addOnCompleteListener { task: Task<Void?> ->
+            ).addOnCompleteListener { task: Task<Void?> ->
+                Log.i(TAG, "uploadCartId: listen")
                 if (task.isSuccessful) {
                     Log.i(TAG, "cart id have been uploaded")
                 } else {

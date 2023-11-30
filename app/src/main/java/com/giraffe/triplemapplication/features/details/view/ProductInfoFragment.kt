@@ -462,8 +462,34 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
                     is Resource.Success -> {
                         Log.d(TAG, "observeCreateCartDraft: (Success) ${Gson().toJson(it.value)}")
-                        mViewModel.uploadCartId(it.value.draft_order.id)
+                        Log.d(TAG, "observeCreateCartDraft: (Success) ${it.value.draft_order.id}")
+
                         mViewModel.insertCartIdLocally(it.value.draft_order.id)
+                        mViewModel.uploadCartId(it.value.draft_order.id)
+                        observeUploadCartId()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeUploadCartId() {
+        lifecycleScope.launch {
+            mViewModel.cartIdFlow.collect{
+                when(it){
+                    is Resource.Failure -> {
+                        Log.e(
+                            TAG,
+                            "observeUploadCartId: (Failure ${it.errorCode}) ${it.errorBody}"
+                        )
+                    }
+
+                    Resource.Loading -> {
+                        Log.i(TAG, "observeUploadCartId: (Loading)")
+                    }
+
+                    is Resource.Success -> {
+                        Log.d(TAG, "observeUploadCartId: (Success) ${Gson().toJson(it.value)}")
                     }
                 }
             }
@@ -488,8 +514,11 @@ class ProductInfoFragment : BaseFragment<ProductInfoVM, FragmentProductInfoBindi
 
                     is Resource.Success -> {
                         Log.d(TAG, "observeUpdateCartDraft: (Success) ${Gson().toJson(it.value)}")
-                        mViewModel.uploadCartId(it.value.draft_order.id)
+                        Log.d(TAG, "observeUpdateCartDraft: (Success) ${it.value.draft_order.id}")
+
                         mViewModel.insertCartIdLocally(it.value.draft_order.id)
+                        mViewModel.uploadCartId(it.value.draft_order.id)
+                        observeUploadCartId()
 
                     }
                 }

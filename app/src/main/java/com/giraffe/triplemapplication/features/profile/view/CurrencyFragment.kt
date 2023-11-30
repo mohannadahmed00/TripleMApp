@@ -67,28 +67,28 @@ class CurrencyFragment : BaseFragment<ProfileVM, FragmentCurrencyBinding>() {
     }
 
     override fun handleClicks() {
-        binding.tvEgp.setOnClickListener {
+        binding.btnEgp.setOnClickListener {
             hideAll()
             binding.ivEgpCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.EGP)
             sharedViewModel.setCurrencySymbol(Constants.Currencies.EGP.symbolRes)
             mViewModel.setCurrency(Constants.Currencies.EGP)
         }
-        binding.tvUsd.setOnClickListener {
+        binding.btnUsd.setOnClickListener {
             hideAll()
             binding.ivUsdCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.USD)
             sharedViewModel.setCurrencySymbol(Constants.Currencies.USD.symbolRes)
             mViewModel.setCurrency(Constants.Currencies.USD)
         }
-        binding.tvEur.setOnClickListener {
+        binding.btnEur.setOnClickListener {
             hideAll()
             binding.ivEurCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.EUR)
             sharedViewModel.setCurrencySymbol(Constants.Currencies.EUR.symbolRes)
             mViewModel.setCurrency(Constants.Currencies.EUR)
         }
-        binding.tvGbp.setOnClickListener {
+        binding.btnGbp.setOnClickListener {
             hideAll()
             binding.ivGbpCorrect.show()
             sharedViewModel.getExchangeRateOf(Constants.Currencies.GBP)

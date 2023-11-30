@@ -124,5 +124,18 @@
         android:layout_height="match_parent"
         android:text="@string/you_must_be_logged_in_to_use_this_feature"/>
 
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias=".85"
+        android:layout_marginBottom="16dp"
+        android:visibility="invisible"
+        android:text="@string/sign_in_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

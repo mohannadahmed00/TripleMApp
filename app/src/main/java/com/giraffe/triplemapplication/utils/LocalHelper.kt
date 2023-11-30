@@ -34,8 +34,8 @@ object LocalHelper {
     fun setLocale(context: Context, language: String?): Context? {
         persist(context, language)
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            updateResources(context, language)
-        } else updateResourcesLegacy(context, language)
+            updateResources(context, language?:"en")
+        } else updateResourcesLegacy(context, language?:"en")
     }
 
 
