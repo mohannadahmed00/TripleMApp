@@ -95,19 +95,14 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     }
 
     override suspend fun setCustomerID(id: Long) {
-
-
         shared.store(Constants.CUSTOMER_ID, id.toString())
-
     }
 
     override suspend fun getCustomerID(): Long? {
-
        return  shared.read(Constants.CUSTOMER_ID)?.toLong()
     }
 
     override suspend fun getCartID(): Long? {
-
         return shared.read(Constants.CART_ID)?.toLong()
     }
 
