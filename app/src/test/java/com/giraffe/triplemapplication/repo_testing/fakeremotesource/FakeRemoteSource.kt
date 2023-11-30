@@ -101,7 +101,9 @@ class FakeRemoteSource : RemoteSource {
     }
 
     override suspend fun getAllProductsFromIds(ids: String): Flow<AllProductsResponse> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(FakeData.FakeAllProductsResponse)
+        }
     }
 
     override suspend fun createOrder(orderCreate: OrderCreate): Flow<CreateOrderResponse> {
