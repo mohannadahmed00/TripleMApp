@@ -1,5 +1,6 @@
 package com.giraffe.triplemapplication
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -7,13 +8,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import com.giraffe.triplemapplication.AppController.Companion.localeManager
 import com.giraffe.triplemapplication.databinding.ActivityMainBinding
-import com.giraffe.triplemapplication.utils.LocalHelper
 import com.giraffe.triplemapplication.utils.gone
 import com.giraffe.triplemapplication.utils.show
 
 
-class MainActivity : AppCompatActivity(), OnActivityCallback {
+class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
     }
@@ -22,9 +23,12 @@ class MainActivity : AppCompatActivity(), OnActivityCallback {
     private lateinit var navController: NavController
 
 
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(localeManager!!.setLocale(base!!))
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LocalHelper.setLocale(this, LocalHelper.getLanguage(this))
+        //LocalHelper.setLocale(this, LocalHelper.getLanguage(this))
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -37,10 +41,5 @@ class MainActivity : AppCompatActivity(), OnActivityCallback {
                 binding.bottomNavView.gone()
             }
         }
-    }
-
-    override fun onLanguageSelected(code: String) {
-        LocalHelper.setLocale(this, code)
-        recreate()
     }
 }

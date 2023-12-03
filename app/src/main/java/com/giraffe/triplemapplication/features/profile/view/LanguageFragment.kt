@@ -1,9 +1,12 @@
 package com.giraffe.triplemapplication.features.profile.view
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import com.giraffe.triplemapplication.OnActivityCallback
+import com.giraffe.triplemapplication.AppController
+import com.giraffe.triplemapplication.MainActivity
 import com.giraffe.triplemapplication.bases.BaseFragment
 import com.giraffe.triplemapplication.databinding.FragmentLanguageBinding
 import com.giraffe.triplemapplication.features.profile.viewmodel.ProfileVM
@@ -11,10 +14,10 @@ import com.giraffe.triplemapplication.utils.Constants
 import com.giraffe.triplemapplication.utils.Resource
 import com.giraffe.triplemapplication.utils.hide
 import com.giraffe.triplemapplication.utils.show
+import com.jakewharton.processphoenix.ProcessPhoenix
 import kotlinx.coroutines.launch
 
 class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
-    private lateinit var onActivityCallback: OnActivityCallback
     override fun getViewModel(): Class<ProfileVM>  = ProfileVM::class.java
 
     override fun getFragmentBinding(
@@ -24,7 +27,6 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
     ): FragmentLanguageBinding = FragmentLanguageBinding.inflate(inflater,container,false)
 
     override fun handleView() {
-        onActivityCallback = activity as OnActivityCallback
         sharedViewModel.getLanguage()
         observeGetLanguage()
         handleClicks()
@@ -33,23 +35,14 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
     override fun handleClicks() {
 
         binding.btnEn.setOnClickListener {
+            changeApplicationLanguage(Constants.Languages.ENGLISH, requireActivity())
             binding.ivEnglishCorrect.show()
             binding.ivArabicCorrect.hide()
-            //mViewModel.setLanguage(Constants.Languages.ENGLISH)
-
-
-
-            onActivityCallback.onLanguageSelected(Constants.Languages.ENGLISH.value)
-
         }
         binding.btnAr.setOnClickListener {
+            changeApplicationLanguage(Constants.Languages.ARABIC, requireActivity())
             binding.ivEnglishCorrect.hide()
             binding.ivArabicCorrect.show()
-            //mViewModel.setLanguage(Constants.Languages.ARABIC)
-
-
-
-            onActivityCallback.onLanguageSelected(Constants.Languages.ARABIC.value)
         }
     }
 
@@ -74,5 +67,13 @@ class LanguageFragment : BaseFragment<ProfileVM,FragmentLanguageBinding>() {
             }
         }
 
+    }
+
+    private fun changeApplicationLanguage(lang: Constants.Languages,context: Context) {
+        AppController.localeManager!!.setNewLocale(context, lang.value)
+        mViewModel.setLanguage(lang)
+        val intent = Intent(context, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        ProcessPhoenix.triggerRebirth(context, intent)
     }
 }
